@@ -1,0 +1,46 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Create Category
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Define Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/categories" method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" name="category[title]" id="title" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <input type="number" name="category[amount]" id="amount" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fixed">Is this cost fixed or flexible?</label>
+                        <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?">
+                            <option value='' selected>--Select Fixed or Flexible--</option>
+                            <option value="true">Fixed</option>
+                            <option value="false">Flexible</option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true"
+                            id="canEnd">
+                        <label class="form-check-label" for="canEnd">I can cancel this</label>
+                    </div>
+                    <button class="btn btn-primary btn-sm">Create</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>

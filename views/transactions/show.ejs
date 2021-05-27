@@ -1,0 +1,22 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><%= transaction.category %> </h5>
+                <% if(transaction.note) {%>
+                <p class="card-text"><%= transaction.note %> </p>
+                <% } %>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Total: $<%= transaction.amount %> </li>
+                <li class="list-group-item">Date:
+                    <%= transaction.date.getMonth() + 1%>/<%= transaction.date.getDate()%>
+                </li>
+            </ul>
+            <div class="card-body">
+                <a href="/transactions/<%=transaction._id%>/edit" class="card-link">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>

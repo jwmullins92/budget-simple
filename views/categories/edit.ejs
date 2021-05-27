@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') %>
+<div class="col-md-6 offset-md-3">
+    <h1 class="d-inline"><%= category.title %> </h1>
+    <form action="/categories/<%=category._id%>?_method=PUT" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" value="<%=category.title%>" name="category[title]" id="title" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount:</label>
+            <input type="number" value="<%=category.amount%>" name="category[amount]" id="amount" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="fixed">Is this cost fixed or flexible?</label>
+            <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?">
+                <option selected>--Select Fixed or Flexible--</option>
+                <option <%= category.fixed === true ? 'selected' : '' %> value="true">Fixed</option>
+                <option <%= category.fixed === false ? 'selected' : '' %> value="false">Flexible</option>
+            </select>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true" id="canEnd"
+                <%=category.canEnd ? 'checked' : ''  %>>
+            <label class="form-check-label" for="canEnd">I can cancel this</label>
+        </div>
+        <button class="btn btn-primary btn-sm">Update</button>
+    </form>
+</div>

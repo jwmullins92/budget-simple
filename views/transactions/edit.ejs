@@ -1,0 +1,39 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="col-md-6 offset-md-3">
+    <h1>Add New Transaction</h1>
+    <form action="/transactions/<%=transaction._id%>?_method=PUT" method="post">
+        <div class="mb-3">
+            <label for="datepicker">Date:</label>
+            <input type="text" name="transaction[date]" class="form-control" id="datepicker"
+                value="<%=transaction.date %>">
+        </div>
+        <div class=" mb-3">
+            <label for="category">Category:</label>
+            <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category">
+                <% for(let category of categories) {%>
+                <option value="<%=category.title%>" <%= category.title === transaction.category ? 'selected' : '' %>>
+                    <%= category.title %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="amount">Total:</label>
+            <input type="number" class="form-control" name="transaction[amount]" value="<%=transaction.amount%>"
+                id="amount">
+        </div>
+        <div class="mb-3">
+            <label for="notes">Notes:</label>
+            <textarea name="transaction[note]" id="notes" rows="3" style="width: 100%;"
+                class="d-block"><%= transaction.note %> </textarea>
+        </div>
+        <button class="btn btn-sm btn-success">Submit</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script>
+    const picker = new Litepicker({
+        element: document.getElementById('datepicker')
+    });
+</script>

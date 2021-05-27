@@ -1,0 +1,36 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="col-md-6 offset-md-3">
+    <h1>Add New Transaction</h1>
+    <form action="/transactions" method="post">
+        <div class="mb-3">
+            <label for="datepicker">Date:</label>
+            <input type="text" name="transaction[date]" class="form-control" id="datepicker">
+        </div>
+        <div class="mb-3">
+            <label for="category">Category:</label>
+            <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category">
+                <option selected>--Choose Category--</option>
+                <% for(let category of categories) {%>
+                <option value="<%=category.title%>"><%= category.title %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="amount">Total:</label>
+            <input type="number" class="form-control" name="transaction[amount]" id="amount">
+        </div>
+        <div class="mb-3">
+            <label for="notes">Notes:</label>
+            <textarea name="transaction[note]" id="notes" rows="3" style="width: 100%;" class="d-block"></textarea>
+        </div>
+        <button class="btn btn-sm btn-success">Submit</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script>
+    const picker = new Litepicker({
+        element: document.getElementById('datepicker')
+    });
+</script>
