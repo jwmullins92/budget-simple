@@ -13,22 +13,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/categories" method="POST">
+                <form action="/categories" method="POST" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
-                        <input type="text" name="category[title]" id="title" class="form-control">
+                        <input type="text" name="category[title]" id="title" class="form-control" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please name your category.
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="amount" class="form-label">Amount:</label>
-                        <input type="number" name="category[amount]" id="amount" class="form-control">
+                        <input type="number" name="category[amount]" id="amount" class="form-control" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter the budgeted amount for your category
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="fixed">Is this cost fixed or flexible?</label>
-                        <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?">
-                            <option value='' selected>--Select Fixed or Flexible--</option>
+                        <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?"
+                            required>
+                            <option value='' selected disabled>--Select Fixed or Flexible--</option>
                             <option value="true">Fixed</option>
                             <option value="false">Flexible</option>
                         </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please select fixed or flexible.
+                        </div>
                     </div>
                     <div class="form-check mb-3">
                         <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true"

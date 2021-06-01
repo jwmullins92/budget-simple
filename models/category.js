@@ -6,8 +6,14 @@ const categorySchema = new Schema({
         type: String,
         required: true
     },
-    amount: Number,
-    fixed: Boolean,
+    amount: {
+        type: Number,
+        required: true
+    },
+    fixed: {
+        type: Boolean,
+        required: true
+    },
     canEnd: Boolean
 })
 

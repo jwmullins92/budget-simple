@@ -2,27 +2,50 @@
 
 <div class="col-md-6 offset-md-3">
     <h1>Add New Transaction</h1>
-    <form action="/transactions" method="post">
+    <form action="/transactions" class="needs-validation" method="post" novalidate>
         <div class="mb-3">
             <label for="datepicker">Date:</label>
-            <input type="text" name="transaction[date]" class="form-control" id="datepicker">
+            <input type="text" name="transaction[date]" class="form-control" id="datepicker" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please select a date.
+            </div>
         </div>
         <div class="mb-3">
             <label for="category">Category:</label>
-            <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category">
-                <option selected>--Choose Category--</option>
+            <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category"
+                required>
+                <option selected disabled value="">--Choose Category--</option>
                 <% for(let category of categories) {%>
                 <option value="<%=category.title%>"><%= category.title %></option>
                 <% } %>
             </select>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please select a category.
+            </div>
         </div>
         <div class="mb-3">
             <label for="amount">Total:</label>
-            <input type="number" class="form-control" name="transaction[amount]" id="amount">
+            <input type="number" class="form-control" name="transaction[amount]" id="amount" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter the total of the transaction.
+            </div>
         </div>
         <div class="mb-3">
             <label for="notes">Notes:</label>
-            <textarea name="transaction[note]" id="notes" rows="3" style="width: 100%;" class="d-block"></textarea>
+            <textarea class="form-control" name="transaction[note]" id="notes" rows="3" style="width: 100%;"
+                class="d-block"></textarea>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
         </div>
         <button class="btn btn-sm btn-success">Submit</button>
     </form>
