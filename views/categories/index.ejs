@@ -1,16 +1,14 @@
 <% layout('layouts/boilerplate') %>
 <div class="col-md-8 offset-md-2 mb-3 col-sm-10 offset-sm-1">
     <h1>HERE ARE YOUR BUDGET CATEGORIES</h1>
-    <%- include('../partials/newCategoryModal.ejs') %>
+    <%- include('../partials/modals/newCategoryModal.ejs') %>
 </div>
-<div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1">
+<div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 d-flex flex-wrap">
     <% for(let category of categories) {%>
-    <div class="mb-3">
+    <div class="mb-3 d-inline-block me-4" style="width: 30%;">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title"><%= category.title %> </h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Budgeted Amount: $<%= category.amount %> </li>

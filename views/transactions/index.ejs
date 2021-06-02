@@ -1,58 +1,48 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
     <div class="col-md-6 offset-md-3 mb-3">
-        <div>
-            <h1>HERE ARE YOUR TRANSACTIONS</h1>
-            <a href="/transactions/new">Add Transaction</a>
-            <form action="/transactions" id="categoryFilter">
-                <select name="category" id="category">
+        <div class="mb-3">
+            <div class="mb-3">
+                <h1>HERE ARE YOUR TRANSACTIONS</h1>
+                <a href="/transactions/new">Add Transaction</a>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" name="category" id="category">
                     <option value="" selected>All</option>
                     <% for(let c of categories) {%>
-                    <option value="<%=c.title%>" <%= c.title === query.category ? 'selected' : '' %>>
-                        <%= c.title %> </option>
+                    <option value="<%=c.title%>"><%= c.title %></option>
                     <% } %>
                 </select>
-            </form>
-            <form action="/transactions" id="dateFilter">
-                <select name="date" id="date">
-                    <% if(query.date) { %>
-                    <option value="all" selected>All</option>
-                    <option value="0" <%= query.date.toString() === "0" ? 'selected' : '' %>>Jan</option>
-                    <option value="1" <%= query.date.toString() === "1" ? 'selected' : '' %>>Feb</option>
-                    <option value="2" <%= query.date.toString() === "2" ? 'selected' : '' %>>Mar</option>
-                    <option value="3" <%= query.date.toString() === "3" ? 'selected' : '' %>>Apr</option>
-                    <option value="4" <%= query.date.toString() === "4" ? 'selected' : '' %>>May</option>
-                    <option value="5" <%= query.date.toString() === "5" ? 'selected' : '' %>>June</option>
-                    <option value="6" <%= query.date.toString() === "6" ? 'selected' : '' %>>July</option>
-                    <option value="7" <%= query.date.toString() === "7" ? 'selected' : '' %>>Aug</option>
-                    <option value="8" <%= query.date.toString() === "8" ? 'selected' : '' %>>Sept</option>
-                    <option value="9" <%= query.date.toString() === "9" ? 'selected' : '' %>>Oct</option>
-                    <option value="10" <%= query.date.toString() === "10" ? 'selected' : '' %>>Nov</option>
-                    <option value="11" <%= query.date.toString() === "11" ? 'selected' : '' %>>Dec</option>
-                    <% } else { %>
-                    <option value="all" selected>All</option>
-                    <option value="0">Jan</option>
-                    <option value="1">Feb</option>
-                    <option value="2">Mar</option>
-                    <option value="3">Apr</option>
-                    <option value="4">May</option>
-                    <option value="5">June</option>
-                    <option value="6">July</option>
-                    <option value="7">Aug</option>
-                    <option value="8">Sept</option>
-                    <option value="9">Oct</option>
-                    <option value="10">Nov</option>
-                    <option value="11">Dec</option>
-                    <% } %>
+                <label for="category">Category</label>
+            </div>
+            <div class="form-floating">
+                <label for="date"></label>
+                <select class="form-select" name="date" id="date">
+                    <option value="" selected>All</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">Aug</option>
+                    <option value="9">Sept</option>
+                    <option value="10">Oct</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dec</option>
                 </select>
-            </form>
+                <label for="date">Month</label>
+            </div>
         </div>
         <div>
-            <ul class="list-group">
+            <ul class="list-group" id="trs">
                 <% for(let t of transactions) {%>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between" value="<%=t.category%>">
                     <p>
                         <%= t.category %>: $<%= t.amount %> ---
+                    </p>
+                    <p class="align-self-start">
                         <strong><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %></strong>
                     </p>
                     <span>
@@ -68,16 +58,4 @@
     </div>
 </div>
 
-<script>
-    const category = document.querySelector('#category');
-    const date = document.querySelector('#date')
-    const categoryFilter = document.querySelector('#categoryFilter')
-    const dateFilter = document.querySelector('#dateFilter')
-    category.addEventListener('change', (event) => {
-        categoryFilter.submit()
-    })
-
-    date.addEventListener('change', (event) => {
-        dateFilter.submit()
-    })
-</script>
+<script src="/scripts/transactionFilter.js"></script>

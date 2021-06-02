@@ -8,7 +8,8 @@ const transactionSchema = new Schema({
         type: Number,
         required: true
     },
-    note: String
+    note: String,
+    user: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
 const Transaction = mongoose.model('Transaction', transactionSchema)

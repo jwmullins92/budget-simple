@@ -9,6 +9,10 @@ const AppError = require('./utils/AppError')
 const mongoose = require('mongoose')
 const Category = require('./models/category')
 const Transaction = require('./models/transaction')
+const { isLoggedIn } = require('./middleware')
+const User = require('./models/user')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const { validateTransaction, validateCategory } = require('./schemas.js')
 const totaler = require('./utils/budgetTotal')
 const catchAsync = require('./utils/catchAsync')
@@ -45,36 +49,53 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(sessionConfig))
 app.use(flash())
 
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error')
     next()
 })
 
-app.get('/error', (req, res) => {
-    throw new AppError(401, "YOU ARE NOT AUTHORIZED")
+app.get('/', (req, res) => {
+    res.render('home')
 })
 
-app.get('/dashboard', catchAsync(async (req, res) => {
+app.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
     const categories = await Category.find({})
     const transactions = await Transaction.find({})
     const expenses = totaler(categories)
     const spent = totaler(transactions)
-    res.render('dash/dashboard', { categories, expenses, spent })
+    const date = new Date()
+    moment(date)
+    res.render('dash/dashboard', { categories, expenses, spent, date })
 }))
 
-app.get('/categories', catchAsync(async (req, res) => {
+app.get('/categories', isLoggedIn, catchAsync(async (req, res) => {
     const categories = await Category.find({})
+    categories.sort(function (a, b) {
+        if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
+        if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
+        return 0;
+    })
     res.render('categories/index', { categories })
 }))
 
-app.post('/categories', validateCategory, catchAsync(async (req, res) => {
+app.post('/categories', isLoggedIn, validateCategory, catchAsync(async (req, res) => {
     const category = new Category(req.body.category)
     await category.save()
     res.redirect('/categories')
 }))
 
-app.get('/categories/:id/edit', catchAsync(async (req, res) => {
+app.get('/categories/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const category = await Category.findById(id);
     if (!category) {
@@ -84,46 +105,31 @@ app.get('/categories/:id/edit', catchAsync(async (req, res) => {
     res.render('categories/edit', { category });
 }))
 
-app.put('/categories/:id', validateCategory, catchAsync(async (req, res) => {
+app.put('/categories/:id', isLoggedIn, validateCategory, catchAsync(async (req, res) => {
     const category = await Category.findByIdAndUpdate(req.params.id, { ...req.body.category })
     res.redirect('/categories')
 }))
 
-app.delete('/categories/:id/edit', catchAsync(async (req, res) => {
+app.delete('/categories/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
     const category = await Category.findByIdAndDelete(id)
     res.redirect('/categories')
 }))
 
-app.get('/transactions', clearQuery, catchAsync(async (req, res) => {
-    query = req.query
-    const filters = query
+app.get('/transactions', isLoggedIn, catchAsync(async (req, res) => {
     const categories = await Category.find({})
     let transactions = await Transaction.find({})
-    transactions = transactions.filter(t => {
-        if (req.url === '/transactions') {
-            return transactions
-        }
-        let isValid = true;
-        for (key in filters) {
-            if (key === "date") {
-                if (query.date === 'all') {
-                    return t
-                }
-                isValid = isValid && t[key].getMonth().toString() === filters[key].toString()
-                console.log(isValid)
-            } else {
-                isValid = isValid && t[key] === filters[key]
-                if (isValid === true) {
-                    console.log(isValid)
-                }
-            }
-        }
+    categories.sort(function (a, b) {
+        if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
+        if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
+        return 0;
     })
-    res.render('transactions/index', { transactions, categories, query })
+    console.log(categories)
+    transactions = transactions.sort((a, b) => b.date - a.date)
+    res.render('transactions/index', { transactions, categories })
 }))
 
-app.post('/transactions', validateTransaction, catchAsync(async (req, res) => {
+app.post('/transactions', isLoggedIn, validateTransaction, catchAsync(async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);
     const transaction = new Transaction(req.body.transaction)
     await transaction.save();
@@ -131,12 +137,17 @@ app.post('/transactions', validateTransaction, catchAsync(async (req, res) => {
     res.redirect('/transactions')
 }))
 
-app.get('/transactions/new', catchAsync(async (req, res) => {
+app.get('/transactions/new', isLoggedIn, catchAsync(async (req, res) => {
     categories = await Category.find({})
+    categories.sort(function (a, b) {
+        if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
+        if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
+        return 0;
+    })
     res.render('transactions/new', { categories })
 }))
 
-app.get('/transactions/:id/edit', catchAsync(async (req, res) => {
+app.get('/transactions/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const transaction = await Transaction.findById(id)
     if (!transaction) {
@@ -147,7 +158,7 @@ app.get('/transactions/:id/edit', catchAsync(async (req, res) => {
     res.render(`transactions/edit`, { transaction, categories })
 }))
 
-app.get('/transactions/:id', catchAsync(async (req, res) => {
+app.get('/transactions/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const transaction = await Transaction.findById(id)
     if (!transaction) {
@@ -157,18 +168,51 @@ app.get('/transactions/:id', catchAsync(async (req, res) => {
     res.render('transactions/show', { transaction })
 }))
 
-app.put('/transactions/:id', validateTransaction, catchAsync(async (req, res) => {
+app.put('/transactions/:id', isLoggedIn, validateTransaction, catchAsync(async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndUpdate(id, { ...req.body.transaction })
     res.redirect('/transactions')
 }))
 
-app.delete('/transactions/:id', catchAsync(async (req, res) => {
+app.delete('/transactions/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndDelete(id)
     res.redirect('/transactions')
 }))
+
+app.get('/login', (req, res) => {
+    res.render('users/login')
+})
+
+app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/users/login' }), (req, res) => {
+    req.flash('success', 'Welcome back!')
+    res.redirect('/dashboard')
+})
+
+app.get('/register', (req, res) => {
+    res.render('users/register')
+})
+
+app.post('/register', catchAsync(async (req, res) => {
+    try {
+        const { username, password, email } = req.body
+        const user = new User({ email, username })
+        const registeredUser = await User.register(user, password)
+        req.flash('success', 'Welcome to Budget Simple!')
+        res.redirect('/dashboard')
+    } catch (e) {
+        req.flash('error', e.message)
+        res.redirect('/register')
+    }
+    console.log(registeredUser);
+}))
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success', 'Goodbye!')
+    res.redirect('/login')
+})
 
 app.all('*', (req, res, next) => {
     next(new AppError(404, 'Page Not Found'))
