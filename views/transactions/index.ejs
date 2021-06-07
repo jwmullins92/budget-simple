@@ -10,7 +10,9 @@
                 <select class="form-select" name="category" id="category">
                     <option value="" selected>All</option>
                     <% for(let c of categories) {%>
+                    <% if(c.user.equals(currentUser._id)) {%>
                     <option value="<%=c.title%>"><%= c.title %></option>
+                    <% } %>
                     <% } %>
                 </select>
                 <label for="category">Category</label>
@@ -38,6 +40,8 @@
         <div>
             <ul class="list-group" id="trs">
                 <% for(let t of transactions) {%>
+                <% if(t.user) {%>
+                <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
                 <li class="list-group-item d-flex justify-content-between" value="<%=t.category%>">
                     <p>
                         <%= t.category %>: $<%= t.amount %> ---
@@ -52,6 +56,8 @@
                         </form>
                     </span>
                 </li>
+                <% } %>
+                <% } %>
                 <% } %>
             </ul>
         </div>

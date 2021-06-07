@@ -1,0 +1,29 @@
+<% layout('layouts/boilerplate') %>
+<h1>YOU ARE ON THE BUDGET INDEX PAGE!</h1>
+<hr>
+<div class="row">
+    <% if(budgets.length) {%>
+    <div class="col-3">
+        <h2>Budget History</h2>
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                <% for(let b of budgets) {%>
+                <li class="list-group-item d-flex justify-content-between">
+                    <p><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %></p>
+                    <a href="/budgets/<%= b._id %>">Details</a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+    <% } %>
+    <div class="col-4 offset-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Set Up Your Budgets</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Click below to get started!</h6>
+                <a href="/budgets/new" class="btn btn-sm btn-info">Create Budget</a>
+            </div>
+        </div>
+    </div>
+</div>

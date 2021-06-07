@@ -7,7 +7,8 @@ module.exports.validateTransaction = (req, res, next) => {
             category: Joi.string().required(),
             date: Joi.date().required(),
             amount: Joi.number().min(0).required(),
-            note: Joi.string().allow('')
+            note: Joi.string().allow(''),
+            isFixed: Joi.boolean()
         }).required()
     })
     const { error } = transactionSchema.validate(req.body)
@@ -24,7 +25,8 @@ module.exports.validateCategory = (req, res, next) => {
         category: Joi.object({
             title: Joi.string().required(),
             fixed: Joi.boolean().required(),
-            amount: Joi.number().min(0).required()
+            amount: Joi.number().min(0),
+            canEnd: Joi.boolean()
         }).required()
     })
     const { error } = categorySchema.validate(req.body)

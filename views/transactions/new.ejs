@@ -19,7 +19,10 @@
                 required>
                 <option selected disabled value="">--Choose Category--</option>
                 <% for(let category of categories) {%>
-                <option value="<%=category.title%>"><%= category.title %></option>
+                <% if(category.user.equals(currentUser._id)) {%>
+                <option value="<%=category.title%>" class='<%= category.fixed === true ? 'fixed' : '' %>'>
+                    <%= category.title %></option>
+                <% } %>
                 <% } %>
             </select>
             <div class="valid-feedback">
@@ -47,6 +50,12 @@
                 Looks good!
             </div>
         </div>
+        <div>
+            <label for="isFixed">Fixed</label>
+            <input type="radio" name="transaction[isFixed]" id="isFixed" value='true'>
+            <label for="flexible">Flexible</label>
+            <input type="radio" name="transaction[isFixed]" id="flexible" value='false'>
+        </div>
         <button class="btn btn-sm btn-success">Submit</button>
     </form>
 </div>
@@ -56,4 +65,18 @@
     const picker = new Litepicker({
         element: document.getElementById('datepicker')
     });
+
+    const category = document.querySelector('#category')
+    const fixed = document.querySelector('#isFixed')
+    const flexible = document.querySelector('#flexible')
+    category.addEventListener('change', (e) => {
+        for (let child of category.children) {
+            if (child.selected === true && child.getAttribute('class') === 'fixed') {
+                fixed.click()
+                break
+            } else {
+                flexible.click()
+            }
+        }
+    })
 </script>

@@ -6,15 +6,13 @@ const categorySchema = new Schema({
         type: String,
         required: true
     },
-    amount: {
-        type: Number,
-        required: true
-    },
     fixed: {
         type: Boolean,
         required: true
     },
-    canEnd: Boolean
+    amount: Number,
+    canEnd: Boolean,
+    user: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
 const Category = mongoose.model('Category', categorySchema)

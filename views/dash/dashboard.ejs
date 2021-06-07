@@ -1,27 +1,70 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
+    <% if(budget) {%>
     <div class="col-4 offset-1">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title text-danger text-end">$<%= expenses - spent %> </h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's
-                    content.</p>
-                <a href="/transactions/new" class="card-link">Log Transactions</a>
-                <a href="#" class="card-link">Another link</a>
+                <h5 class="card-title">Budget Breakdown</h5>
+                <p class="card-text text-success text-end fs-1 d-flex justify-content-between">
+                    <span class="card-text text-dark">Total Cash:</span>
+                    <span>$<%= budget.amount %></span>
+                </p>
+                <p class="card-text text-end text-danger fs-1 d-flex justify-content-between">
+                    <span class="card-text text-dark">Budgeted:</span>
+                    <span>$<%= expenses %> </span>
+                </p>
+                <p class="card-text text-end text-danger fs-1 d-flex justify-content-between">
+                    <span class="card-text text-dark">Spent:</span>
+                    <span>$<%= spent %> </span>
+                </p>
+                <div>
+                    <a href=" /transactions/new" class="card-link">Log Transactions</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
             </div>
         </div>
     </div>
+    <% } else { %>
+    <div class="col-4 offset-1">
+        <h1>Welcome to your Dashboard</h1>
+    </div>
+    <% } %>
+    <% if (!budget || budget.month.getMonth() !== date.getMonth()) {%>
     <div class="col-4 offset-1">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">SET BUDGET FOR
-                    <%= date.getMonth() + 1%>/<%= date.getFullYear() %> </h5>
+                    <%= months[date.getMonth()] %> <%= date.getFullYear() %> </h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
                     card's
                     content.</p>
-                <%- include('../partials/modals/setBudget.ejs')  %>
+                <a href="/budgets/new" class="btn btn-success">Set Budget!</a>
             </div>
         </div>
     </div>
+    <% } else {%>
+    <div class="col-4 offset-1">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Remaining cash for <%= months[budget.month.getMonth()] %> </h5>
+                <p class="card-text fs-1 <%=budget.amount - spent >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= budget.amount - spent %> </p>
+                <p class="card-text d-flex justify-content-between">
+                    <span class="card-text text-dark fs-5">Fixed Expenses Remaining:
+                    </span>
+                    <span class="fs-5 <%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                        $<%= fixedTotal %>
+                    </span>
+                </p>
+                <p class="card-text d-flex justify-content-between">
+                    <span class="card-text text-dark fs-5">Flexible Expenses Remaining:
+                    </span>
+                    <span class="fs-5 <%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                        $<%= flexTotal %>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <% } %>
 </div>

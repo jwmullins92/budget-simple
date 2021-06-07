@@ -1,0 +1,13 @@
+<% layout('layouts/boilerplate') %>
+<h1><%= months[budget.month.getMonth()] %> Budget: $<%= budget.amount %> </h1>
+<h2>Breakdown:</h2>
+<% for(let obj of budget.categories) {%>
+<div class="mb-3">
+    <p><%= obj.category[0].toUpperCase() %><%= obj.category.slice(1) %> : $<%= obj.amount %> </p>
+</div>
+<% } %>
+<div class="mb-3">
+    <form action="/budgets/<%=budget._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-sm btn-danger">Delete</button>
+    </form>
+</div>
