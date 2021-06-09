@@ -3,11 +3,12 @@
 <h2>Breakdown:</h2>
 <% for(let obj of budget.categories) {%>
 <div class="mb-3">
-    <p><%= obj.category[0].toUpperCase() %><%= obj.category.slice(1) %> : $<%= obj.amount %> </p>
+    <p><%= obj.category.title %> : $<%= obj.amount %> </p>
 </div>
 <% } %>
 <div class="mb-3">
-    <form action="/budgets/<%=budget._id%>?_method=DELETE" method="POST">
+    <a href="/budgets/<%=budget._id%>/edit" class="btn btn-sm btn-primary">Edit</a>
+    <form action="/budgets/<%=budget._id%>?_method=DELETE" method="POST" class="d-inline">
         <button class="btn btn-sm btn-danger">Delete</button>
     </form>
 </div>

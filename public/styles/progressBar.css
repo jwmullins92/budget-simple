@@ -1,0 +1,11 @@
+.prog-bar {
+    height: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid black
+}
+
+.red {
+    height: 20px;
+    width: 100%;
+}

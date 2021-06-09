@@ -1,6 +1,10 @@
 <% layout('layouts/boilerplate') %>
-<div class="row">
-    <% if(budget) {%>
+<div class="row mb-3">
+    <%if(!budget._id) { %>
+    <div class="col-4 offset-1">
+        <h1>Welcome to your Dashboard</h1>
+    </div>
+    <% } else {%>
     <div class="col-4 offset-1">
         <div class="card">
             <div class="card-body">
@@ -24,12 +28,8 @@
             </div>
         </div>
     </div>
-    <% } else { %>
-    <div class="col-4 offset-1">
-        <h1>Welcome to your Dashboard</h1>
-    </div>
     <% } %>
-    <% if (!budget || budget.month.getMonth() !== date.getMonth()) {%>
+    <% if (!budget._id || budget.month.getMonth() !== date.getMonth()) {%>
     <div class="col-4 offset-1">
         <div class="card">
             <div class="card-body">
@@ -68,3 +68,66 @@
     </div>
     <% } %>
 </div>
+<% if(budget.categories) {%>
+<div class="row mb-3">
+    <div class="offset-1 col-6">
+        <div class="card">
+            <div class="card-header">
+                Tracking
+            </div>
+            <ul class="list-group list-group-flush">
+
+                <% for(let b of budget.categories) {%>
+                <li class="list-group-item fs-4" id="<%=b.category.title%>">
+                    <div class="d-flex justify-content-between cat-tracker">
+                        <p>
+                            <%= b.category.title %>
+                        </p>
+                        <% for(let c of progress.categories) {%>
+                        <% if(c.category === b.category.title) {%>
+                        <p class="percent-complete"> <%= c.percent %>% </p>
+                        <% } %>
+                        <% } %>
+                    </div>
+                    <% for(let c of progress.categories) {%>
+                    <% if(c.category === b.category.title) {%>
+                    <div class="card-header">
+                        <div class="text-center">
+                            <p>$<%= c.spent %> of $<%= b.amount %> </p>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% } %>
+                    <div class="prog-bar"></div>
+                </li>
+
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script>
+    let category = document.querySelectorAll('.cat-tracker')
+    let progressBar = document.querySelectorAll('.prog-bar')
+    for (let c of category) {
+        if (!c.children[1]) {
+            let p = document.createElement('p')
+            p.innerText = '0%'
+            p.classList.add('percent-complete')
+            c.appendChild(p)
+        }
+    }
+
+    let progress = document.querySelectorAll('.percent-complete')
+
+    for (let i = 0; i < category.length; i++) {
+        w = parseInt(progress[i].innerText)
+        progressBar[i].setAttribute('style', `background-image: linear-gradient(90deg, green ${w}%, white ${w}%)!important`)
+        if (w >= 100) {
+            progressBar[i].style.width = `100%`
+            progressBar[i].setAttribute('style', `background-image: linear-gradient(90deg, red 100%, red 100%)!important`)
+        }
+    }
+</script>

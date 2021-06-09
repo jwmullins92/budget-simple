@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const breakdownSchema = new Schema({
-    category: String,
-    amount: Number
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
+    amount: Number,
 })
 
 const budgetSchema = new Schema({
@@ -13,7 +13,8 @@ const budgetSchema = new Schema({
         required: true
     },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
-    categories: [breakdownSchema]
+    categories: [breakdownSchema],
+    transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }]
 })
 
 const Budget = mongoose.model('Budget', budgetSchema)

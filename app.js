@@ -74,8 +74,11 @@ app.get('/', (req, res) => {
 app.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
     const date = new Date()
     const categories = await Category.find({ user: req.user })
-    let transactions = await Transaction.find({ user: req.user })
-    let budget = await Budget.find({ user: req.user })
+    let transactions = await Transaction.find({ user: req.user }).populate('category')
+    let budget = await Budget.find({ user: req.user }).populate('categories.category').populate('transactions')
+    if (!budget.length) {
+        return res.render('dash/dashboard', { categories, date, budget, transactions })
+    }
     budget = budget.filter(b => b.month.getMonth() === date.getMonth())
     budget = budget[0]
     transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
@@ -89,24 +92,58 @@ app.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
     }
     let fixedTotal = 0
     let flexTotal = 0
-    console.log(budget)
-    // for (let b of budget) {
-    //     console.log(b)
-    //     if (t.isFixed === true) {
-    //         fixedTotal = fixedTotal + t.amount
-    //     } else {
-    //         flexTotal = flexTotal + t.amount
-    //     }
-    // }
-    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedTotal, flexTotal })
-}))
+    for (let obj of budget.categories) {
+        if (obj.category.fixed === true) {
+            fixedTotal = fixedTotal + obj.amount
+        } else {
+            flexTotal = flexTotal + obj.amount
+        }
+    }
+    let fixedTr = 0
+    let flexTr = 0
+    for (let t of transactions) {
+        if (t.category.fixed === true) {
+            fixedTr = fixedTr + t.amount
+        } else {
+            flexTr = flexTr + t.amount
+        }
+    }
+    let progress = {}
+    progress.categories = []
+    for (let b of budget.categories) {
+        for (let t of transactions) {
+            if (b.category.title === t.category.title) {
+                let newObj = {}
+                newObj.category = t.category.title
+                if (progress.categories.length) {
+                    for (let c of progress.categories) {
+                        if (c.category === newObj.category) {
+                            newObj.percent = c.percent
+                            newObj.spent = c.spent
+                            progress.categories.splice(progress.categories.indexOf(c, 1))
+                        }
+                    }
+                }
+                let diff = b.amount - t.amount
+                let divisor = b.amount - diff
+                let percent = divisor / b.amount * 100
+                if (newObj.percent) {
+                    newObj.percent = newObj.percent + percent
+                    newObj.spent = newObj.spent + t.amount
+                    newObj.percent = Math.round(newObj.percent)
+                    progress.categories.push(newObj)
+                } else {
+                    newObj.percent = percent
+                    newObj.spent = t.amount
+                    progress.categories.push(newObj)
 
-app.post('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
-    const budget = new Budget(req.body);
-    budget.user = req.user
-    budget.month = moment(Date.now())
-    await budget.save()
-    res.redirect('/dashboard')
+                }
+            }
+        }
+    }
+    fixedTotal = fixedTotal - fixedTr
+    flexTotal = flexTotal - flexTr
+    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedTotal, flexTotal, progress })
 }))
 
 app.get('/categories', isLoggedIn, catchAsync(async (req, res) => {
@@ -150,7 +187,7 @@ app.delete('/categories/:id', isLoggedIn, catchAsync(async (req, res) => {
 
 app.get('/transactions', isLoggedIn, catchAsync(async (req, res) => {
     const categories = await Category.find({})
-    let transactions = await Transaction.find({}).populate('user')
+    let transactions = await Transaction.find({}).populate('user').populate('category')
     categories.sort(function (a, b) {
         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
@@ -164,7 +201,11 @@ app.post('/transactions', isLoggedIn, catchAsync(async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);
     const transaction = new Transaction(req.body.transaction)
     transaction.user = req.user._id;
-    console.log(transaction)
+    let budget = await Budget.find({ user: req.user })
+    budget = budget.filter(b => b.month.getMonth() === transaction.date.getMonth())
+    budget = await Budget.findByIdAndUpdate(budget[0]._id)
+    budget.transactions.push(transaction)
+    await budget.save()
     await transaction.save();
     req.flash('success', 'Successfully added transaction!')
     res.redirect('/transactions')
@@ -214,42 +255,68 @@ app.delete('/transactions/:id', isLoggedIn, catchAsync(async (req, res) => {
     res.redirect('/transactions')
 }))
 
-app.get('/budgets', catchAsync(async (req, res) => {
+app.get('/budgets', isLoggedIn, catchAsync(async (req, res) => {
     const budgets = await Budget.find({ user: req.user })
-    console.log(budgets)
+    console.log('index page budget*****', budgets)
     res.render('budgets/index', { budgets })
 }))
 
-app.post('/budgets', budgetCat, catchAsync(async (req, res) => {
+app.post('/budgets', budgetCat, isLoggedIn, catchAsync(async (req, res) => {
     const { month, year } = req.body
     const budget = new Budget(req.body)
     budget.month = `${year}-${month}`
     budget.user = req.user
-    budget.categories
+    let transactions = await Transaction.find({ user: req.user })
+    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
+    for (let t of transactions) {
+        budget.transactions.push(t)
+    }
     await budget.save()
     req.flash('success', 'Successfully created new budget!')
     res.redirect('/budgets')
 }))
 
-app.get('/budgets/new', catchAsync(async (req, res) => {
+app.get('/budgets/new', isLoggedIn, catchAsync(async (req, res) => {
     const date = new Date()
     const categories = await Category.find({ user: req.user })
-    console.log(categories)
     res.render('budgets/new', { date, categories })
 }))
 
-app.get('/budgets/:id', catchAsync(async (req, res) => {
+app.get('/budgets/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
-    const budget = await Budget.findById(id)
+    const budget = await Budget.findById(id).populate('categories.category')
     if (!budget) {
         req.flash('error', 'Budget not found')
         return res.redirect('/budgets')
     }
-    console.log(budget)
     res.render(`budgets/show`, { budget })
 }))
 
-app.delete('/budgets/:id', catchAsync(async (req, res) => {
+app.get('/budgets/:id/edit', catchAsync(async (req, res) => {
+    const date = new Date()
+    const { id } = req.params
+    const budget = await Budget.findById(id).populate('categories.category').populate('categories.category')
+    console.log('Edit page budget*****', budget)
+    res.render('budgets/edit', { budget, date })
+}))
+
+app.post('/budgets/:id', budgetCat, catchAsync(async (req, res) => {
+    const { id } = req.params
+    const { month, year } = req.body
+    const oldBudget = await Budget.findOneAndDelete(id)
+    const budget = new Budget(req.body)
+    budget.month = `${year}-${month}`
+    budget.user = req.user
+    let transactions = await Transaction.find({ user: req.user })
+    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
+    for (let t of transactions) {
+        budget.transactions.push(t)
+    }
+    await budget.save()
+    res.redirect(`/budgets/${budget._id}`)
+}))
+
+app.delete('/budgets/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findByIdAndDelete(id)
     res.redirect('/budgets')

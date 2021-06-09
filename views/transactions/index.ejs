@@ -44,7 +44,7 @@
                 <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
                 <li class="list-group-item d-flex justify-content-between" value="<%=t.category%>">
                     <p>
-                        <%= t.category %>: $<%= t.amount %> ---
+                        <%= t.category.title %>: $<%= t.amount %> ---
                     </p>
                     <p class="align-self-start">
                         <strong><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %></strong>

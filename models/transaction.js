@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const transactionSchema = new Schema({
-    category: String,
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
     date: Date,
     isFixed: {
         type: Boolean,

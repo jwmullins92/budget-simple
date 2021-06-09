@@ -20,7 +20,7 @@
                 <option selected disabled value="">--Choose Category--</option>
                 <% for(let category of categories) {%>
                 <% if(category.user.equals(currentUser._id)) {%>
-                <option value="<%=category.title%>" class='<%= category.fixed === true ? 'fixed' : '' %>'>
+                <option value="<%=category._id%>" class='<%= category.fixed === true ? 'fixed' : '' %>'>
                     <%= category.title %></option>
                 <% } %>
                 <% } %>
@@ -50,7 +50,7 @@
                 Looks good!
             </div>
         </div>
-        <div>
+        <div class="hide">
             <label for="isFixed">Fixed</label>
             <input type="radio" name="transaction[isFixed]" id="isFixed" value='true'>
             <label for="flexible">Flexible</label>
