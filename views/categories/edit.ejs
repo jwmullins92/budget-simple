@@ -39,12 +39,18 @@
 <script>
     const fixed = document.querySelector("#fixed")
     const cancel = document.querySelector("#cancel")
+    const checkbox = document.querySelector("#canEnd")
     fixed.addEventListener('change', (event) => {
-        console.log("change")
         if (fixed.value === "true") {
             cancel.classList.remove('hide')
         } else {
             cancel.classList.add('hide')
+            if (checkbox.checked) {
+                console.log("I WAS CHECKED!")
+                checkbox.click()
+            } else {
+                console.log("I don't think I was checked...")
+            }
         }
     })
 </script>

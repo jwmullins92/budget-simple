@@ -19,7 +19,7 @@
             <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category">
                 <% for(let category of categories) {%>
                 <% if(category.user.equals(currentUser._id)) {%>
-                <option value="<%=category.title%>" <%= category.title === transaction.category ? 'selected' : '' %>>
+                <option value="<%=category._id%>" <%= category.title === transaction.category ? 'selected' : '' %>>
                     <%= category.title %></option>
                 <% } %>
                 <% } %>

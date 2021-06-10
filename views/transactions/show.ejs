@@ -3,7 +3,7 @@
     <div class="col-md-6 offset-md-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"><%= transaction.category %> </h5>
+                <h5 class="card-title"><%= transaction.category.title %> </h5>
                 <% if(transaction.note) {%>
                 <p class="card-text"><%= transaction.note %> </p>
                 <% } %>
