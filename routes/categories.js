@@ -7,14 +7,15 @@ const categories = require('../controllers/categories')
 const Category = require('../models/category')
 
 
-router.get('/', isLoggedIn, catchAsync(categories.index))
+router.route('/')
+    .get(isLoggedIn, catchAsync(categories.index))
+    .post(isLoggedIn, validateCategory, catchAsync(categories.createCategory))
 
-router.post('/', isLoggedIn, validateCategory, catchAsync(categories.createCategory))
+router.route('/:id/edit')
+    .get(isLoggedIn, catchAsync(categories.renderEditForm))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(categories.renderEditForm))
-
-router.put('/:id', isLoggedIn, validateCategory, catchAsync(categories.updateCategory))
-
-router.delete('/:id', isLoggedIn, catchAsync(categories.deleteCategory))
+router.route('/:id')
+    .put(isLoggedIn, validateCategory, catchAsync(categories.updateCategory))
+    .delete(isLoggedIn, catchAsync(categories.deleteCategory))
 
 module.exports = router

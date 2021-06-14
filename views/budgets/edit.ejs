@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <% layout('layouts/boilerplate') %>
-<h1>EDITING BUDGET</h1>
+<h1>CREATE NEW BUDGET</h1>
 <form action="/budgets/<%=budget._id%>" class="row" method="POST">
     <div class="mb-3 col-4">
         <label class="form-label" for="month">Month</label>
@@ -24,7 +24,7 @@
         <label class="form-label" for="year">Year</label>
         <select class="form-select" name="year" id="year">
             <% for(let i = 2015; i <= date.getFullYear(); i++) {%>
-            <option value="<%=i%>" <%= budget.month.getFullYear() === i ? 'selected' : '' %>><%= i %></option>
+            <option value="<%=i%>" <%= budget.month.getFullYear() === i ? 'selected': ''%>><%= i %></option>
             <% } %>
         </select>
     </div>

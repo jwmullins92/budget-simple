@@ -3,15 +3,25 @@ const Budget = require('../models/budget')
 const Category = require('../models/category')
 
 module.exports.loadDashboard = async (req, res) => {
+    let budgetPeriod = req.query
     const date = new Date()
-    const categories = await Category.find({ user: req.user })
     let transactions = await Transaction.find({ user: req.user }).populate('category')
     let budget = await Budget.find({ user: req.user }).populate('categories.category').populate('transactions')
+    const categories = await Category.find({ user: req.user })
     if (!budget.length) {
         return res.render('dash/dashboard', { categories, date, budget, transactions })
     }
-    budget = budget.filter(b => b.month.getMonth() === date.getMonth())
-    budget = budget[0]
+    if (budgetPeriod.month) {
+        budget = budget.filter(b => parseInt(b.month.getMonth()) === parseInt(budgetPeriod.month) && parseInt(b.month.getFullYear()) === parseInt(budgetPeriod.year))
+        budget = budget[0]
+        if (!budget) {
+            req.flash('error', 'Could not find budget period')
+            return res.redirect('/dashboard')
+        }
+    } else {
+        budget = budget.filter(b => b.month.getMonth() === date.getMonth())
+        budget = budget[0]
+    }
     transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
     let spent = 0
     for (let t of transactions) {
@@ -74,5 +84,5 @@ module.exports.loadDashboard = async (req, res) => {
     }
     fixedTotal = fixedTotal - fixedTr
     flexTotal = flexTotal - flexTr
-    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedTotal, flexTotal, progress })
+    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedTotal, flexTotal, progress, budgetPeriod })
 }

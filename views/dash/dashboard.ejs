@@ -29,7 +29,7 @@
         </div>
     </div>
     <% } %>
-    <% if (!budget._id || budget.month.getMonth() !== date.getMonth()) {%>
+    <% if (!budget._id || !budget.month.getMonth()) {%>
     <div class="col-4 offset-1">
         <div class="card">
             <div class="card-body">
@@ -55,6 +55,7 @@
                     <span class="fs-5 <%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
                         $<%= fixedTotal %>
                     </span>
+                    <a href="/budgets/<%=budget._id%>/fixed">view</a>
                 </p>
                 <p class="card-text d-flex justify-content-between">
                     <span class="card-text text-dark fs-5">Flexible Expenses Remaining:
@@ -62,9 +63,58 @@
                     <span class="fs-5 <%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
                         $<%= flexTotal %>
                     </span>
+                    <a href="/budgets/<%=budget._id%>/flex">view</a>
                 </p>
             </div>
         </div>
+    </div>
+    <div class="col-2">
+        <h2>FILTER</h2>
+        <form action="/dashboard">
+            <div class="mb-3">
+                <% if(budgetPeriod.month) {%>
+                <select class="form-select" name="month" id="budgetMonth">
+                    <option value="0" <%=parseInt(budgetPeriod.month) === 0 ? 'selected' : ''%>>Jan</option>
+                    <option value="1" <%=parseInt(budgetPeriod.month) === 1 ? 'selected' : ''%>>Feb</option>
+                    <option value="2" <%=parseInt(budgetPeriod.month) === 2 ? 'selected' : ''%>>Mar</option>
+                    <option value="3" <%=parseInt(budgetPeriod.month) === 3 ? 'selected' : ''%>>Apr</option>
+                    <option value="4" <%=parseInt(budgetPeriod.month) === 4 ? 'selected' : ''%>>May</option>
+                    <option value="5" <%=parseInt(budgetPeriod.month) === 5 ? 'selected' : ''%>>June</option>
+                    <option value="6" <%=parseInt(budgetPeriod.month) === 6 ? 'selected' : ''%>>July</option>
+                    <option value="7" <%=parseInt(budgetPeriod.month) === 7 ? 'selected' : ''%>>Aug</option>
+                    <option value="8" <%=parseInt(budgetPeriod.month) === 8 ? 'selected' : ''%>>Sept</option>
+                    <option value="9" <%=parseInt(budgetPeriod.month) === 9 ? 'selected' : ''%>>Oct</option>
+                    <option value="10" <%=parseInt(budgetPeriod.month) === 10 ? 'selected' : ''%>>Nov</option>
+                    <option value="11" <%=parseInt(budgetPeriod.month) === 11 ? 'selected' : ''%>>Dec</option>
+                </select>
+                <% } else { %>
+                <select class="form-select" name="month" id="budgetMonth">
+                    <option value="0" <%=date.getMonth() === 0 ? 'selected' : ''%>>Jan</option>
+                    <option value="1" <%=date.getMonth() === 1 ? 'selected' : ''%>>Feb</option>
+                    <option value="2" <%=date.getMonth() === 2 ? 'selected' : ''%>>Mar</option>
+                    <option value="3" <%=date.getMonth() === 3 ? 'selected' : ''%>>Apr</option>
+                    <option value="4" <%=date.getMonth() === 4 ? 'selected' : ''%>>May</option>
+                    <option value="5" <%=date.getMonth() === 5 ? 'selected' : ''%>>June</option>
+                    <option value="6" <%=date.getMonth() === 6 ? 'selected' : ''%>>July</option>
+                    <option value="7" <%=date.getMonth() === 7 ? 'selected' : ''%>>Aug</option>
+                    <option value="8" <%=date.getMonth() === 8 ? 'selected' : ''%>>Sept</option>
+                    <option value="9" <%=date.getMonth() === 9 ? 'selected' : ''%>>Oct</option>
+                    <option value="10" <%=date.getMonth() === 10 ? 'selected' : ''%>>Nov</option>
+                    <option value="11" <%=date.getMonth() === 11 ? 'selected' : ''%>>Dec</option>
+                </select>
+                <% } %>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" name="year" id="year">
+                    <% for(let i = 2015; i <= date.getFullYear(); i++) {%> <option value="<%=i%>"
+                        <%= budget.month.getFullYear() === i ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-primary">Filter</button>
+            </div>
+        </form>
     </div>
     <% } %>
 </div>

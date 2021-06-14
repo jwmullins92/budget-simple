@@ -1,3 +1,4 @@
+const Budget = require('../models/budget');
 const Category = require('../models/category')
 
 module.exports.index = async (req, res) => {
@@ -14,6 +15,14 @@ module.exports.createCategory = async (req, res) => {
     const category = new Category(req.body.category)
     category.user = req.user._id
     await category.save()
+    const budgets = await Budget.find({})
+    let newCat = {}
+    newCat.category = category._id
+    newCat.amount = 0
+    for (let b of budgets) {
+        b.categories.push(newCat)
+        await b.save()
+    }
     req.flash('success', 'Successfully created new category!')
     res.redirect('/categories')
 }
@@ -36,5 +45,9 @@ module.exports.updateCategory = async (req, res) => {
 module.exports.deleteCategory = async (req, res) => {
     const { id } = req.params
     const category = await Category.findByIdAndDelete(id)
+    const budgets = await Budget.find({})
+    for (let b of budgets) {
+        b.categories.remove({ id: { $in: category } })
+    }
     res.redirect('/categories')
 }

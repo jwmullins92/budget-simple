@@ -4,16 +4,125 @@ const Budget = require('../models/budget')
 const moment = require('moment');
 moment().format();
 
+// module.exports.index = async (req, res) => {
+//     const categories = await Category.find({})
+//     let transactions = await Transaction.find({})
+//     const pageNums = Math.ceil(transactions.length / 10)
+//     let page
+//     let skip = 0
+//     if (req.query.page) {
+//         page = req.query.page
+//         skip = (page - 1) * 10
+//         transactions = await Transaction.find({}).populate('user').populate('category').skip(skip).limit(10).sort({ date: -1 })
+//     } else {
+//         transactions = await Transaction.find({}).populate('user').populate('category').sort({ date: -1 }).limit(10)
+//         page = 1
+//     }
+//     categories.sort(function (a, b) {
+//         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
+//         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
+//         return 0;
+//     })
+//     res.render('transactions/index', { transactions, categories, pageNums, page })
+// }
+
 module.exports.index = async (req, res) => {
+    console.log(req.url)
+    let transactions = await Transaction.find({})
+    let today = new Date()
+    let pageNums = Math.ceil(transactions.length / 10)
+    if (req.query.limit) {
+        const query = req.query
+        const { category, date, limit, page, year } = req.query
+        pageNums = Math.ceil(transactions.length / limit)
+        let skip = (page - 1) * limit
+        if (date && category) {
+            if (date < 12) {
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lt: `${year}-${parseInt(date) + 1}` }, category })
+                pageNums = Math.ceil(transactions.length / limit)
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lt: `${year}-${parseInt(date) + 1}` }, category })
+                    .populate('user')
+                    .populate('category')
+                    .skip(skip)
+                    .limit(parseInt(limit))
+                    .sort({ date: -1 })
+            } else {
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lte: `${year}-${date}-31` }, category })
+                pageNums = Math.ceil(transactions.length / limit)
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lte: `${year}-${date}-31` }, category })
+                    .populate('user')
+                    .populate('category')
+                    .skip(skip)
+                    .limit(parseInt(limit))
+                    .sort({ date: -1 })
+            }
+
+        } else if (date && !category) {
+            console.log('d no c')
+            if (date < 12) {
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lt: `${year}-${parseInt(date) + 1}` } })
+                pageNums = Math.ceil(transactions.length / limit)
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lt: `${year}-${parseInt(date) + 1}` } })
+                    .populate('user')
+                    .populate('category')
+                    .skip(skip)
+                    .limit(parseInt(limit))
+                    .sort({ date: -1 })
+            } else {
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lte: `${year}-${date}-31` } })
+                pageNums = Math.ceil(transactions.length / limit)
+                transactions = await Transaction.find({ date: { $gte: `${year}-${date}`, $lte: `${year}-${date}-31` } })
+                    .populate('user')
+                    .populate('category')
+                    .skip(skip)
+                    .limit(parseInt(limit))
+                    .sort({ date: -1 })
+            }
+        } else if (year && category && !date) {
+            console.log("IN HERE")
+            transactions = await Transaction.find({ date: { $gte: `${year}`, $lt: `${parseInt(year) + 1}` }, category })
+            pageNums = Math.ceil(transactions.length / limit)
+            transactions = await Transaction.find({ date: { $gte: `${year}`, $lt: `${parseInt(year) + 1}` }, category })
+                .populate('user')
+                .populate('category')
+                .skip(skip)
+                .limit(parseInt(limit))
+                .sort({ date: -1 })
+        } else if (year && !date) {
+            transactions = await Transaction.find({ date: { $gte: `${year}`, $lt: `${parseInt(year) + 1}` } })
+            pageNums = Math.ceil(transactions.length / limit)
+            transactions = await Transaction.find({ date: { $gte: `${year}`, $lt: `${parseInt(year) + 1}` } })
+                .populate('user')
+                .populate('category')
+                .skip(skip)
+                .limit(parseInt(limit))
+                .sort({ date: -1 })
+        } else {
+            transactions = await Transaction.find({})
+                .populate('user')
+                .populate('category')
+                .skip(skip)
+                .limit(parseInt(limit))
+                .sort({ date: -1 })
+        }
+        const categories = await Category.find({})
+        categories.sort(function (a, b) {
+            if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
+            if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
+            return 0;
+        })
+        return res.render('transactions/index', { transactions, categories, pageNums, page, query, today })
+    }
+    let query = ''
     const categories = await Category.find({})
-    let transactions = await Transaction.find({}).populate('user').populate('category')
+    transactions = await Transaction.find({}).populate('user').populate('category').sort({ date: -1 }).limit(10)
+    const page = 1
     categories.sort(function (a, b) {
         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
         return 0;
     })
-    transactions = transactions.sort((a, b) => b.date - a.date)
-    res.render('transactions/index', { transactions, categories })
+    res.render('transactions/index', { transactions, categories, pageNums, page, query, today })
 }
 
 module.exports.createTransaction = async (req, res) => {
@@ -22,9 +131,11 @@ module.exports.createTransaction = async (req, res) => {
     transaction.user = req.user._id;
     let budget = await Budget.find({ user: req.user })
     budget = budget.filter(b => b.month.getMonth() === transaction.date.getMonth())
-    budget = await Budget.findByIdAndUpdate(budget[0]._id)
-    budget.transactions.push(transaction)
-    await budget.save()
+    if (budget.length) {
+        budget = await Budget.findByIdAndUpdate(budget[0]._id)
+        budget.transactions.push(transaction)
+        await budget.save()
+    }
     await transaction.save();
     req.flash('success', 'Successfully added transaction!')
     res.redirect('/transactions')
@@ -34,6 +145,7 @@ module.exports.updateTransaction = async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndUpdate(id, { ...req.body.transaction })
+
     res.redirect('/transactions')
 }
 

@@ -10,18 +10,19 @@ const transactions = require('../controllers/transactions')
 const moment = require('moment');
 moment().format();
 
-router.get('/', isLoggedIn, catchAsync(transactions.index))
+router.route('/')
+    .get(isLoggedIn, catchAsync(transactions.index))
+    .post(isLoggedIn, catchAsync(transactions.createTransaction))
 
-router.post('/', isLoggedIn, catchAsync(transactions.createTransaction))
+router.route('/new')
+    .get(isLoggedIn, catchAsync(transactions.renderNewTransactionForm))
 
-router.get('/new', isLoggedIn, catchAsync(transactions.renderNewTransactionForm))
+router.route('/:id/edit')
+    .get(isLoggedIn, catchAsync(transactions.renderEditForm))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(transactions.renderEditForm))
-
-router.get('/:id', isLoggedIn, catchAsync(transactions.showTransaction))
-
-router.put('/:id', isLoggedIn, validateTransaction, catchAsync(transactions.updateTransaction))
-
-router.delete('/:id', isLoggedIn, catchAsync(transactions.deleteTransaction))
+router.route('/:id')
+    .get(isLoggedIn, catchAsync(transactions.showTransaction))
+    .put(isLoggedIn, validateTransaction, catchAsync(transactions.updateTransaction))
+    .delete(isLoggedIn, catchAsync(transactions.deleteTransaction))
 
 module.exports = router;

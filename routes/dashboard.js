@@ -9,6 +9,7 @@ const Category = require('../models/category')
 const dashboard = require('../controllers/dashboard')
 
 
-router.get('/', isLoggedIn, catchAsync(dashboard.loadDashboard))
+router.route('/')
+    .get(isLoggedIn, catchAsync(dashboard.loadDashboard))
 
 module.exports = router

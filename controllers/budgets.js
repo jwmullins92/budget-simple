@@ -4,7 +4,6 @@ const Category = require('../models/category')
 
 module.exports.index = async (req, res) => {
     const budgets = await Budget.find({ user: req.user })
-    console.log('index page budget*****', budgets)
     res.render('budgets/index', { budgets })
 }
 
@@ -42,9 +41,9 @@ module.exports.showBudget = async (req, res) => {
 module.exports.renderEditForm = async (req, res) => {
     const date = new Date()
     const { id } = req.params
+    const categories = await Category.find({ user: req.user })
     const budget = await Budget.findById(id).populate('categories.category').populate('categories.category')
-    console.log('Edit page budget*****', budget)
-    res.render(`budgets/edit`, { budget, date })
+    res.render(`budgets/edit`, { budget, date, categories })
 }
 
 module.exports.updateBudget = async (req, res) => {
@@ -61,6 +60,34 @@ module.exports.updateBudget = async (req, res) => {
     }
     await budget.save()
     res.redirect(`/budgets/${budget._id}`)
+}
+
+module.exports.showFixed = async (req, res) => {
+    const { id } = req.params;
+    const budget = await Budget.findById(id).populate('categories.category')
+    budget.categories = budget.categories.sort((a, b) => a.category.payDate - b.category.payDate)
+    res.render('budgets/fixed', { budget })
+}
+
+module.exports.showFlex = async (req, res) => {
+    const { id } = req.params;
+    const budget = await Budget.findById(id).populate('categories.category')
+    res.render('budgets/flexible', { budget })
+}
+
+module.exports.updateBudgetItem = async (req, res) => {
+    const { id } = req.params
+    const budget = await Budget.findByIdAndUpdate(id, { ...req.body })
+    await budget.save()
+    let redirectUrl
+    if (req.body.isFixed) {
+        redirectUrl = `/budgets/${id}/fixed`
+    } else {
+        redirectUrl = `/budgets/${id}/flex`
+    }
+    req.flash('success', 'Budget updated!')
+    res.redirect(redirectUrl)
+
 }
 
 module.exports.deleteBudget = async (req, res) => {

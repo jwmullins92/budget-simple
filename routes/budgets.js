@@ -7,18 +7,30 @@ const Budget = require('../models/budget')
 const Transaction = require('../models/transaction')
 const Category = require('../models/category')
 
-router.get('/', isLoggedIn, catchAsync(budgets.index))
+router.route('/')
+    .get(isLoggedIn, catchAsync(budgets.index))
+    .post(budgetCat, isLoggedIn, catchAsync(budgets.createBudget));
 
-router.post('/', budgetCat, isLoggedIn, catchAsync(budgets.createBudget))
+router.route('/new')
+    .get(isLoggedIn, catchAsync(budgets.renderNewBudgetForm));
 
-router.get('/new', isLoggedIn, catchAsync(budgets.renderNewBudgetForm))
+router.route('/:id')
+    .get(isLoggedIn, catchAsync(budgets.showBudget))
+    .post(budgetCat, catchAsync(budgets.updateBudget))
+    .patch(budgetCat, isLoggedIn, catchAsync(budgets.updateBudgetItem))
+    .delete(isLoggedIn, catchAsync(budgets.deleteBudget))
 
-router.get('/:id', isLoggedIn, catchAsync(budgets.showBudget))
+router.route('/:id/edit')
+    .get(isLoggedIn, catchAsync(budgets.renderEditForm))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(budgets.renderEditForm))
+router.route('/:id/fixed')
+    .get(isLoggedIn, catchAsync(budgets.showFixed))
 
-router.post('/:id', budgetCat, catchAsync(budgets.updateBudget))
+router.route('/:id/flex')
+    .get(isLoggedIn, catchAsync(budgets.showFlex))
 
-router.delete('/:id', isLoggedIn, catchAsync(budgets.deleteBudget))
+
+
+
 
 module.exports = router

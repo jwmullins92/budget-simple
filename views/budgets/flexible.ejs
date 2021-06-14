@@ -1,0 +1,50 @@
+<% layout('layouts/boilerplate') %>
+<h1>Flexible Expenses for <%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %> </h1>
+<div id="flex-items">
+    <% for(let c of budget.categories) {%>
+    <% if(!c.category.fixed) {%>
+    <p><%= c.category.title %>: $<%= c.amount %> </p>
+    <% } %>
+    <% } %>
+    <button class="btn btn-sm btn-primary" type="button" id="show-edit">Edit</button>
+</div>
+<div id="edit-form" class="hide">
+    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST">
+        <div class="row"></div>
+        <% for(let c of budget.categories) {%>
+        <div
+            class="<%=!c.category.fixed ? 'd-flex': ''%> justify-content-between col-2 align-items-baseline <%=c.category.fixed ? 'hide': ''%>">
+            <label for="<%=c.category.title%>"> <%= c.category.title %>: </label>
+            <input class="hide" type="text" name="categories[category]" value="<%=c.category._id%>">
+            <input class="form-control w-50" type="number" name="categories[amount]" id="<%=c.category.title%>"
+                value="<%=c.amount%>">
+            </input>
+        </div>
+        <div class="col-10"></div>
+        <% } %>
+        <input type="text" name="isFixed" id="isFixed" class="hide">
+        <button class='btn btn-sm btn-success d-inline mt-3'>Confirm</button>
+        <button class='btn btn-sm btn-danger d-inline mt-3' type="button" id="cancel">Cancel</button>
+    </form>
+</div>
+
+
+<script>
+
+    const flexItems = document.querySelector('#flex-items')
+    const editForm = document.querySelector('#edit-form')
+    const showEdit = document.querySelector('#show-edit')
+    const cancel = document.querySelector('#cancel')
+
+    showEdit.addEventListener('click', (e) => {
+        console.log('CLICKED')
+        flexItems.classList.toggle('hide')
+        editForm.classList.toggle('hide')
+    })
+
+    cancel.addEventListener('click', (e) => {
+        flexItems.classList.toggle('hide')
+        editForm.classList.toggle('hide')
+    })
+
+</script>

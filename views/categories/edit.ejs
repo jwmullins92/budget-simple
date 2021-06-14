@@ -27,6 +27,14 @@
                 Please select fixed or flexible.
             </div>
         </div>
+        <div class="mb-3 hide" id="pay-date">
+            <label for="date-select">Day of Month?</label>
+            <select name="category[payDate]" class="form-select" id="date-select">
+                <% for(let i = 1; i <= 30; i++) {%>
+                <option value="<%=i%>"><%= i %> </option>
+                <% } %>
+            </select>
+        </div>
         <div id="cancel" class="mb-3 <%= category.fixed === false ? "hide" : ""%>">
             <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true" id="canEnd"
                 <%=category.canEnd ? 'checked' : ''  %>>
@@ -39,18 +47,15 @@
 <script>
     const fixed = document.querySelector("#fixed")
     const cancel = document.querySelector("#cancel")
-    const checkbox = document.querySelector("#canEnd")
+    const payDate = document.querySelector("#pay-date")
     fixed.addEventListener('change', (event) => {
+        console.log("change")
         if (fixed.value === "true") {
             cancel.classList.remove('hide')
+            payDate.classList.remove('hide')
         } else {
             cancel.classList.add('hide')
-            if (checkbox.checked) {
-                console.log("I WAS CHECKED!")
-                checkbox.click()
-            } else {
-                console.log("I don't think I was checked...")
-            }
+            payDate.classList.add('hide')
         }
     })
 </script>

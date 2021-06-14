@@ -76,38 +76,6 @@ app.use('/categories', categoryRoutes)
 app.use('/transactions', transactionRoutes);
 app.use('/budgets', budgetRoutes)
 app.use('/', userRoutes)
-app.get('/login', (req, res) => {
-    res.render('users/login')
-})
-
-app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/users/login' }), (req, res) => {
-    req.flash('success', 'Welcome back!')
-    res.redirect('/dashboard')
-})
-
-app.get('/register', (req, res) => {
-    res.render('users/register')
-})
-
-app.post('/register', catchAsync(async (req, res) => {
-    try {
-        const { username, password, email } = req.body
-        const user = new User({ email, username })
-        const registeredUser = await User.register(user, password)
-        req.flash('success', 'Welcome to Budget Simple!')
-        res.redirect('/dashboard')
-    } catch (e) {
-        req.flash('error', e.message)
-        res.redirect('/register')
-    }
-    console.log(registeredUser);
-}))
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success', 'Goodbye!')
-    res.redirect('/login')
-})
 
 app.all('*', (req, res, next) => {
     next(new AppError(404, 'Page Not Found'))
