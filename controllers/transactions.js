@@ -4,30 +4,9 @@ const Budget = require('../models/budget')
 const moment = require('moment');
 moment().format();
 
-// module.exports.index = async (req, res) => {
-//     const categories = await Category.find({})
-//     let transactions = await Transaction.find({})
-//     const pageNums = Math.ceil(transactions.length / 10)
-//     let page
-//     let skip = 0
-//     if (req.query.page) {
-//         page = req.query.page
-//         skip = (page - 1) * 10
-//         transactions = await Transaction.find({}).populate('user').populate('category').skip(skip).limit(10).sort({ date: -1 })
-//     } else {
-//         transactions = await Transaction.find({}).populate('user').populate('category').sort({ date: -1 }).limit(10)
-//         page = 1
-//     }
-//     categories.sort(function (a, b) {
-//         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
-//         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
-//         return 0;
-//     })
-//     res.render('transactions/index', { transactions, categories, pageNums, page })
-// }
-
 module.exports.index = async (req, res) => {
-    console.log(req.url)
+    req.session.returnTo = req.originalUrl
+    console.log(req.session)
     let transactions = await Transaction.find({})
     let today = new Date()
     let pageNums = Math.ceil(transactions.length / 10)
@@ -137,19 +116,21 @@ module.exports.createTransaction = async (req, res) => {
         await budget.save()
     }
     await transaction.save();
+    const redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions'
     req.flash('success', 'Successfully added transaction!')
-    res.redirect('/transactions')
+    res.redirect(redirectUrl)
 }
 
 module.exports.updateTransaction = async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndUpdate(id, { ...req.body.transaction })
-
-    res.redirect('/transactions')
+    const redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions'
+    res.redirect(redirectUrl)
 }
 
 module.exports.renderNewTransactionForm = async (req, res) => {
+
     categories = await Category.find({})
     categories.sort(function (a, b) {
         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
@@ -166,7 +147,7 @@ module.exports.renderEditForm = async (req, res) => {
         req.flash('error', 'Transaction not found')
         return res.redirect('/transactions')
     }
-    const categories = await Category.find({})
+    const categories = await Category.find({}).sort({ title: 1 })
     res.render(`transactions/edit`, { transaction, categories })
 }
 

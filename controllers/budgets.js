@@ -1,9 +1,10 @@
 const Budget = require('../models/budget')
 const Transaction = require('../models/transaction')
 const Category = require('../models/category')
+const numSuffix = require('../utils/numSuffix')
 
 module.exports.index = async (req, res) => {
-    const budgets = await Budget.find({ user: req.user })
+    const budgets = await Budget.find({ user: req.user }).sort({ month: -1 })
     res.render('budgets/index', { budgets })
 }
 
@@ -13,7 +14,6 @@ module.exports.createBudget = async (req, res) => {
     budget.month = `${year}-${month}`
     budget.user = req.user
     let transactions = await Transaction.find({ user: req.user })
-    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
     for (let t of transactions) {
         budget.transactions.push(t)
     }
@@ -24,13 +24,18 @@ module.exports.createBudget = async (req, res) => {
 
 module.exports.renderNewBudgetForm = async (req, res) => {
     const date = new Date()
-    const categories = await Category.find({ user: req.user })
+    const categories = await Category.find({ user: req.user }).sort({ title: 1 })
     res.render('budgets/new', { date, categories })
 }
 
 module.exports.showBudget = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findById(id).populate('categories.category')
+    budget.categories.sort((a, b) => {
+        if (a.category.title < b.category.title) { return -1 };
+        if (a.category.title > b.category.title) { return 1 };
+        return 0
+    })
     if (!budget) {
         req.flash('error', 'Budget not found')
         return res.redirect('/budgets')
@@ -43,6 +48,11 @@ module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params
     const categories = await Category.find({ user: req.user })
     const budget = await Budget.findById(id).populate('categories.category').populate('categories.category')
+    budget.categories.sort((a, b) => {
+        if (a.category.title < b.category.title) { return -1 };
+        if (a.category.title > b.category.title) { return 1 };
+        return 0
+    })
     res.render(`budgets/edit`, { budget, date, categories })
 }
 
@@ -53,8 +63,7 @@ module.exports.updateBudget = async (req, res) => {
     const budget = new Budget(req.body)
     budget.month = `${year}-${month}`
     budget.user = req.user
-    let transactions = await Transaction.find({ user: req.user })
-    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
+    let transactions = await Transaction.find({ user: req.user }).sort({ date: -1 })
     for (let t of transactions) {
         budget.transactions.push(t)
     }
@@ -66,12 +75,25 @@ module.exports.showFixed = async (req, res) => {
     const { id } = req.params;
     const budget = await Budget.findById(id).populate('categories.category')
     budget.categories = budget.categories.sort((a, b) => a.category.payDate - b.category.payDate)
+    budget.categories.sort((a, b) => {
+        if (a.category.title < b.category.title) { return -1 };
+        if (a.category.title > b.category.title) { return 1 };
+        return 0
+    })
+    for (let c of budget.categories) {
+        c.category.payDate = numSuffix(c.category.payDate)
+    }
     res.render('budgets/fixed', { budget })
 }
 
 module.exports.showFlex = async (req, res) => {
     const { id } = req.params;
     const budget = await Budget.findById(id).populate('categories.category')
+    budget.categories.sort((a, b) => {
+        if (a.category.title < b.category.title) { return -1 };
+        if (a.category.title > b.category.title) { return 1 };
+        return 0
+    })
     res.render('budgets/flexible', { budget })
 }
 

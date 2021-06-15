@@ -14,6 +14,11 @@ module.exports.loadDashboard = async (req, res) => {
     if (budgetPeriod.month) {
         budget = budget.filter(b => parseInt(b.month.getMonth()) === parseInt(budgetPeriod.month) && parseInt(b.month.getFullYear()) === parseInt(budgetPeriod.year))
         budget = budget[0]
+        budget.categories.sort((a, b) => {
+            if (a.category.title < b.category.title) { return -1 };
+            if (a.category.title > b.category.title) { return 1 };
+            return 0
+        })
         if (!budget) {
             req.flash('error', 'Could not find budget period')
             return res.redirect('/dashboard')
@@ -21,6 +26,11 @@ module.exports.loadDashboard = async (req, res) => {
     } else {
         budget = budget.filter(b => b.month.getMonth() === date.getMonth())
         budget = budget[0]
+        budget.categories.sort((a, b) => {
+            if (a.category.title < b.category.title) { return -1 };
+            if (a.category.title > b.category.title) { return 1 };
+            return 0
+        })
     }
     transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
     let spent = 0

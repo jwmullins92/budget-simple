@@ -3,11 +3,10 @@
     <div class="col-md-6 offset-md-3 mb-3">
         <div class="mb-3">
             <div class="mb-3">
-                <h1>HERE ARE YOUR TRANSACTIONS</h1>
-                <a href="/transactions/new">Add Transaction</a>
+                <h1>TRANSACTIONS</h1>
             </div>
             <form action="/transactions" class="row">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3 col-4">
                     <select class="form-select" name="category" id="category">
                         <option value="" selected>All</option>
                         <% for(let c of categories) {%>
@@ -20,21 +19,7 @@
                     </select>
                     <label for="category">Category</label>
                 </div>
-                <div class="form-floating mb-3">
-                    <select class="form-select" name="year" id="year">
-                        <% if(!query.year) {%>
-                        <% for(let i = 2015; i <= today.getFullYear(); i++) {%> <option value="<%=i%>"
-                            <%= today.getFullYear() === i ? 'selected' : '' %>><%= i %></option>
-                        <% } %>
-                        <% } else {%>
-                        <% for(let i = 2015; i <= today.getFullYear(); i++) {%> <option value="<%=i%>"
-                            <%= parseInt(query.year) === i ? 'selected' : '' %>><%= i %></option>
-                        <% } %>
-                        <% } %>
-                    </select>
-                    <label for="year">Year</label>
-                </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3 col-4">
                     <select class="form-select" name="date" id="date">
                         <option value="" selected>All</option>
                         <option value="1" <%=parseInt(query.date) === 1 ? 'selected' : ''%>>Jan</option>
@@ -52,15 +37,29 @@
                     </select>
                     <label for="date">Month</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3 col-4">
+                    <select class="form-select" name="year" id="year">
+                        <% if(!query.year) {%>
+                        <% for(let i = 2015; i <= today.getFullYear(); i++) {%> <option value="<%=i%>"
+                            <%= today.getFullYear() === i ? 'selected' : '' %>><%= i %></option>
+                        <% } %>
+                        <% } else {%>
+                        <% for(let i = 2015; i <= today.getFullYear(); i++) {%> <option value="<%=i%>"
+                            <%= parseInt(query.year) === i ? 'selected' : '' %>><%= i %></option>
+                        <% } %>
+                        <% } %>
+                    </select>
+                    <label for="year">Year</label>
+                </div>
+                <div class="form-floating mb-3 col-4">
                     <select name="limit" id="limit" class="form-select">
                         <option value="10" <%=parseInt(query.limit) === 10 ? 'selected' : ''%>>10</option>
                         <option value="25" <%=parseInt(query.limit) === 25 ? 'selected' : ''%>>25</option>
                         <option value="50" <%=parseInt(query.limit) === 50 ? 'selected' : ''%>>50</option>
                     </select>
-                    <label for="limit">Number of Transactions</label>
+                    <label for="limit">Transactions/Page</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3 col-4">
                     <select name="page" id="page" class="form-select">
                         <% for(let i = 1; i <= pageNums; i++) {%> <option value="<%=i%>"
                             <%= parseInt(query.page) === i ? 'selected' : '' %>><%=i%></option>
@@ -70,6 +69,7 @@
                 </div>
                 <div>
                     <button class="btn btn-primary btn-sm">Filter</button>
+                    <a href="/transactions/new">Add Transaction</a>
                 </div>
             </form>
         </div>
@@ -79,16 +79,16 @@
                 <% if(t.user) {%>
                 <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
                 <li class="list-group-item d-flex justify-content-between" value="<%=t.category%>">
-                    <p>
-                        <%= t.category.title %>: $<%= t.amount %> ---
-                    </p>
                     <p class="align-self-start">
                         <strong><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %></strong>
+                        <%= t.note ? `- ${t.note}` : '' %>
                     </p>
-                    <span>
+                    <span class='d-flex justify-content-end w-50'>
+                        <p class="d-inline me-auto align-self-start"><b>$<%= t.amount %>:</b> <%= t.category.title %>
+                        </p>
                         <a href="/transactions/<%= t._id %>">Details</a>
                         <form class="d-inline" action="/transactions/<%=t._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-danger">Delete</button>
+                            <button class="btn btn-sm btn-danger ms-1">X</button>
                         </form>
                     </span>
                 </li>
@@ -97,42 +97,5 @@
                 <% } %>
             </ul>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item <%=parseInt(page) === parseInt(1) ? 'disabled' : ''%>"><a class="page-link"
-                        href="/transactions/?page=1">
-                        << </a>
-                </li>
-                <li class="page-item <%=parseInt(page) === parseInt(1) ? 'disabled' : ''%>"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(page) - parseInt(1)%>">
-                        < </a>
-                </li>
-                <% if(page < 3) {%>
-                <% for(let i = 1; i <= 3; i++) {%>
-                <li class="page-item <%= i === parseInt(page) ? 'active' : '' %>"><a class="page-link"
-                        href="/transactions/?page=<%=i%>"><%=i%></a></li>
-                <% } %>
-                <% } else if(page >= 3) {%>
-                <li class="page-item"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(page) - parseInt(1)%>"><%=parseInt(page) - parseInt(1)%></a>
-                </li>
-                <li class="page-item active"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(page)%>"><%= page %>
-                    </a>
-                </li>
-                <% if(parseInt(page) + parseInt(1) <= pageNums) {%>
-                <li class="page-item"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(page) + parseInt(1)%>"><%=parseInt(page) + parseInt(1)%></a>
-                </li>
-                <% } %>
-                <% } %>
-                <li class="page-item <%=parseInt(page) === parseInt(pageNums) ? 'disabled' : ''%>"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(page) + parseInt(1)%>">></a>
-                </li>
-                <li class="page-item <%=parseInt(page) === parseInt(pageNums) ? 'disabled' : ''%>"><a class="page-link"
-                        href="/transactions/?page=<%=parseInt(pageNums)%>">>></a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>

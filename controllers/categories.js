@@ -1,5 +1,6 @@
 const Budget = require('../models/budget');
 const Category = require('../models/category')
+const numSuffix = require('../utils/numSuffix')
 
 module.exports.index = async (req, res) => {
     const categories = await Category.find({})
@@ -8,6 +9,10 @@ module.exports.index = async (req, res) => {
         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
         return 0;
     })
+    for (let c of categories) {
+        c.payDate = numSuffix(c.payDate)
+        console.log(c.payDate)
+    }
     res.render('categories/index', { categories })
 }
 

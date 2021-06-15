@@ -14,7 +14,9 @@
             </div>
             <ul class="list-group list-group-flush">
                 <% if(category.fixed) {%>
-                <li class="list-group-item"><strong>Fixed</strong></li>
+                <li class="list-group-item"><strong>Fixed -
+                        <span class="due-date"><%= category.payDate %></span></strong>
+                </li>
                 <% } else {%>
                 <li class="list-group-item"><strong>Flexible</strong></li>
                 <% } %>

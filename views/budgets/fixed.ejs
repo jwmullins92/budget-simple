@@ -1,11 +1,10 @@
 <% layout('layouts/boilerplate') %>
-<% console.log(budget.categories) %>
 <h1>Fixed Expenses for <%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %> </h1>
 <div id="fixed-items">
     <% for(let c of budget.categories) {%>
     <% if(c.category.fixed) {%>
-    <p class="fs-3">Due <%=months[budget.month.getMonth()]%> <%= c.category.payDate %>: </p>
-    <p><%= c.category.title %>: $<%= c.amount %> </p>
+    <p><%= c.category.title %>: $<%= c.amount %> --- <%=months[budget.month.getMonth()]%>
+        <%= c.category.payDate %></p>
     <% } %>
     <% } %>
     <button class="btn btn-sm btn-primary" type="button" id="show-edit">Edit</button>
@@ -39,7 +38,6 @@
     const cancel = document.querySelector('#cancel')
 
     showEdit.addEventListener('click', (e) => {
-        console.log('CLICKED')
         fixedItems.classList.toggle('hide')
         editForm.classList.toggle('hide')
     })
