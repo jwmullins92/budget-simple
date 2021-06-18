@@ -1,8 +1,9 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="col-md-6 offset-md-3">
+<div class="col-md-6 offset-md-3 mb-3">
     <h1>Editing Transaction</h1>
-    <form action="/transactions/<%=transaction._id%>?_method=PUT" class="needs-validation" method="post" novalidate>
+    <form action="/transactions/<%=transaction._id%>?_method=PUT" id="edit-form" class="needs-validation" method="post"
+        novalidate>
         <div class="mb-3">
             <label for="datepicker">Date:</label>
             <input type="text" name="transaction[date]" class="form-control" id="datepicker"
@@ -45,7 +46,10 @@
             <textarea class="form-control" name="transaction[note]" id="notes" rows="3" style="width: 100%;"
                 class="d-block"><%= transaction.note %> </textarea>
         </div>
-        <button class="btn btn-sm btn-success">Submit</button>
+    </form>
+    <button type="button" id="confirm" class="btn btn-sm btn-success d-inline">Submit</button>
+    <form action="/transactions/<%=transaction._id%>?_method=DELETE" class="d-inline" method="POST">
+        <button class="btn btn-danger btn-sm">Delete</button>
     </form>
 </div>
 
@@ -54,4 +58,9 @@
     const picker = new Litepicker({
         element: document.getElementById('datepicker')
     });
+
+    document.querySelector('#confirm').addEventListener('click', (e) => {
+        document.querySelector('#edit-form').submit()
+    })
+
 </script>

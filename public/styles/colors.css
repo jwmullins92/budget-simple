@@ -1,0 +1,13 @@
+.bg-yellow {
+    background-color: #fceb7f!important;
+    transition: all .25s ease-in-out
+}
+
+.bg-yellow:hover {
+    background-color: #eedc69!important;
+}
+
+.table-alt {
+    background-color: #dae8fd!important;
+}
+

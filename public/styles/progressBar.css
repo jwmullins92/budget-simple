@@ -1,5 +1,5 @@
 .prog-bar {
-    height: 20px;
+    height: 12px;
     width: 100%;
     box-sizing: border-box;
     border: 2px solid black;
@@ -7,6 +7,20 @@
 }
 
 .red {
-    height: 20px;
+    height: 12px;
     width: 100%;
 }
+
+.divider {
+    width: 2px;
+    margin: 6px 0;
+    background: lightgray;
+  }
+
+  iframe {
+      height: 100vh;
+  }
+
+  .full-height {
+      height: 100vh
+  }

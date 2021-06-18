@@ -8,15 +8,19 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 module.exports.budgetCat = (req, res, next) => {
-    let arr = []
-    const { category, amount } = req.body.categories
-    for (let i = 0; i < category.length; i++) {
-        let newObj = {
-            category: category[i],
-            amount: amount[i]
+    if (req.body.categories) {
+        let arr = []
+        let { category, amount } = req.body.categories
+        for (let i = 0; i < category.length; i++) {
+            let newObj = {
+                category: category[i],
+                amount: amount[i]
+            }
+            arr.push(newObj)
         }
-        arr.push(newObj)
+        req.body.categories = arr
+        next()
+    } else {
+        next()
     }
-    req.body.categories = arr
-    next()
 }

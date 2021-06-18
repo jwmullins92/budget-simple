@@ -27,7 +27,7 @@ module.exports.validateCategory = (req, res, next) => {
             fixed: Joi.boolean().required(),
             amount: Joi.number().min(0),
             canEnd: Joi.boolean(),
-            payDate: Joi.string()
+            payDate: Joi.string().allow('')
         }).required()
     })
     const { error } = categorySchema.validate(req.body)

@@ -1,29 +1,53 @@
 <% layout('layouts/boilerplate') %>
-<h1>YOU ARE ON THE BUDGET INDEX PAGE!</h1>
-<hr>
 <div class="row">
     <% if(budgets.length) {%>
-    <div class="col-3">
-        <h2>Budget History</h2>
-        <div class="card">
-            <ul class="list-group list-group-flush">
+    <div class="container">
+        <div class="row">
+            <div class="row g-0 mb-3">
+                <h2 class="col-9 offset-3 mb-3">Budget History</h2>
+                <div class="col-3 offset-3 border border-2 border-end-0 bg-light">
+                    <p class="ms-2 my-1 fs-5">Budget Period</p>
+                </div>
+                <div class="col-3 border border-2 bg-light">
+                    <p class="ms-2 my-1 fs-5">Income </p>
+                </div>
+                <div class="col-3"></div>
                 <% for(let b of budgets) {%>
-                <li class="list-group-item d-flex justify-content-between">
-                    <p><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %></p>
-                    <a href="/budgets/<%= b._id %>">Details</a>
-                </li>
+                <div class="col-3 offset-3 border border-2 border-end-0 border-top-0 alt table-alt">
+                    <p class="ms-2 my-1"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
+                </div>
+                <div class="col-3 border border-2 border-top-0 alt table-alt">
+                    <p class="ms-2 my-1">$<%= b.amount %> </p>
+                </div>
+                <div class="col-3">
+                    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 my-1"></a>
+                </div>
                 <% } %>
-            </ul>
-        </div>
-    </div>
-    <% } %>
-    <div class="col-4 offset-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Set Up Your Budgets</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Click below to get started!</h6>
-                <a href="/budgets/new" class="btn btn-sm btn-info">Create Budget</a>
+                <div class="col-2 offset-3 mt-3">
+                    <a href="/budgets/new" class="btn btn-sm btn-secondary">Create Budget</a>
+                </div>
             </div>
+            <% } %>
         </div>
     </div>
-</div>
+
+    <script>
+        let cells = [...document.querySelectorAll('.alt')]
+        altRows = []
+        for (let i = 0; i < cells.length; i++) {
+            if (cells.indexOf(cells[i]) % 4 === 0) {
+                row = cells.slice(i, i + 2)
+                altRows.push(row)
+            }
+        }
+        const alternate = () => {
+            for (let row of altRows) {
+                for (let cell of row) {
+                    cell.classList.remove('table-alt')
+                }
+            }
+        }
+
+        alternate()
+
+    </script>

@@ -1,183 +1,89 @@
 <% layout('layouts/boilerplate') %>
-<div class="row mb-3">
+<% if(budget._id) {%>
+<h1 class="text-center mb-5">
+    <b><%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %></b> <span
+        class="fs-3"><%- include('../partials/modals/dashFilter') %></span>
+</h1>
+<% } %>
+<div class="row mb-5 d-flex justify-content-center">
     <%if(!budget._id) { %>
-    <div class="col-4 offset-1">
+    <div class="col-4">
         <h1>Welcome to your Dashboard</h1>
     </div>
     <% } else {%>
-    <div class="col-4 offset-1">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Budget Breakdown</h5>
-                <p class="card-text text-success text-end fs-1 d-flex justify-content-between">
-                    <span class="card-text text-dark">Total Cash:</span>
-                    <span>$<%= budget.amount %></span>
-                </p>
-                <p class="card-text text-end text-danger fs-1 d-flex justify-content-between">
-                    <span class="card-text text-dark">Budgeted:</span>
-                    <span>$<%= expenses %> </span>
-                </p>
-                <p class="card-text text-end text-danger fs-1 d-flex justify-content-between">
-                    <span class="card-text text-dark">Spent:</span>
-                    <span>$<%= spent %> </span>
-                </p>
-                <div>
-                    <a href=" /transactions/new" class="card-link">Log Transactions</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
-            </div>
+    <div class="col-3">
+        <div>
+            <p class="card-text text-end fs-4 d-flex justify-content-between"> <span
+                    class="card-text text-dark"><b>Total
+                        Income:</b></span>
+                <span>$<%= budget.amount %></span>
+            </p>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Budgeted:</b></span>
+                <span>$<%= expenses %> </span>
+            </p>
+            <hr>
+            <p
+                class="card-text text-end <%= budget.amount - expenses >= 0 ? "text-success" : "text-danger" %> fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Leftover:</b></span>
+                <span>$<%= budget.amount - expenses %> </span>
+            </p>
         </div>
+    </div>
+    <div class=" col-1 d-flex justify-content-center">
+        <div class="divider h-100"></div>
     </div>
     <% } %>
     <% if (!budget._id || !budget.month.getMonth()) {%>
-    <div class="col-4 offset-1">
+    <div class="col-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">SET BUDGET FOR
+                <h5 class="card-title">Set budget for
                     <%= months[date.getMonth()] %> <%= date.getFullYear() %> </h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's
-                    content.</p>
+                <p class="card-text">Click Below to get started!</p>
                 <a href="/budgets/new" class="btn btn-success">Set Budget!</a>
             </div>
         </div>
     </div>
     <% } else {%>
-    <div class="col-4 offset-1">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Remaining cash for <%= months[budget.month.getMonth()] %> </h5>
-                <p class="card-text fs-1 <%=budget.amount - spent >= 0 ? 'text-success' : 'text-danger'%>">
-                    $<%= budget.amount - spent %> </p>
-                <p class="card-text d-flex justify-content-between">
-                    <span class="card-text text-dark fs-5">Fixed Expenses Remaining:
-                    </span>
-                    <span class="fs-5 <%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
-                        $<%= fixedTotal %>
-                    </span>
-                    <a href="/budgets/<%=budget._id%>/fixed">view</a>
-                </p>
-                <p class="card-text d-flex justify-content-between">
-                    <span class="card-text text-dark fs-5">Flexible Expenses Remaining:
-                    </span>
-                    <span class="fs-5 <%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
-                        $<%= flexTotal %>
-                    </span>
-                    <a href="/budgets/<%=budget._id%>/flex">view</a>
-                </p>
-            </div>
+    <div class="col-3">
+        <div>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Spent:</b></span>
+                <span>$<%= spent %> </span>
+            </p>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Scheduled Out:</b></span>
+                <span>
+                    $<%= fixedTotal + flexTotal %>
+                </span>
+            </p>
+            <hr>
+            <p class="card-text d-flex justify-content-between fs-6 mb-0">
+                <span class="card-text text-dark"><a class="text-decoration-none"
+                        href="/budgets/<%=budget._id%>/fixed">Fixed
+                        Remaining</a>:
+                </span>
+                <span class="<%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= fixedTotal %>
+                </span>
+            </p>
+            <p class="card-text d-flex justify-content-between fs-6">
+                <span class="card-text text-dark"><a class="text-decoration-none"
+                        href="/budgets/<%=budget._id%>/flex">Flex Remaining</a>:
+                </span>
+                <span class="<%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= flexTotal %>
+                </span>
+            </p>
         </div>
-    </div>
-    <div class="col-2">
-        <h2>FILTER</h2>
-        <form action="/dashboard">
-            <div class="mb-3">
-                <% if(budgetPeriod.month) {%>
-                <select class="form-select" name="month" id="budgetMonth">
-                    <option value="0" <%=parseInt(budgetPeriod.month) === 0 ? 'selected' : ''%>>Jan</option>
-                    <option value="1" <%=parseInt(budgetPeriod.month) === 1 ? 'selected' : ''%>>Feb</option>
-                    <option value="2" <%=parseInt(budgetPeriod.month) === 2 ? 'selected' : ''%>>Mar</option>
-                    <option value="3" <%=parseInt(budgetPeriod.month) === 3 ? 'selected' : ''%>>Apr</option>
-                    <option value="4" <%=parseInt(budgetPeriod.month) === 4 ? 'selected' : ''%>>May</option>
-                    <option value="5" <%=parseInt(budgetPeriod.month) === 5 ? 'selected' : ''%>>June</option>
-                    <option value="6" <%=parseInt(budgetPeriod.month) === 6 ? 'selected' : ''%>>July</option>
-                    <option value="7" <%=parseInt(budgetPeriod.month) === 7 ? 'selected' : ''%>>Aug</option>
-                    <option value="8" <%=parseInt(budgetPeriod.month) === 8 ? 'selected' : ''%>>Sept</option>
-                    <option value="9" <%=parseInt(budgetPeriod.month) === 9 ? 'selected' : ''%>>Oct</option>
-                    <option value="10" <%=parseInt(budgetPeriod.month) === 10 ? 'selected' : ''%>>Nov</option>
-                    <option value="11" <%=parseInt(budgetPeriod.month) === 11 ? 'selected' : ''%>>Dec</option>
-                </select>
-                <% } else { %>
-                <select class="form-select" name="month" id="budgetMonth">
-                    <option value="0" <%=date.getMonth() === 0 ? 'selected' : ''%>>Jan</option>
-                    <option value="1" <%=date.getMonth() === 1 ? 'selected' : ''%>>Feb</option>
-                    <option value="2" <%=date.getMonth() === 2 ? 'selected' : ''%>>Mar</option>
-                    <option value="3" <%=date.getMonth() === 3 ? 'selected' : ''%>>Apr</option>
-                    <option value="4" <%=date.getMonth() === 4 ? 'selected' : ''%>>May</option>
-                    <option value="5" <%=date.getMonth() === 5 ? 'selected' : ''%>>June</option>
-                    <option value="6" <%=date.getMonth() === 6 ? 'selected' : ''%>>July</option>
-                    <option value="7" <%=date.getMonth() === 7 ? 'selected' : ''%>>Aug</option>
-                    <option value="8" <%=date.getMonth() === 8 ? 'selected' : ''%>>Sept</option>
-                    <option value="9" <%=date.getMonth() === 9 ? 'selected' : ''%>>Oct</option>
-                    <option value="10" <%=date.getMonth() === 10 ? 'selected' : ''%>>Nov</option>
-                    <option value="11" <%=date.getMonth() === 11 ? 'selected' : ''%>>Dec</option>
-                </select>
-                <% } %>
-            </div>
-            <div class="mb-3">
-                <select class="form-select" name="year" id="year">
-                    <% for(let i = 2015; i <= date.getFullYear(); i++) {%> <option value="<%=i%>"
-                        <%= budget.month.getFullYear() === i ? 'selected' : '' %>><%= i %></option>
-                    <% } %>
-                </select>
-            </div>
-            <div>
-                <button class="btn btn-sm btn-primary">Filter</button>
-            </div>
-        </form>
     </div>
     <% } %>
 </div>
-<% if(budget.categories) {%>
-<div class="row mb-3">
-    <div class="offset-1 col-6">
-        <div class="card">
-            <div class="card-header">
-                Tracking
-            </div>
-            <ul class="list-group list-group-flush">
 
-                <% for(let b of budget.categories) {%>
-                <li class="list-group-item fs-4" id="<%=b.category.title%>">
-                    <div class="d-flex justify-content-between cat-tracker">
-                        <p>
-                            <%= b.category.title %>
-                        </p>
-                        <% for(let c of progress.categories) {%>
-                        <% if(c.category === b.category.title) {%>
-                        <p class="percent-complete"> <%= c.percent %>% </p>
-                        <% } %>
-                        <% } %>
-                    </div>
-                    <% for(let c of progress.categories) {%>
-                    <% if(c.category === b.category.title) {%>
-                    <div class="card-header">
-                        <div class="text-center">
-                            <p>$<%= c.spent %> of $<%= b.amount %> </p>
-                        </div>
-                    </div>
-                    <% } %>
-                    <% } %>
-                    <div class="prog-bar"></div>
-                </li>
+<!-- Loads budget tracking table -->
+<%- include('../partials/dashboard/spendingTracker.ejs') %>
 
-                <% } %>
-            </ul>
-        </div>
-    </div>
-</div>
-<% } %>
 
-<script>
-    let category = document.querySelectorAll('.cat-tracker')
-    let progressBar = document.querySelectorAll('.prog-bar')
-    for (let c of category) {
-        if (!c.children[1]) {
-            let p = document.createElement('p')
-            p.innerText = '0%'
-            p.classList.add('percent-complete')
-            c.appendChild(p)
-        }
-    }
-
-    let progress = document.querySelectorAll('.percent-complete')
-
-    for (let i = 0; i < category.length; i++) {
-        w = parseInt(progress[i].innerText)
-        progressBar[i].setAttribute('style', `background-image: linear-gradient(90deg, green ${w}%, white ${w}%)!important`)
-        if (w >= 100) {
-            progressBar[i].style.width = `100%`
-            progressBar[i].setAttribute('style', `background-image: linear-gradient(90deg, red 100%, red 100%)!important`)
-        }
-    }
+<script src="/scripts/progressBar.js">
 </script>

@@ -1,50 +1,104 @@
 <% layout('layouts/boilerplate') %>
-<h1>Fixed Expenses for <%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %> </h1>
-<div id="fixed-items">
-    <% for(let c of budget.categories) {%>
-    <% if(c.category.fixed) {%>
-    <p><%= c.category.title %>: $<%= c.amount %> --- <%=months[budget.month.getMonth()]%>
-        <%= c.category.payDate %></p>
-    <% } %>
-    <% } %>
-    <button class="btn btn-sm btn-primary" type="button" id="show-edit">Edit</button>
-</div>
-<div id="edit-form" class="hide">
-    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST">
-        <div class="row"></div>
-        <% for(let c of budget.categories) {%>
-        <div
-            class="<%=c.category.fixed ? 'd-flex': ''%> justify-content-between col-2 align-items-baseline <%=!c.category.fixed ? 'hide': ''%>">
-            <label for="<%=c.category.title%>"> <%= c.category.title %>: </label>
-            <input class="hide" type="text" name="categories[category]" value="<%=c.category._id%>">
-            <input class="form-control w-50" type="number" name="categories[amount]" id="<%=c.category.title%>"
-                value="<%=c.amount%>">
-            </input>
-        </div>
-        <div class="col-10"></div>
-        <% } %>
-        <input type="text" name="isFixed" id="isFixed" class="hide" value="true">
-        <button class='btn btn-sm btn-success d-inline mt-3'>Confirm</button>
-        <button class='btn btn-sm btn-danger d-inline mt-3' type="button" id="cancel">Cancel</button>
-    </form>
-</div>
+<div id="fixed-items" class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 mb-3">
+    <div class="container">
+        <h1 class="offset-1 mb-3">Fixed Expenses for <%= months[budget.month.getMonth()] %>
+            <%= budget.month.getFullYear() %>
+        </h1>
+        <div class="row g-0 mb-3">
+            <div class="col-3 offset-1 fs-4 border border-2 border-end-0 bg-light">
+                <p class="ms-2 my-0">Due Date</p>
+            </div>
+            <div class="col-3 fs-4 border border-2 border-end-0 bg-light">
+                <p class="ms-2 my-0">Category</p>
+            </div>
+            <div class="col-3 fs-4 border border-2 bg-light">
+                <p class="ms-2 my-0">Budgeted</p>
+            </div>
+            <div class="col-1"></div>
+            <% for(let c of budget.categories) {%>
+            <% if(c.category.fixed) {%>
 
+            <div class="col-3 offset-1 border border-2 border-end-0 border-top-0 alt table-alt">
+                <p class="ms-2 my-1"><%=months[budget.month.getMonth()]%> <%= c.category.payDate %> </p>
+            </div>
+            <div class="col-3 border border-2 border-end-0 border-top-0 alt table-alt">
+                <p class="ms-2 my-1"><%= c.category.title%> </p>
+            </div>
+            <div class="col-3 border border-2 border-top-0 alt table-alt form-div">
+                <div class="amount">
+                    <p class="ms-2 my-1">$<%= c.amount %> </p>
+                </div>
+                <div class="hide amount">
+                    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST" class="amount-form">
+                        <% for(let cat of budget.categories) {%>
+                        <% if(cat.category.fixed) {%>
+                        <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
+                        <input type="number" class="hide ms-2 py-1 w-50" name="categories[amount]" id="amount"
+                            value="<%=cat.amount%>">
+                        <button class="hide btn btn-sm btn-success">Confirm</button>
+                        <% } %>
+                        <% } %>
+                        <% for(let cat of budget.categories) {%>
+                        <% if(!cat.category.fixed) {%>
+                        <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
+                        <input type="number" class="hide ms-2 py-1 w-50" name="categories[amount]" id="amount"
+                            value="<%=cat.amount%>">
+                        <button class="hide btn btn-sm btn-success">Confirm</button>
+                        <% } %>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-sm text-primary bi-pencil-square edit-amount"></button>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
 
 <script>
+    const editButton = [...document.querySelectorAll('.edit-amount')]
+    const amount = [...document.querySelectorAll('.form-div')]
+    const form = [...document.querySelectorAll('.amount-form')]
+    console.log(form[2])
+    for (let b of editButton) {
+        b.addEventListener('click', (e) => {
+            if (editButton.indexOf(b)) {
+                let index = editButton.indexOf(b)
+                console.log(index)
+                amount[index].children[0].classList.toggle('hide')
+                amount[index].children[1].classList.toggle('hide')
+                amount[index].children[1].children[0].children[3 * index + 1].classList.toggle('hide')
+                amount[index].children[1].children[0].children[3 * index + 2].classList.toggle('hide')
+            } else {
+                let index = 0
+                amount[index].children[0].classList.toggle('hide')
+                amount[index].children[1].classList.toggle('hide')
+                amount[index].children[1].children[0].children[3 * index + 1].classList.toggle('hide')
+                amount[index].children[1].children[0].children[3 * index + 2].classList.toggle('hide')
+            }
+            b.classList.toggle('bi-check-lg')
+            b.classList.toggle('bi-x-lg')
+        })
+    }
 
-    const fixedItems = document.querySelector('#fixed-items')
-    const editForm = document.querySelector('#edit-form')
-    const showEdit = document.querySelector('#show-edit')
-    const cancel = document.querySelector('#cancel')
+    let cells = [...document.querySelectorAll('.alt')]
+    altRows = []
+    for (let i = 0; i < cells.length; i++) {
+        if (cells.indexOf(cells[i]) % 6 === 0) {
+            row = cells.slice(i, i + 3)
+            altRows.push(row)
+        }
+    }
+    const alternate = () => {
+        for (let row of altRows) {
+            for (let cell of row) {
+                cell.classList.remove('table-alt')
+            }
+        }
+    }
 
-    showEdit.addEventListener('click', (e) => {
-        fixedItems.classList.toggle('hide')
-        editForm.classList.toggle('hide')
-    })
-
-    cancel.addEventListener('click', (e) => {
-        fixedItems.classList.toggle('hide')
-        editForm.classList.toggle('hide')
-    })
-
+    alternate()
 </script>

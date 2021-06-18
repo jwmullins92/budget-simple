@@ -1,12 +1,13 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
-    <div class="col-md-6 offset-md-3 mb-3">
+    <div class="col-md-8 offset-md-2 mb-3">
         <div class="mb-3">
             <div class="mb-3">
                 <h1>TRANSACTIONS</h1>
             </div>
             <form action="/transactions" class="row">
-                <div class="form-floating mb-3 col-4">
+                <div class="mb-3 col-2">
+                    <label for="category">Category:</label>
                     <select class="form-select" name="category" id="category">
                         <option value="" selected>All</option>
                         <% for(let c of categories) {%>
@@ -17,9 +18,9 @@
                         <% } %>
                         <% } %>
                     </select>
-                    <label for="category">Category</label>
                 </div>
-                <div class="form-floating mb-3 col-4">
+                <div class="mb-3 col-2">
+                    <label for="date">Month:</label>
                     <select class="form-select" name="date" id="date">
                         <option value="" selected>All</option>
                         <option value="1" <%=parseInt(query.date) === 1 ? 'selected' : ''%>>Jan</option>
@@ -35,9 +36,9 @@
                         <option value="11" <%=parseInt(query.date) === 11 ? 'selected' : ''%>>Nov</option>
                         <option value="12" <%=parseInt(query.date) === 12 ? 'selected' : ''%>>Dec</option>
                     </select>
-                    <label for="date">Month</label>
                 </div>
-                <div class="form-floating mb-3 col-4">
+                <div class="mb-3 col-2">
+                    <label for="year">Year:</label>
                     <select class="form-select" name="year" id="year">
                         <% if(!query.year) {%>
                         <% for(let i = 2015; i <= today.getFullYear(); i++) {%> <option value="<%=i%>"
@@ -49,53 +50,96 @@
                         <% } %>
                         <% } %>
                     </select>
-                    <label for="year">Year</label>
                 </div>
-                <div class="form-floating mb-3 col-4">
+                <div class="mb-3 col-2">
+                    <label for="limit">Items/Page:</label>
                     <select name="limit" id="limit" class="form-select">
                         <option value="10" <%=parseInt(query.limit) === 10 ? 'selected' : ''%>>10</option>
                         <option value="25" <%=parseInt(query.limit) === 25 ? 'selected' : ''%>>25</option>
                         <option value="50" <%=parseInt(query.limit) === 50 ? 'selected' : ''%>>50</option>
                     </select>
-                    <label for="limit">Transactions/Page</label>
                 </div>
-                <div class="form-floating mb-3 col-4">
+                <div class="mb-3 col-2">
+                    <label for="limit">Page:</label>
                     <select name="page" id="page" class="form-select">
                         <% for(let i = 1; i <= pageNums; i++) {%> <option value="<%=i%>"
                             <%= parseInt(query.page) === i ? 'selected' : '' %>><%=i%></option>
                         <% } %>
                     </select>
-                    <label for="limit">Page</label>
                 </div>
                 <div>
-                    <button class="btn btn-primary btn-sm">Filter</button>
-                    <a href="/transactions/new">Add Transaction</a>
+                    <button class="btn btn-success btn-sm">Filter</button>
+                    <a class="btn btn-secondary btn-sm" href="/transactions/new">Add Transaction</a>
                 </div>
             </form>
         </div>
-        <div class="mb-3">
-            <ul class="list-group" id="trs">
-                <% for(let t of transactions) {%>
-                <% if(t.user) {%>
-                <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
-                <li class="list-group-item d-flex justify-content-between" value="<%=t.category%>">
-                    <p class="align-self-start">
-                        <strong><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %></strong>
-                        <%= t.note ? `- ${t.note}` : '' %>
-                    </p>
-                    <span class='d-flex justify-content-end w-50'>
-                        <p class="d-inline me-auto align-self-start"><b>$<%= t.amount %>:</b> <%= t.category.title %>
-                        </p>
-                        <a href="/transactions/<%= t._id %>">Details</a>
-                        <form class="d-inline" action="/transactions/<%=t._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-danger ms-1">X</button>
-                        </form>
-                    </span>
-                </li>
+        <div class="row g-0 mb-3 t-table">
+            <div class="col-2 fs-6 border border-2 bg-light fw-bold">
+                <p class="ms-2 my-0">Date</p>
+            </div>
+            <div class="col-4 fs-6 border border-2 border-start-0 bg-light fw-bold">
+                <p class="ms-2 my-0">Description</p>
+            </div>
+            <div class="col-2 fs-6 border border-2 border-start-0 bg-light fw-bold">
+                <p class="ms-2 my-0">Category</p>
+            </div>
+            <div class="col-2 fs-6 border border-2 border-start-0 bg-light fw-bold">
+                <p class="ms-2 my-0">Total</p>
+            </div>
+            <div class="col-1"></div>
+            <% for(let t of transactions) {%>
+            <% if(t.user) {%>
+            <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
+            <div class="col-2 border border-2 border-bottom-0 alt table-alt">
+                <p class="ms-2 my-0"><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %> </p>
+            </div>
+            <div class="col-4 border-top border-end border-2 alt table-alt">
+                <% if (t.note) {%>
+                <p class="ms-2 my-0"> <%= t.note %> </p>
+                <% } else { %>
+                <p class="ms-2 my-0"> - </p>
                 <% } %>
-                <% } %>
-                <% } %>
-            </ul>
+            </div>
+            <div class="col-2 border-top border-end border-2 alt table-alt">
+                <p class="ms-2 my-0"><%= t.category.title %> </p>
+            </div>
+            <div class="col-2 border border-2 border-bottom-0 border-start-0 text-end alt table-alt">
+                <p class="me-2 my-0"> $<%= t.amount %></p>
+            </div>
+            <div class="col-1">
+                <a class="ms-2 my-0 bi-pencil-square" href="transactions/<%=t._id%>/edit"></a>
+            </div>
+            <% } %>
+            <% } %>
+            <% } %>
         </div>
     </div>
 </div>
+
+<script>
+    let table = document.querySelector('.t-table')
+    let cells = [...document.querySelectorAll('.alt')]
+    altRows = []
+    for (let i = 0; i < cells.length; i++) {
+        if (cells.indexOf(cells[i]) % 8 === 0) {
+            row = cells.slice(i, i + 4)
+            altRows.push(row)
+        }
+    }
+    const addBottomBorder = () => {
+        table.children[table.children.length - 2].classList.remove('border-bottom-0')
+        table.children[table.children.length - 3].classList.add('border-bottom')
+        table.children[table.children.length - 4].classList.add('border-bottom')
+        table.children[table.children.length - 5].classList.remove('border-bottom-0')
+    }
+    const alternate = () => {
+        for (let row of altRows) {
+            for (let cell of row) {
+                cell.classList.remove('table-alt')
+            }
+        }
+    }
+    addBottomBorder()
+    alternate()
+
+</script>

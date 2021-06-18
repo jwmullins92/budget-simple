@@ -1,7 +1,8 @@
 <% layout('layouts/boilerplate') %>
 <div class="col-md-6 offset-md-3">
     <h1 class="d-inline"><%= category.title %> </h1>
-    <form action="/categories/<%=category._id%>?_method=PUT" class="needs-validation" method="POST" novalidate>
+    <form action="/categories/<%=category._id%>?_method=PUT" class="needs-validation" id="edit-category" method="POST"
+        novalidate>
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" value="<%=category.title%>" name="category[title]" id="title" class="form-control"
@@ -27,11 +28,12 @@
                 Please select fixed or flexible.
             </div>
         </div>
-        <div class="mb-3 hide" id="pay-date">
+        <div class="mb-3 <%=!parseInt(category.payDate) ? "hide" : ''%>" id="pay-date">
             <label for="date-select">Day of Month?</label>
             <select name="category[payDate]" class="form-select" id="date-select">
+                <option value="" selected>--Select Pay Date--</option>
                 <% for(let i = 1; i <= 30; i++) {%>
-                <option value="<%=i%>"><%= i %> </option>
+                <option value="<%=i%>" <%=parseInt(category.payDate) === i ? 'selected' : ''%>><%= i %> </option>
                 <% } %>
             </select>
         </div>
@@ -40,7 +42,10 @@
                 <%=category.canEnd ? 'checked' : ''  %>>
             <label class=" form-check-label" for="canEnd">I can cancel this</label>
         </div>
-        <button class="btn btn-primary btn-sm">Update</button>
+    </form>
+    <button type="button" class="btn btn-success btn-sm d-inline" id="confirm">Update</button>
+    <form action="/categories/<%=category._id%>?_method=DELETE" class="d-inline" method="POST">
+        <button class="btn btn-sm btn-danger">Delete</button>
     </form>
 </div>
 
@@ -49,7 +54,6 @@
     const cancel = document.querySelector("#cancel")
     const payDate = document.querySelector("#pay-date")
     fixed.addEventListener('change', (event) => {
-        console.log("change")
         if (fixed.value === "true") {
             cancel.classList.remove('hide')
             payDate.classList.remove('hide')
@@ -57,5 +61,9 @@
             cancel.classList.add('hide')
             payDate.classList.add('hide')
         }
+    })
+
+    document.querySelector('#confirm').addEventListener('click', (e) => {
+        document.querySelector('#edit-category').submit()
     })
 </script>

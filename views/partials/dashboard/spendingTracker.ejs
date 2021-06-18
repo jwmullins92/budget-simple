@@ -1,0 +1,51 @@
+<% if(budget.categories) {%>
+<div class="row mb-3">
+    <div class="col-10 offset-1">
+        <div class="card">
+            <div class="card-header fs-3 d-flex align-items-center">
+                <span><b>Categories</b></span>
+                <span class="ms-auto">
+                    <%- include('../modals/newCategoryModal.ejs') %></span>
+            </div>
+            <div class="card-body py-0 d-flex align-items-center">
+                <span class="fw-bold me-3">Quick Links:</span>
+                <span>
+                    <ul class="nav">
+                        <li class="nav-item fw-bold">
+                            <a href="/transactions/new" class="nav-link">Log
+                                Transaction </a>
+                        </li>
+                        <li class="nav-item fw-bold">
+                            <a href="/budgets/<%=budget._id%>/edit" class="nav-link">Edit
+                                Budget</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+            <ul class="list-group list-group-flush">
+                <% for(let b of budget.categories) {%>
+                <li class="list-group-item fs-5" id="<%=b.category.title%>">
+                    <div class="d-flex justify-content-between cat-tracker">
+                        <p>
+                            <%= b.category.title %>
+                        </p>
+                        <% for(let c of progress.categories) {%>
+                        <% if(c.category === b.category.title) {%>
+                        <p class="percent-complete hide"> <%= c.percent %>% </p>
+                        <p>$<%= c.spent %> of $<%= b.amount %> </p>
+                        <% } %>
+                        <% } %>
+                        <% if(!progressCategories.includes(b.category.title)) {%>
+                        <p>$0 of $<%= b.amount %> </p>
+                        <p class="percent-complete hide">0%</p>
+                        <% } %>
+                    </div>
+                    <div class="prog-bar"></div>
+                </li>
+
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</div>
+<% } %>

@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
-<h1>CREATE NEW BUDGET</h1>
+<h1>Create New Budget</h1>
 <form action="/budgets" class="row" method="POST">
-    <div class="mb-3 col-4">
+    <div class="mb-3 col-2">
         <label class="form-label" for="month">Month</label>
         <select class="form-select" name="month" id="month">
             <option value="" selected>All</option>
@@ -19,7 +19,7 @@
             <option value="12" <%= date.getMonth() + 1 === 12 ? 'selected' : ''%>>Dec</option>
         </select>
     </div>
-    <div class="mb-3 col-4">
+    <div class="mb-3 col-2">
         <label class="form-label" for="year">Year</label>
         <select class="form-select" name="year" id="year">
             <% for(let i = 2015; i <= date.getFullYear(); i++) {%>
@@ -27,11 +27,12 @@
             <% } %>
         </select>
     </div>
-    <div class="mb-3 col-4">
-        <label class="form-label" for="amount">Total Budget for Month:</label>
+    <div class="mb-3 col-3">
+        <label class="form-label" for="amount">Total Income for Month:</label>
         <input class="form-control" type="number" name="amount" id="amount">
     </div>
-    <div class="row">
+    <div class="col-5"></div>
+    <div class="row mb-3">
         <% for(let c of categories) {%>
         <div class="col-3 d-flex justify-content-between align-items-baseline mb-1">
             <label for="<%=c.title%>" class="form-label"><%=c.title%>:</label>

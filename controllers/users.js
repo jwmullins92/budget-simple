@@ -7,8 +7,8 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.login = (req, res) => {
     req.flash('success', 'Welcome back!')
-    const redirectUrl = req.session.returnTo || '/dashboard'
-    delete req.session.returnTo
+    const redirectUrl = req.session.returnTo || '/dashboard' // once logged in, they are taken to where they tried to go
+    delete req.session.returnTo // cleans up the session
     res.redirect(redirectUrl)
 }
 
@@ -20,10 +20,10 @@ module.exports.createNewUser = async (req, res) => {
     try {
         const { username, password, email } = req.body
         const user = new User({ email, username })
-        const registeredUser = await User.register(user, password)
-        req.login(registeredUser, (err) => {
-            if (err) {
-                return next
+        const registeredUser = await User.register(user, password)  // creates new user and salts password
+        req.login(registeredUser, (err) => {    //
+            if (err) {                          // logs in newly registered user
+                return next()                   //
             }
             req.flash('success', 'Welcome to Budget Simple!')
             res.redirect('/dashboard')
