@@ -2,55 +2,7 @@
 
 <div class="col-md-6 offset-md-3 mb-3">
     <h1>Editing Transaction</h1>
-    <form action="/transactions/<%=transaction._id%>?_method=PUT" id="edit-form" class="needs-validation" method="post"
-        novalidate>
-        <div class="mb-3">
-            <label for="datepicker">Date:</label>
-            <input type="text" name="transaction[date]" class="form-control" id="datepicker"
-                value="<%=transaction.date %>" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please select a date.
-            </div>
-        </div>
-        <div class=" mb-3">
-            <label for="category">Category:</label>
-            <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category">
-                <% for(let category of categories) {%>
-                <% if(category.user.equals(currentUser._id)) {%>
-                <option value="<%=category._id%>"
-                    <%= category._id.toString() === transaction.category.toString() ? 'selected' : '' %>>
-                    <%= category.title %></option>
-                <% } %>
-                <% } %>
-            </select>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="amount">Total:</label>
-            <input type="number" class="form-control" name="transaction[amount]" value="<%=transaction.amount%>"
-                id="amount" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please enter the total of the transaction.
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="notes">Notes:</label>
-            <textarea class="form-control" name="transaction[note]" id="notes" rows="3" style="width: 100%;"
-                class="d-block"><%= transaction.note %> </textarea>
-        </div>
-    </form>
-    <button type="button" id="confirm" class="btn btn-sm btn-success d-inline">Submit</button>
-    <form action="/transactions/<%=transaction._id%>?_method=DELETE" class="d-inline" method="POST">
-        <button class="btn btn-danger btn-sm">Delete</button>
-    </form>
+    <%- include('../partials/transactions/edit/transactionEditForm') %>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>

@@ -1,0 +1,72 @@
+<h1 class="text-center mb-5">
+    <b><%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %></b> <span
+        class="fs-3"><%- include('../modals/dashFilter') %></span>
+</h1>
+<!-- Right Side Start -->
+<div class="row mb-5 d-flex justify-content-center">
+    <div class="col-3">
+        <div>
+            <p class="card-text text-end fs-4 d-flex justify-content-between"> <span
+                    class="card-text text-dark"><b>Total
+                        Income:</b></span>
+                <span>$<%= budget.amount %></span>
+            </p>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Budgeted:</b></span>
+                <span>$<%= expenses %> </span>
+            </p>
+            <hr>
+            <p
+                class="card-text text-end <%= budget.amount - expenses >= 0 ? "text-success" : "text-danger" %> fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Leftover:</b></span>
+                <span>$<%= budget.amount - expenses %> </span>
+            </p>
+        </div>
+    </div>
+    <!-- Right Side End -->
+
+
+    <div class=" col-1 d-flex justify-content-center">
+        <div class="divider h-100"></div>
+    </div>
+
+    <!-- Left Side Start -->
+    <div class="col-3">
+        <div>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Spent:</b></span>
+                <span>$<%= spent %> </span>
+            </p>
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Scheduled Out:</b></span>
+                <% if(fixedTotal + flexTotal > 0) {%>
+                <span>
+                    $<%= fixedTotal + flexTotal %>
+                </span>
+                <% } else { %>
+                <span>
+                    $0
+                </span>
+                <% } %>
+            </p>
+            <hr>
+            <p class="card-text d-flex justify-content-between fs-6 mb-0">
+                <span class="card-text text-dark"><a class="text-decoration-none"
+                        href="/budgets/<%=budget._id%>/fixed">Fixed
+                        Remaining</a>:
+                </span>
+                <span class="<%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= fixedTotal %>
+                </span>
+            </p>
+            <p class="card-text d-flex justify-content-between fs-6">
+                <span class="card-text text-dark"><a class="text-decoration-none"
+                        href="/budgets/<%=budget._id%>/flex">Flex Remaining</a>:
+                </span>
+                <span class="<%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= flexTotal %>
+                </span>
+            </p>
+        </div>
+    </div>
+</div>

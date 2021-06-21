@@ -1,7 +1,7 @@
 const Budget = require('../models/budget')
 
 module.exports.updateBudgets = async (category) => {
-    const budgets = await Budget.find({})
+    const budgets = await Budget.find({ user: req.user })
     let newCat = {}
     newCat.category = category._id
     newCat.amount = 0

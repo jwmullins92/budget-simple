@@ -1,0 +1,18 @@
+<div class="hide amount">
+    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST" class="amount-form">
+        <% for(let cat of budget.categories) {%>
+        <% if(cat.category.fixed) {%>
+        <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
+        <input type="number" class="hide ms-2 py-1 w-50" name="categories[amount]" id="amount" value="<%=cat.amount%>">
+        <button class="hide btn btn-sm btn-success">Confirm</button>
+        <% } %>
+        <% } %>
+        <% for(let cat of budget.categories) {%>
+        <% if(!cat.category.fixed) {%>
+        <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
+        <input type="number" class="hide ms-2 py-1 w-50" name="categories[amount]" id="amount" value="<%=cat.amount%>">
+        <button class="hide btn btn-sm btn-success">Confirm</button>
+        <% } %>
+        <% } %>
+    </form>
+</div>

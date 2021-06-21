@@ -1,0 +1,11 @@
+<div class="mb-3">
+    <a href="/budgets/<%=budget._id%>/edit" class="btn btn-sm btn-secondary">Edit</a>
+    <form action="/budgets/<%=budget._id%>?_method=DELETE" method="POST" class="d-inline">
+        <button class="btn btn-sm btn-danger">Delete</button>
+    </form>
+</div>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(4)
+</script>

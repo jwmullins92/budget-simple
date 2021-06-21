@@ -1,0 +1,32 @@
+<div class="row g-0 mb-3">
+    <div class="col-3 offset-2 fs-4 border border-2 border-end-0 bg-light">
+        <p class="ms-2 my-0">Category</p>
+    </div>
+    <div class="col-3 fs-4 border border-2 bg-light">
+        <p class="ms-2 my-0">Budgeted</p>
+    </div>
+    <div class="col-3"></div>
+    <% for(let c of budget.categories) {%>
+    <% if(!c.category.fixed) {%>
+    <div class="col-3 offset-2 border border-2 border-end-0 border-top-0 alt table-alt">
+        <p class="ms-2 my-1"><%= c.category.title%> </p>
+    </div>
+    <div class="col-3 border border-2 border-top-0 alt table-alt form-div">
+        <div class="amount">
+            <p class="ms-2 my-1">$<%= c.amount %> </p>
+        </div>
+        <%- include('./flexibleEditForm') %>
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-sm bi-pencil-square text-primary edit-amount"></button>
+    </div>
+    <% } %>
+    <% } %>
+</div>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script src="/scripts/allowEditCells.js"></script>
+<script>
+    allowEditCells()
+    alternate(4)
+</script>

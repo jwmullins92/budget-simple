@@ -1,6 +1,4 @@
-<% layout('layouts/boilerplate') %>
-<%- include('../partials/categories/edit/categoryEditForm') %>
-<script>
+const formFunction = () => {
     const fixed = document.querySelector("#fixed")
     const cancel = document.querySelector("#cancel")
     const payDate = document.querySelector("#pay-date")
@@ -17,4 +15,4 @@
     document.querySelector('#confirm').addEventListener('click', (e) => {
         document.querySelector('#edit-category').submit()
     })
-</script>
+}

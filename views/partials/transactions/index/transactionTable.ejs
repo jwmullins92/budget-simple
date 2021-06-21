@@ -1,0 +1,45 @@
+<div class="row g-0 mb-3 t-table">
+    <div class="col-2 fs-6 border border-2 bg-light fw-bold">
+        <p class="ms-2 my-0">Date</p>
+    </div>
+    <div class="col-4 fs-6 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-2 my-0">Description</p>
+    </div>
+    <div class="col-2 fs-6 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-2 my-0">Category</p>
+    </div>
+    <div class="col-2 fs-6 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-2 my-0">Total</p>
+    </div>
+    <div class="col-1"></div>
+    <% for(let t of transactions) {%>
+    <% if(t.user) {%>
+    <% if(currentUser && t.user._id.equals(currentUser._id)) {%>
+    <div class="col-2 border border-2 border-top-0 alt table-alt">
+        <p class="ms-2 my-0"><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %> </p>
+    </div>
+    <div class="col-4 border border-2 border-top-0 border-start-0 alt table-alt">
+        <% if (t.note) {%>
+        <p class="ms-2 my-0"> <%= t.note %> </p>
+        <% } else { %>
+        <p class="ms-2 my-0"> - </p>
+        <% } %>
+    </div>
+    <div class="col-2 border border-top-0 border-start-0 border-2 alt table-alt">
+        <p class="ms-2 my-0"><%= t.category.title %> </p>
+    </div>
+    <div class="col-2 border border-2 border-top-0 border-start-0 text-end alt table-alt">
+        <p class="me-2 my-0"> $<%= t.amount %></p>
+    </div>
+    <div class="col-1">
+        <a class="ms-2 my-0 bi-pencil-square" href="transactions/<%=t._id%>/edit"></a>
+    </div>
+    <% } %>
+    <% } %>
+    <% } %>
+</div>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(8)
+</script>

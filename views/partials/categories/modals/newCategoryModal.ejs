@@ -1,0 +1,80 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#new-category">
+    Create Category
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="new-category" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Define Category</h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/categories" method="POST" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label fs-5">Title:</label>
+                        <input type="text" name="category[title]" id="title" class="form-control" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please name your category.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fixed" class="form-label fs-5">Is this cost fixed or flexible?</label>
+                        <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?"
+                            required>
+                            <option value='' selected disabled>--Select Fixed or Flexible--</option>
+                            <option value="true">Fixed</option>
+                            <option value="false">Flexible</option>
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please select fixed or flexible.
+                        </div>
+                    </div>
+                    <div class="mb-3 hide" id="pay-date">
+                        <label for="date-select" class="form-label fs-5">Day of Month?</label>
+                        <select name="category[payDate]" class="form-select" id="date-select">
+                            <option value="none" selected>--Select Pay Date--</option>
+                            <% for(let i = 1; i <= 30; i++) {%>
+                            <option value="<%=i%>"><%= i %> </option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3 hide" id="cancel">
+                        <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true"
+                            id="canEnd">
+                        <label class="form-check-label fs-5" for="canEnd">I can cancel this</label>
+                    </div>
+                    <button class="btn btn-primary btn-sm">Create</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fixed = document.querySelector("#fixed")
+    const cancel = document.querySelector("#cancel")
+    const payDate = document.querySelector("#pay-date")
+    fixed.addEventListener('change', (event) => {
+        console.log("change")
+        if (fixed.value === "true") {
+            cancel.classList.remove('hide')
+            payDate.classList.remove('hide')
+        } else {
+            cancel.classList.add('hide')
+            payDate.classList.add('hide')
+        }
+    })
+</script>

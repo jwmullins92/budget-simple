@@ -1,0 +1,26 @@
+<div class="col-3 offset-3 border border-2 border-end-0 bg-light">
+    <p class="ms-2 my-1 fs-5">Budget Period</p>
+</div>
+<div class="col-3 border border-2 bg-light">
+    <p class="ms-2 my-1 fs-5">Income </p>
+</div>
+<div class="col-3"></div>
+<% for(let b of budgets) {%>
+<div class="col-3 offset-3 border border-2 border-end-0 border-top-0 alt table-alt">
+    <p class="ms-2 my-1"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
+</div>
+<div class="col-3 border border-2 border-top-0 alt table-alt">
+    <p class="ms-2 my-1">$<%= b.amount %> </p>
+</div>
+<div class="col-3">
+    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 my-1"></a>
+</div>
+<% } %>
+<div class="col-2 offset-3 mt-3">
+    <a href="/budgets/new" class="btn btn-sm btn-secondary">Create Budget</a>
+</div>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(4)
+</script>
