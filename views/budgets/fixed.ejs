@@ -3,7 +3,10 @@
     <div class="container">
 
         <!-- Prints name of the budget month -->
-        <h1 class="offset-1 mb-3">Fixed Expenses for <%= months[budget.month.getMonth()] %>
+        <h1 class="offset-1 d-sm-block d-none mb-3">Fixed Expenses for <%= months[budget.month.getMonth()] %>
+            <%= budget.month.getFullYear() %>
+        </h1>
+        <h1 class="d-sm-none d-block fs-4 mb-3">Fixed Expenses for <%= months[budget.month.getMonth()] %>
             <%= budget.month.getFullYear() %>
         </h1>
 

@@ -58,7 +58,6 @@ module.exports.validateBudgetBreakdown = (req, res, next) => {
     }
 }
 
-
 // Validates a new or edited budget
 module.exports.validateBudget = (req, res, next) => {
     const breakdownSchema = Joi.array()

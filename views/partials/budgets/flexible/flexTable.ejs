@@ -1,23 +1,23 @@
 <div class="row g-0 mb-3">
 
     <!-- Table Headers Start -->
-    <div class="col-3 offset-2 fs-4 border border-2 border-end-0 bg-light">
+    <div class="col-5 col-sm-4 offset-1 offset-sm-2 fs-4 border border-2 border-end-0 bg-light">
         <p class="ms-2 my-0">Category</p>
     </div>
-    <div class="col-3 fs-4 border border-2 bg-light">
+    <div class="col-5 col-sm-4 fs-4 border border-2 bg-light">
         <p class="ms-2 my-0">Budgeted</p>
     </div>
-    <div class="col-3"></div>
+    <div class="col-1 col-sm-2"></div>
     <!-- Table Headers End -->
 
     <% for(let c of budget.categories) {%>
     <% if(!c.category.fixed) {%>
 
     <!-- Table data start -->
-    <div class="col-3 offset-2 border border-2 border-end-0 border-top-0 alt table-alt">
+    <div class="col-5 col-sm-4 offset-1 offset-sm-2 border border-2 border-end-0 border-top-0 alt table-alt">
         <p class="ms-2 my-1"><%= c.category.title%> </p>
     </div>
-    <div class="col-3 border border-2 border-top-0 alt table-alt form-div">
+    <div class="col-5 col-sm-4 border border-2 border-top-0 alt table-alt form-div">
         <div class="amount">
             <p class="ms-2 my-1">$<%= c.amount %> </p>
         </div>
@@ -29,7 +29,7 @@
     </div>
     <!-- Table data end -->
 
-    <div class="col-3">
+    <div class="col-1 col-sm-2">
 
         <!-- Shows edit field for the category's budgeted amount -->
         <button type="button" class="btn btn-sm bi-pencil-square text-primary edit-amount"></button>

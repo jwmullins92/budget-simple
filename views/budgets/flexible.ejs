@@ -4,8 +4,12 @@
     <div class="container">
 
         <!-- Prints name of the budget month -->
-        <h1 class="offset-2 mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
-            <%= budget.month.getFullYear() %> </h1>
+        <h1 class="offset-2 d-sm-block d-none mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
+            <%= budget.month.getFullYear() %>
+        </h1>
+        <h1 class="d-sm-none offset-1 d-block fs-4 mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
+            <%= budget.month.getFullYear() %>
+        </h1>
 
         <!-- Table of flexible categories and their budgeted amount for the period -->
         <%- include('../partials/budgets/flexible/flexTable') %>

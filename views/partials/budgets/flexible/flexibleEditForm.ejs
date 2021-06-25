@@ -7,8 +7,13 @@
 
         <!-- Submits category id. This part stays hidden. Start. -->
         <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
-        <input type="number" class="hide ms-2 py-1 w-50" name="categories[amount]" id="amount" value="<%=cat.amount%>">
-        <button class="hide btn btn-sm btn-success">Confirm</button>
+
+
+        <div class="input-group py-0 my-0 px-1 justify-content-between hide">
+            <span class="input-group-text d-none d-sm-block">$</span>
+            <input type="number" class="form-control" name="categories[amount]" id="amount" value="<%=cat.amount%>">
+            <button class="btn bi-check-lg confirm-change"></button>
+        </div>
         <!-- Category id input end -->
 
 

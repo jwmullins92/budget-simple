@@ -1,15 +1,21 @@
+// Finds either the budget period that matches the current date, or if there is none, finds budget with the latest date.
+// Also filters by query string
 module.exports.filterBudget = (budget, budgetPeriod, date) => {
     if (budgetPeriod.month) {
-        budget = budget.filter(b => parseInt(b.month.getMonth()) === parseInt(budgetPeriod.month) && parseInt(b.month.getFullYear()) === parseInt(budgetPeriod.year))
-        budget = budget[0]
+        newBudget = budget.filter(b => parseInt(b.month.getMonth()) === parseInt(budgetPeriod.month) && parseInt(b.month.getFullYear()) === parseInt(budgetPeriod.year))
+        budget = newBudget[0]
         budget.categories.sort((a, b) => {
             if (a.category.title < b.category.title) { return -1 };
             if (a.category.title > b.category.title) { return 1 };
             return 0
         })
     } else {
-        budget = budget.filter(b => b.month.getMonth() === date.getMonth())
-        budget = budget[0]
+        newBudget = budget.filter(b => b.month.getMonth() === date.getMonth())
+        if (!newBudget.length) {
+            budget = budget[budget.length - 1]
+        } else {
+            budget = newBudget[0]
+        }
         budget.categories.sort((a, b) => {
             if (a.category.title < b.category.title) { return -1 };
             if (a.category.title > b.category.title) { return 1 };
@@ -27,6 +33,8 @@ module.exports.findSpent = (transactions) => {
     return total
 }
 
+
+// Finds total of budgeted amounts
 module.exports.findExpenses = (categories) => {
     let total = 0
     for (let obj of categories) {
@@ -35,6 +43,8 @@ module.exports.findExpenses = (categories) => {
     return total
 }
 
+
+// Finds total of budgeted amounts for fixed categories
 module.exports.findFixed = (categories) => {
     total = 0
     for (let obj of categories) {
@@ -45,6 +55,8 @@ module.exports.findFixed = (categories) => {
     return total
 }
 
+
+// Finds total of budgeted amounts for flex categories
 module.exports.findFlex = (categories) => {
     total = 0
     for (let obj of categories) {
@@ -55,6 +67,8 @@ module.exports.findFlex = (categories) => {
     return total
 }
 
+
+// Tracks percent of progress for each category toward the budget cap (used to fill progress bar dynamically)
 module.exports.findProgress = (budget, transactions) => {
     let progress = {}
     progress.categories = []
@@ -92,6 +106,8 @@ module.exports.findProgress = (budget, transactions) => {
     return progress
 }
 
+
+// reference for categories that have transactions associated with them so they are displayed correctly on the dashboard
 module.exports.findProgressCategories = (progress) => {
     progressCategories = []
     for (let p of progress.categories) {
@@ -100,6 +116,8 @@ module.exports.findProgressCategories = (progress) => {
     return progressCategories
 }
 
+
+// Finds how much is still scheduled out for fixed categories
 module.exports.fixedRem = (budget, transactions) => {
     fixed = []
     for (let b of budget.categories) {
@@ -124,6 +142,8 @@ module.exports.fixedRem = (budget, transactions) => {
     return fixedRem
 }
 
+
+// Finds how much is still scheduled out for flex categories
 module.exports.flexRem = (budget, transactions) => {
     flex = []
     for (let b of budget.categories) {

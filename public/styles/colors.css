@@ -16,3 +16,14 @@
     height: 1px;
 }
 
+/* Fixed/Flex table edit confirm button */
+
+.confirm-change {
+    color: #198754;
+    width: 25%;
+    transition: all .25s ease-in-out;
+}
+
+.confirm-change:hover {
+    color: #146b42;
+}
