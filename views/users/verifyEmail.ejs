@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <div class="col-12 col-md-8 offset-md-2 col-xl-4 offset-xl-4 mb-3">
+        <div class="card shadow">
+
+            <!-- Card top image -->
+            <img src="https://cdn.pixabay.com/photo/2017/10/25/19/45/piggy-bank-2889042_960_720.jpg"
+                class="card-img-top" alt="piggie">
+
+
+            <div class="card-body">
+                <h5 class="card-title">Verify Email</h5>
+
+                <!-- Email verification form start -->
+                <form action="/reset-password/verify-email" method="POST">
+                    <div class="mb-3">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                    </div>
+                    <div>
+                        <button class="btn btn-success">Confirm</button>
+                    </div>
+                </form>
+
+                <!-- Email verification form end -->
+            </div>
+        </div>
+    </div>
+</div>

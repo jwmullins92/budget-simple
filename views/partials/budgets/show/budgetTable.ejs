@@ -1,25 +1,29 @@
 <div class="container mb-3">
     <div class="row">
-        <div class="col-2 border border-2 border-end-0 bg-light">
+
+        <!-- Table headers start -->
+        <div class="col-6 col-lg-4 offset-lg-2 offset-xl-4 col-xl-2 border border-2 border-end-0 bg-light">
             <p class="ms-2 my-1 fs-5">Category</p>
         </div>
-        <div class="col-2 border border-2 bg-light">
+        <div class="col-6 col-lg-4 col-xl-2 border border-2 bg-light">
             <p class="ms-2 my-1 fs-5">Amount </p>
         </div>
-        <div class="col-8"></div>
+        <div class="col-xl-8"></div>
+        <!-- Table headers start -->
+
         <% for(let c of budget.categories) {%>
-        <div class="col-2 border border-2 border-end-0 border-top-0 alt table-alt">
+
+        <!-- Table data start -->
+        <div
+            class="col-6 col-lg-4 offset-lg-2 offset-xl-4 col-xl-2 border border-2 border-end-0 border-top-0 alt table-alt">
             <p class="ms-2 my-0"><%= c.category.title %> </p>
         </div>
-        <div class="col-2 border border-2 border-top-0 alt table-alt">
+        <div class="col-6 col-lg-4 col-xl-2 border border-2 border-top-0 alt table-alt">
             <p class="ms-2 my-0">$<%= c.amount %> </p>
         </div>
-        <div class="col-8"></div>
+        <div class="col-xl-8"></div>
+        <!-- Table data end -->
+
         <% } %>
     </div>
 </div>
-
-<script src="/scripts/alternateTableRows.js"></script>
-<script>
-    alternate(4)
-</script>

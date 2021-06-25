@@ -1,0 +1,36 @@
+<% if(categories.length) {%>
+
+<div class="d-flex offset-1 offset-md-2 col-lg-8 offset-lg-3 justify-content-between align-items-baseline">
+    <h2 class="d-none d-sm-block">Budget History</h2>
+    <h2 class="d-block d-sm-none fs-5">Budget History</h2>
+</div>
+
+<!-- Instructions (after categories are created) start -->
+<p class="fs-4 col-10 offset-1 offset-md-2 col-md-6 offset-lg-3 mt-3">When you set up your budgets, they will all be
+    stored here
+    for
+    you to access
+    at
+    any point in the future!</p>
+<div class="col-6 offset-1 offset-md-2 offset-lg-3 mt-3">
+    <a href="/budgets/new" class="btn btn-sm btn-success">Create Budget</a>
+</div>
+<!-- Instructions (after categories are created) end -->
+
+<% } else { %>
+
+<div class="d-flex offset-1 offset-md-2 col-lg-8 offset-lg-3 justify-content-between align-items-baseline">
+    <h2 class="d-none d-sm-block">Budget History</h2>
+    <h2 class="d-block d-sm-none fs-5">Budget History</h2>
+</div>
+
+<!-- Instructions (if categories have not been created) start -->
+<p class="fs-4 col-10 offset-1 offset-md-2 col-md-6 offset-lg-3 mt-3">Come back here once you've created your Categories
+    to start logging your
+    transactions!</p>
+<div class="col-6 offset-1 offset-md-2 offset-lg-3 mt-3">
+    <a href="/categories" class="btn btn-sm btn-success">Set up Categories</a>
+</div>
+<!-- Instructions (if categories have not been created) end -->
+
+<% } %>

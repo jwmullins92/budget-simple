@@ -1,4 +1,6 @@
 <div class="row g-0 mb-3">
+
+    <!-- Table Headers Start -->
     <div class="col-3 offset-1 fs-4 border border-2 border-end-0 bg-light">
         <p class="ms-2 my-0">Due Date</p>
     </div>
@@ -9,8 +11,13 @@
         <p class="ms-2 my-0">Budgeted</p>
     </div>
     <div class="col-1"></div>
+    <!-- Table Headers End -->
+
+
     <% for(let c of budget.categories) {%>
     <% if(c.category.fixed) {%>
+
+    <!-- Table data start -->
     <div class="col-3 offset-1 border border-2 border-end-0 border-top-0 alt table-alt">
         <p class="ms-2 my-1"><%=months[budget.month.getMonth()]%> <%= c.category.payDate %> </p>
     </div>
@@ -24,14 +31,14 @@
         <%- include('./fixedEditForm') %>
     </div>
     <div class="col-1">
+        <!-- Table data end -->
+
+        <!-- Shows edit field for the category's budgeted amount -->
         <button type="button" class="btn btn-sm text-primary bi-pencil-square edit-amount"></button>
+
     </div>
+
+
     <% } %>
     <% } %>
 </div>
-<script src="/scripts/alternateTableRows.js"></script>
-<script src="/scripts/allowEditCells.js"></script>
-<script>
-    allowEditCells()
-    alternate(6)
-</script>

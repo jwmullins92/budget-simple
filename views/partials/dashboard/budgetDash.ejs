@@ -2,71 +2,106 @@
     <b><%= months[budget.month.getMonth()] %> <%= budget.month.getFullYear() %></b> <span
         class="fs-3"><%- include('../modals/dashFilter') %></span>
 </h1>
-<!-- Right Side Start -->
-<div class="row mb-5 d-flex justify-content-center">
-    <div class="col-3">
-        <div>
+
+<!-- Left Side Start -->
+<div class="container-fluid">
+    <div class="row mb-5 d-md-flex justify-content-center">
+        <div class="col-md-5 col-lg-4 col-xl-3">
+
+            <!-- Shows total income for the month -->
             <p class="card-text text-end fs-4 d-flex justify-content-between"> <span
                     class="card-text text-dark"><b>Total
                         Income:</b></span>
                 <span>$<%= budget.amount %></span>
             </p>
+
+            <!-- Shows how much money has been assigned to categories -->
             <p class="card-text text-end fs-4 d-flex justify-content-between">
                 <span class="card-text text-dark"><b>Budgeted:</b></span>
                 <span>$<%= expenses %> </span>
             </p>
             <hr>
+
+            <!-- Calculates how much money can still be budgeted -->
+            <% if(expenses > spent) {%>
+
+            <!-- Calculates based on unbudgeted money -->
             <p
                 class="card-text text-end <%= budget.amount - expenses >= 0 ? "text-success" : "text-danger" %> fs-4 d-flex justify-content-between">
                 <span class="card-text text-dark"><b>Leftover:</b></span>
                 <span>$<%= budget.amount - expenses %> </span>
             </p>
-        </div>
-    </div>
-    <!-- Right Side End -->
+            <% } else { %>
 
-
-    <div class=" col-1 d-flex justify-content-center">
-        <div class="divider h-100"></div>
-    </div>
-
-    <!-- Left Side Start -->
-    <div class="col-3">
-        <div>
-            <p class="card-text text-end fs-4 d-flex justify-content-between">
-                <span class="card-text text-dark"><b>Spent:</b></span>
-                <span>$<%= spent %> </span>
+            <!-- Calculates based on unbudgeted money minus money spent if user has spent more than they budgeted -->
+            <p
+                class="card-text text-end <%= budget.amount - spent >= 0 ? "text-success" : "text-danger" %> fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark"><b>Leftover:</b></span>
+                <span>$<%= budget.amount - spent %> </span>
             </p>
+            <% } %>
+
+
+        </div>
+        <!-- Left Side End -->
+
+        <!-- Divider Start -->
+        <div class=" col-1 d-flex justify-content-center">
+            <div class="divider d-none d-md-block h-100"></div>
+        </div>
+        <div class="container d-md-none d-block">
+            <div class="h-divider my-4"></div>
+        </div>
+        <!-- Divider End -->
+
+        <!-- Right Side Start -->
+        <div class="col-md-5 col-lg-4 col-xl-3">
+
+            <!-- Shows how much user has spent so far -->
             <p class="card-text text-end fs-4 d-flex justify-content-between">
-                <span class="card-text text-dark"><b>Scheduled Out:</b></span>
-                <% if(fixedTotal + flexTotal > 0) {%>
+                <span class="card-text text-dark">
+                    <b>Spent:</b></span>
+                <span class=<%= spent > budget.amount ? 'text-danger' : ''%>
+                    <%= spent > expenses ? 'text-warning' : ''%>>$<%= spent %> </span>
+            </p>
+
+            <!-- Shows how much user still has scheduled out -->
+            <p class="card-text text-end fs-4 d-flex justify-content-between">
+                <span class="card-text text-dark "><b>Scheduled Out:</b></span>
                 <span>
-                    $<%= fixedTotal + flexTotal %>
+                    $<%= fixedRemaining + flexRemaining %>
                 </span>
-                <% } else { %>
-                <span>
-                    $0
-                </span>
-                <% } %>
             </p>
             <hr>
+
+            <!-- Shows how much of scheduled out are fixed expenses -->
             <p class="card-text d-flex justify-content-between fs-6 mb-0">
                 <span class="card-text text-dark"><a class="text-decoration-none"
                         href="/budgets/<%=budget._id%>/fixed">Fixed
                         Remaining</a>:
                 </span>
-                <span class="<%=fixedTotal >= 0 ? 'text-success' : 'text-danger'%>">
-                    $<%= fixedTotal %>
+
+                <!-- link to view and edit fixed expenses -->
+                <span class="<%=fixedRemaining >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= fixedRemaining %>
                 </span>
             </p>
+
+            <!-- Shows how much of scheduled out are flexible expenses -->
             <p class="card-text d-flex justify-content-between fs-6">
                 <span class="card-text text-dark"><a class="text-decoration-none"
-                        href="/budgets/<%=budget._id%>/flex">Flex Remaining</a>:
+                        href="/budgets/<%=budget._id%>/flex">Flex
+                        Remaining</a>:
                 </span>
-                <span class="<%=flexTotal >= 0 ? 'text-success' : 'text-danger'%>">
-                    $<%= flexTotal %>
+
+                <!-- link to view and edit flex expenses -->
+                <span class="<%=flexRemaining >= 0 ? 'text-success' : 'text-danger'%>">
+                    $<%= flexRemaining %>
                 </span>
             </p>
+
+
         </div>
+        <!-- Right Side End -->
     </div>
 </div>

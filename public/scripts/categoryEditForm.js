@@ -1,3 +1,5 @@
+// Shows and hides input fields depending on the answer to "fixed or flexible" on category new/edit forms
+
 const formFunction = () => {
     const fixed = document.querySelector("#fixed")
     const cancel = document.querySelector("#cancel")

@@ -2,8 +2,19 @@
 
 <div id="flex-items" class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 mb-3">
     <div class="container">
+
+        <!-- Prints name of the budget month -->
         <h1 class="offset-2 mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
             <%= budget.month.getFullYear() %> </h1>
+
+        <!-- Table of flexible categories and their budgeted amount for the period -->
         <%- include('../partials/budgets/flexible/flexTable') %>
+
     </div>
 </div>
+<script src="/scripts/alternateTableRows.js"></script>
+<script src="/scripts/allowEditCells.js"></script>
+<script>
+    allowEditCells()
+    alternate(4)
+</script>

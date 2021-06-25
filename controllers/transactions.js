@@ -7,19 +7,24 @@ moment().format();
 
 module.exports.index = async (req, res) => {
     req.session.returnTo = req.originalUrl // returns to current URL after editing transactions to give the filters persistence
-    let transactions = await Transaction.find({})
+    const originalUrl = req.originalUrl
+    let transactions = await Transaction.find({ user: req.user })
     let today = new Date()
     let pageNums = Math.ceil(transactions.length / 10)
-    if (req.query.limit) {                                                          //
-        const query = req.query                                                     // 
-        const results = await filterTransactions(query, transactions, pageNums, res)// filters results based on selected parameters
-        res.render('transactions/index', results)                                   //
-    }                                                                               //
+    if (req.query.limit) {
+        const query = req.query
+        if (!query.page) {
+            query.page = 1
+        }
+        console.log(query)
+        const results = await filterTransactions(query, transactions, pageNums, originalUrl)// filters results based on selected parameters
+        return res.render('transactions/index', results)
+    }
     const query = ''
-    const categories = await Category.find({})
-    transactions = await Transaction.find({}).populate('user').populate('category').sort({ date: -1 }).limit(10) // sorts transactions by date and defaults to show 10 per page
+    const categories = await Category.find({ user: req.user })
+    transactions = await Transaction.find({ user: req.user }).populate('user').populate('category').sort({ date: -1 }).limit(10) // sorts transactions by date and defaults to show 10 per page
     const page = 1
-    res.render('transactions/index', { transactions, categories, pageNums, page, query, today })
+    res.render('transactions/index', { transactions, categories, pageNums, page, query, today, originalUrl })
 }
 
 module.exports.createTransaction = async (req, res) => {
@@ -43,6 +48,10 @@ module.exports.updateTransaction = async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date); // corrects the date to the users timezone (prevents error that sometimes sets date 1 day earlier than expected)
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndUpdate(id, { ...req.body.transaction })
+    if (!transaction) {
+        req.flash('error', 'Transaction not found')
+        return res.redirect('/transactions')
+    }
     const redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions' // returns to the transactions page with the persisted filters
     res.redirect(redirectUrl)
 }
@@ -76,6 +85,10 @@ module.exports.showTransaction = async (req, res) => {
 module.exports.deleteTransaction = async (req, res) => {
     const { id } = req.params;
     const transaction = await Transaction.findByIdAndDelete(id)
+    if (!transaction) {
+        req.flash('error', 'Transaction not found')
+        return res.redirect('/transactions')
+    }
     const redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions'
     res.redirect(redirectUrl)
 }

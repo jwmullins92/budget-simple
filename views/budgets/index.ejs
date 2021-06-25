@@ -1,9 +1,19 @@
 <% layout('layouts/boilerplate') %>
-<% if(budgets.length) {%>
 <div class="container">
     <div class="row g-0 mb-3">
-        <h2 class="col-9 offset-3 mb-3">Budget History</h2>
+
+        <!-- Budget history table if user has any budgets -->
+        <% if(budgets.length) {%>
         <%- include('../partials/budgets/index/historyTable') %>
+
+        <!-- If no budgets, directs to next steps -->
+        <% } else {%>
+        <%- include('../partials/budgets/index/noBudgets') %>
+        <% } %>
     </div>
 </div>
-<% } %>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(4)
+</script>

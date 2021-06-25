@@ -1,4 +1,14 @@
 <% layout('layouts/boilerplate') %>
-<h1><%= months[budget.month.getMonth()] %> Budget: $<%= budget.amount %> </h1>
+<h1 class="offset-lg-2 offset-xl-4"><%= months[budget.month.getMonth()] %> Budget: $<%= budget.amount %> </h1>
+<!-- Prints name of the budget month -->
+
+<!-- loads table -->
 <%- include('../partials/budgets/show/budgetTable') %>
+
+<!-- loads edit/delete options -->
 <%- include('../partials/budgets/show/edit-delete') %>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(4)
+</script>

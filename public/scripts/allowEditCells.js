@@ -1,3 +1,5 @@
+// Gives functionality to the fixed and flex tables to allow editing a single cell
+
 const allowEditCells = () => {
     const editButton = [...document.querySelectorAll('.edit-amount')]
     const amount = [...document.querySelectorAll('.form-div')]
@@ -6,7 +8,6 @@ const allowEditCells = () => {
         b.addEventListener('click', (e) => {
             if (editButton.indexOf(b)) {
                 let index = editButton.indexOf(b)
-                console.log(index)
                 amount[index].children[0].classList.toggle('hide')
                 amount[index].children[1].classList.toggle('hide')
                 amount[index].children[1].children[0].children[3 * index + 1].classList.toggle('hide')

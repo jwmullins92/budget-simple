@@ -4,7 +4,7 @@ const { updateBudgets } = require('../utils/categoryHelpers');
 const numSuffix = require('../utils/numSuffix')
 
 module.exports.index = async (req, res) => {
-    const categories = await Category.find({})
+    const categories = await Category.find({ user: req.user })
     categories.sort(function (a, b) {                                       // 
         if (a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }   // sorts categories alphabetically
         if (a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }    //
@@ -20,7 +20,7 @@ module.exports.createCategory = async (req, res) => {
     const category = new Category(req.body.category)
     category.user = req.user._id
     await category.save()
-    updateBudgets(category) // pushes new category onto existing budgets with $0 budgeted for the budget periods
+    updateBudgets(category, category.user) // pushes new category onto existing budgets with $0 budgeted for the budget periods
     req.flash('success', 'Successfully created new category!')
     res.redirect('/categories')
 }
@@ -37,13 +37,21 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCategory = async (req, res) => {
     const category = await Category.findByIdAndUpdate(req.params.id, { ...req.body.category })
+    if (!category) {
+        req.flash('error', 'Category not found')
+        return res.redirect('/categories')
+    }
     res.redirect('/categories')
 }
 
 module.exports.deleteCategory = async (req, res) => {
     const { id } = req.params
     const category = await Category.findByIdAndDelete(id)
-    const budgets = await Budget.find({})
+    if (!category) {
+        req.flash('error', 'Category not found')
+        return res.redirect('/categories')
+    }
+    const budgets = await Budget.find({ user: req.user })
     for (let b of budgets) {                            //
         b.categories.remove({ id: { $in: category } })  // removes all references to category on existing budget models
     }                                                   //

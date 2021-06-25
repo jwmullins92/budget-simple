@@ -1,3 +1,5 @@
+// Allows for customizing errors
+
 class AppError extends Error {
     constructor(status, message) {
         super();

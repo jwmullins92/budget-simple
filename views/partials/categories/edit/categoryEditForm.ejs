@@ -1,18 +1,18 @@
 <div class="col-md-6 offset-md-3">
     <h1 class="d-inline"><%= category.title %> </h1>
+
+    <!-- Edit form start -->
     <form action="/categories/<%=category._id%>?_method=PUT" class="needs-validation" id="edit-category" method="POST"
         novalidate>
+
+        <!-- Category title -->
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" value="<%=category.title%>" name="category[title]" id="title" class="form-control"
                 required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please name your category.
-            </div>
         </div>
+
+        <!-- Category fixed or flexible -->
         <div class="mb-3">
             <label for="fixed">Is this cost fixed or flexible?</label>
             <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?" required>
@@ -20,13 +20,9 @@
                 <option <%= category.fixed === true ? 'selected' : '' %> value="true">Fixed</option>
                 <option <%= category.fixed === false ? 'selected' : '' %> value="false">Flexible</option>
             </select>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback">
-                Please select fixed or flexible.
-            </div>
         </div>
+
+        <!-- Category pay date -->
         <div class="mb-3 <%=!parseInt(category.payDate) ? "hide" : ''%>" id="pay-date">
             <label for="date-select">Day of Month?</label>
             <select name="category[payDate]" class="form-select" id="date-select">
@@ -36,19 +32,27 @@
                 <% } %>
             </select>
         </div>
+
+        <!-- Category can be cancelled? -->
         <div id="cancel" class="mb-3 <%= category.fixed === false ? "hide" : ""%>">
             <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true" id="canEnd"
                 <%=category.canEnd ? 'checked' : ''  %>>
             <label class=" form-check-label" for="canEnd">I can cancel this</label>
         </div>
+
+
     </form>
+    <!-- Edit form end -->
+
+    <!-- Submit form start -->
     <button type="button" class="btn btn-success btn-sm d-inline" id="confirm">Update</button>
+    <!-- Submit form end -->
+
+    <!-- Delete category start -->
     <form action="/categories/<%=category._id%>?_method=DELETE" class="d-inline" method="POST">
         <button class="btn btn-sm btn-danger">Delete</button>
     </form>
-</div>
+    <!-- Delete category end -->
 
-<script src="/scripts/categoryEditForm"></script>
-<script>
-    formFunction()
-</script>
+
+</div>

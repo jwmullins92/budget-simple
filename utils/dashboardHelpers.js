@@ -16,7 +16,6 @@ module.exports.filterBudget = (budget, budgetPeriod, date) => {
             return 0
         })
     }
-    console.log(budget)
     return budget
 }
 
@@ -51,26 +50,6 @@ module.exports.findFlex = (categories) => {
     for (let obj of categories) {
         if (obj.category.fixed !== true) {
             total = total + obj.amount
-        }
-    }
-    return total
-}
-
-module.exports.findFixedTransactions = (transactions) => {
-    total = 0
-    for (let t of transactions) {
-        if (t.category.fixed === true) {
-            total = total + t.amount
-        }
-    }
-    return total
-}
-
-module.exports.findFlexTransactions = (transactions) => {
-    total = 0
-    for (let t of transactions) {
-        if (t.category.fixed !== true) {
-            total = total + t.amount
         }
     }
     return total
@@ -119,4 +98,52 @@ module.exports.findProgressCategories = (progress) => {
         progressCategories.push(p.category)
     }
     return progressCategories
+}
+
+module.exports.fixedRem = (budget, transactions) => {
+    fixed = []
+    for (let b of budget.categories) {
+        if (b.category.fixed) {
+            fixed.push({ category: b.category, amount: b.amount })
+        }
+    }
+    for (let f of fixed) {
+        for (let t of transactions) {
+            if (f.category._id.toString() === t.category._id.toString()) {
+                f.amount = f.amount - t.amount
+                if (f.amount < 0) {
+                    f.amount = 0
+                }
+            }
+        }
+    }
+    fixedRem = 0
+    for (let f of fixed) {
+        fixedRem = fixedRem + f.amount
+    }
+    return fixedRem
+}
+
+module.exports.flexRem = (budget, transactions) => {
+    flex = []
+    for (let b of budget.categories) {
+        if (!b.category.fixed) {
+            flex.push({ category: b.category, amount: b.amount })
+        }
+    }
+    for (let f of flex) {
+        for (let t of transactions) {
+            if (f.category._id.toString() === t.category._id.toString()) {
+                f.amount = f.amount - t.amount
+                if (f.amount < 0) {
+                    f.amount = 0
+                }
+            }
+        }
+    }
+    flexRem = 0
+    for (let f of flex) {
+        flexRem = flexRem + f.amount
+    }
+    return flexRem
 }

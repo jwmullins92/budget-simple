@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#new-category">
+<button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#new-category">
     Create Category
 </button>
 
@@ -13,17 +13,17 @@
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
+                <!-- Category creation form start -->
                 <form action="/categories" method="POST" class="needs-validation" novalidate>
+
+                    <!-- Category title -->
                     <div class="mb-3">
                         <label for="title" class="form-label fs-5">Title:</label>
                         <input type="text" name="category[title]" id="title" class="form-control" required>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please name your category.
-                        </div>
                     </div>
+
+                    <!-- Category fixed or flexible -->
                     <div class="mb-3">
                         <label for="fixed" class="form-label fs-5">Is this cost fixed or flexible?</label>
                         <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?"
@@ -32,13 +32,9 @@
                             <option value="true">Fixed</option>
                             <option value="false">Flexible</option>
                         </select>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Please select fixed or flexible.
-                        </div>
                     </div>
+
+                    <!-- Category pay date -->
                     <div class="mb-3 hide" id="pay-date">
                         <label for="date-select" class="form-label fs-5">Day of Month?</label>
                         <select name="category[payDate]" class="form-select" id="date-select">
@@ -48,13 +44,20 @@
                             <% } %>
                         </select>
                     </div>
+
+                    <!-- Category can be cancelled? -->
                     <div class="mb-3 hide" id="cancel">
                         <input class="form-check-input" name="category[canEnd]" type="checkbox" value="true"
                             id="canEnd">
                         <label class="form-check-label fs-5" for="canEnd">I can cancel this</label>
                     </div>
+
+                    <!-- Submit button -->
                     <button class="btn btn-primary btn-sm">Create</button>
                 </form>
+                <!-- Category creation form end -->
+
+
             </div>
             <div class="modal-footer">
 
@@ -68,7 +71,6 @@
     const cancel = document.querySelector("#cancel")
     const payDate = document.querySelector("#pay-date")
     fixed.addEventListener('change', (event) => {
-        console.log("change")
         if (fixed.value === "true") {
             cancel.classList.remove('hide')
             payDate.classList.remove('hide')

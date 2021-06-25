@@ -1,3 +1,5 @@
+// Adds proper numeric suffix to dates (1st 2nd 3rd 4th, etc.)
+
 const numSuffix = (i) => {
     var j = i % 10,
         k = i % 100;

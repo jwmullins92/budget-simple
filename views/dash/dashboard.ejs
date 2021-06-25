@@ -1,7 +1,32 @@
 <% layout('layouts/boilerplate') %>
 <% if(budget._id) {%>
+
+<!-- Loads budget period information -->
 <%- include('../partials/dashboard/budgetDash') %>
+
+<!-- Loads progress tracking table for budget period -->
 <%- include('../partials/dashboard/spendingTracker.ejs') %>
+
+
+<!-- if no budgets have been created, directs to next steps -->
 <% } else {%>
 <%- include('../partials/dashboard/noBudgetsDash')  %>
 <% } %>
+
+<script src="/scripts/progressBar.js">
+</script>
+
+<script>
+    const fixed = document.querySelector("#fixed")
+    const cancel = document.querySelector("#cancel")
+    const payDate = document.querySelector("#pay-date")
+    fixed.addEventListener('change', (event) => {
+        if (fixed.value === "true") {
+            cancel.classList.remove('hide')
+            payDate.classList.remove('hide')
+        } else {
+            cancel.classList.add('hide')
+            payDate.classList.add('hide')
+        }
+    })
+</script>

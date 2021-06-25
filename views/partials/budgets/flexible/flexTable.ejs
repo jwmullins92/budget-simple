@@ -1,4 +1,6 @@
 <div class="row g-0 mb-3">
+
+    <!-- Table Headers Start -->
     <div class="col-3 offset-2 fs-4 border border-2 border-end-0 bg-light">
         <p class="ms-2 my-0">Category</p>
     </div>
@@ -6,8 +8,12 @@
         <p class="ms-2 my-0">Budgeted</p>
     </div>
     <div class="col-3"></div>
+    <!-- Table Headers End -->
+
     <% for(let c of budget.categories) {%>
     <% if(!c.category.fixed) {%>
+
+    <!-- Table data start -->
     <div class="col-3 offset-2 border border-2 border-end-0 border-top-0 alt table-alt">
         <p class="ms-2 my-1"><%= c.category.title%> </p>
     </div>
@@ -15,18 +21,20 @@
         <div class="amount">
             <p class="ms-2 my-1">$<%= c.amount %> </p>
         </div>
+
+        <!-- Edit form start -->
         <%- include('./flexibleEditForm') %>
+        <!-- Edit form end -->
+
     </div>
+    <!-- Table data end -->
+
     <div class="col-3">
+
+        <!-- Shows edit field for the category's budgeted amount -->
         <button type="button" class="btn btn-sm bi-pencil-square text-primary edit-amount"></button>
+
     </div>
     <% } %>
     <% } %>
 </div>
-
-<script src="/scripts/alternateTableRows.js"></script>
-<script src="/scripts/allowEditCells.js"></script>
-<script>
-    allowEditCells()
-    alternate(4)
-</script>

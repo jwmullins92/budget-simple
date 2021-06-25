@@ -1,20 +1,11 @@
 <% layout('layouts/boilerplate') %>
-<%- include('../partials/categories/edit/categoryEditForm') %>
-<script>
-    const fixed = document.querySelector("#fixed")
-    const cancel = document.querySelector("#cancel")
-    const payDate = document.querySelector("#pay-date")
-    fixed.addEventListener('change', (event) => {
-        if (fixed.value === "true") {
-            cancel.classList.remove('hide')
-            payDate.classList.remove('hide')
-        } else {
-            cancel.classList.add('hide')
-            payDate.classList.add('hide')
-        }
-    })
 
-    document.querySelector('#confirm').addEventListener('click', (e) => {
-        document.querySelector('#edit-category').submit()
-    })
+<!-- Loads category edit form -->
+<%- include('../partials/categories/edit/categoryEditForm') %>
+
+
+<!-- Shows and hides form elements based on fixed or flexible field value -->
+<script src="/scripts/categoryEditForm.js"></script>
+<script>
+    formFunction()
 </script>

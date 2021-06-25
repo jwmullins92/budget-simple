@@ -1,26 +1,93 @@
-<div class="col-3 offset-3 border border-2 border-end-0 bg-light">
-    <p class="ms-2 my-1 fs-5">Budget Period</p>
-</div>
-<div class="col-3 border border-2 bg-light">
-    <p class="ms-2 my-1 fs-5">Income </p>
-</div>
-<div class="col-3"></div>
-<% for(let b of budgets) {%>
-<div class="col-3 offset-3 border border-2 border-end-0 border-top-0 alt table-alt">
-    <p class="ms-2 my-1"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
-</div>
-<div class="col-3 border border-2 border-top-0 alt table-alt">
-    <p class="ms-2 my-1">$<%= b.amount %> </p>
-</div>
-<div class="col-3">
-    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 my-1"></a>
-</div>
-<% } %>
-<div class="col-2 offset-3 mt-3">
-    <a href="/budgets/new" class="btn btn-sm btn-secondary">Create Budget</a>
+<!-- Table headers start -->
+<div class="d-flex col-11 col-xl-8 offset-xl-2 justify-content-between align-items-baseline">
+    <h2 class="d-none d-sm-block">Budget History</h2>
+    <h2 class="d-block d-sm-none fs-5">Budget History</h2>
+    <p class="d-none d-sm-block">Page <%= page %> of <%= pageNums %> </p>
+    <p class="d-block d-sm-none fs-7">Page <%= page %> of <%= pageNums %> </p>
 </div>
 
-<script src="/scripts/alternateTableRows.js"></script>
-<script>
-    alternate(4)
-</script>
+<div class="col-6 col-xl-4 offset-xl-2 border border-2 border-end-0 bg-light">
+    <p class="ms-2 my-1 fs-5 d-none d-sm-block">Budget Period</p>
+    <p class="ms-2 my-1 fs-6 d-block d-sm-none">Budget Period</p>
+</div>
+<div class="col-5 col-xl-4 border border-2 bg-light">
+    <p class="ms-2 my-1 d-none d-sm-block fs-5">Income</p>
+    <p class="ms-2 my-1 d-block d-sm-none fs-6">Income</p>
+</div>
+<!-- Table headers end -->
+
+
+<% for(let b of budgets) {%>
+
+<!-- Table data start -->
+<div class="col-6 col-xl-4 offset-xl-2 border border-2 border-end-0 border-top-0 alt table-alt">
+    <p class="ms-2 my-1 fs-7"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
+</div>
+<div class="col-5 col-xl-4 border border-2 border-top-0 alt table-alt">
+    <p class="ms-2 my-1 fs-7">$<%= b.amount %> </p>
+</div>
+<div class="col-1">
+    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 my-1"></a>
+</div>
+<!-- Table data end -->
+
+<% } %>
+
+<!-- Create new budget link start -->
+<div class="offset-xl-2 mt-3">
+    <a href="/budgets/new" class="btn btn-sm btn-success">Create Budget</a>
+</div>
+<!-- Create new budget link end -->
+
+<!-- Page navigator start -->
+<nav class="mt-2" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <% if(page > 1) {%>
+        <li class="page-item"><a class="page-link bi-caret-left-fill" href="/budgets?page=<%=parseInt(page) - 1%>"></a>
+        </li>
+        <% } else {%>
+        <li class="page-item disabled"><a class="page-link bi-caret-left-fill"
+                href="/budgets?page=<%=parseInt(page) - 1%>"></a>
+        </li>
+        <% } %>
+        <% if(pageNums > 2 && page < 3) {%>
+        <% for(let i = 1; i <= 3; i++) {%>
+        <li class="page-item <%= parseInt(page) === i ? 'active' : '' %> "><a class="page-link"
+                href="/budgets?page=<%=i%> "><%= i %>
+            </a></li>
+        <% } %>
+        <% } else if(pageNums < 3) { %>
+        <% for(let i = 1; i <= pageNums; i++) {%>
+        <li class="page-item <%= parseInt(page) === i ? 'active' : '' %> "><a class="page-link"
+                href="/budgets?page=<%=i%> "><%= i %>
+            </a></li>
+        <% } %>
+        <% } else if (parseInt(page) === pageNums) {%>
+        <li class="page-item"><a class="page-link" href="/budgets?page=<%= parseInt(page-2) %>"><%= parseInt(page-2) %>
+            </a></li>
+        <li class="page-item"><a class="page-link" href="/budgets?page=<%= parseInt(page-1) %>"><%= parseInt(page-1) %>
+            </a></li>
+        <li class="page-item active"><a class="page-link" href="/budgets?page=<%= page %> "><%= parseInt(page) %>
+            </a></li>
+        <% } else if(page >= 3) {%>
+        <li class="page-item"><a class="page-link"
+                href="/budgets?page=<%= parseInt(page-1) %>"><%= parseInt(page) - 1 %>
+            </a></li>
+        <li class="page-item active"><a class="page-link"
+                href="/budgets?page=<%= parseInt(page) %>"><%= parseInt(page) %>
+            </a></li>
+        <li class="page-item"><a class="page-link"
+                href="/budgets?page=<%= parseInt(page + 1) %> "><%= parseInt(page) + 1 %>
+            </a></li>
+        <% } %>
+        <% if(page < pageNums) {%>
+        <li class="page-item"><a class="page-link bi-caret-right-fill" href="/budgets?page=<%=parseInt(page) + 1%>"></a>
+        </li>
+        <% } else { %>
+        <li class="page-item disabled"><a class="page-link bi-caret-right-fill"
+                href="/budgets?page=<%=parseInt(page) + 1%>"></a>
+        </li>
+        <% } %>
+    </ul>
+</nav>
+<!-- Page navigator end -->

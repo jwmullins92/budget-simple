@@ -1,3 +1,5 @@
+// Adds fixed or flexible descriptor to transactions
+
 const transactionFixedFlexPicker = () => {
     const category = document.querySelector('#category')
     const fixed = document.querySelector('#isFixed')

@@ -1,7 +1,7 @@
 const Transaction = require('../models/transaction')
 const Budget = require('../models/budget')
 const Category = require('../models/category')
-const { filterBudget, findSpent, findExpenses, findFixed, findFlex, findFixedTransactions, findFlexTransactions, findProgress, findProgressCategories } = require('../utils/dashboardHelpers.js')
+const { filterBudget, findSpent, findExpenses, findFixed, findFlex, fixedRem, flexRem, findFixedTransactions, findFlexTransactions, findProgress, findProgressCategories } = require('../utils/dashboardHelpers.js')
 
 module.exports.loadDashboard = async (req, res) => {
     const budgetPeriod = req.query // Defines budget period from query string
@@ -19,15 +19,13 @@ module.exports.loadDashboard = async (req, res) => {
         return res.redirect('/dashboard')
     }
     transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth()) // filters out transactions taht do not match the budget period
-    const spent = findSpent(transactions)                   // calculates total transactions for budget period
-    const expenses = findExpenses(budget.categories)        // calculates total money assigned to a category for budget period
-    let fixedTotal = findFixed(budget.categories)           // calculates how much of the assigned money is designated for a fixed expense
-    let flexTotal = findFlex(budget.categories)             // calculates how much of the assigned money is designated for a flexible expense
-    const fixedTr = findFixedTransactions(transactions)     // calculates total of transactions whose category is 'fixed'
-    const flexTr = findFlexTransactions(transactions)       // calculates total of transactions whose category is 'flexible'
-    fixedTotal = fixedTotal - fixedTr                       // calculates remaining fixed expenses that are still scheduled out
-    flexTotal = flexTotal - flexTr                          // calculates remaining flexible expenses that are still scheduled out
-    const progress = findProgress(budget, transactions)     // calculates % progress spent toward cap for each category
-    const progressCategories = findProgressCategories(progress) // reference for categories that have transactions associated with them
-    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedTotal, flexTotal, progress, budgetPeriod, progressCategories })
+    const spent = findSpent(transactions)                        // calculates total transactions for budget period
+    const expenses = findExpenses(budget.categories)             // calculates total money assigned to a category for budget period
+    let fixedTotal = findFixed(budget.categories)                // calculates how much of the assigned money is designated for a fixed expense
+    let flexTotal = findFlex(budget.categories)                  // calculates how much of the assigned money is designated for a flexible expense
+    const progress = findProgress(budget, transactions)          // calculates % progress spent toward cap for each category
+    const progressCategories = findProgressCategories(progress)  // reference for categories that have transactions associated with them
+    const fixedRemaining = fixedRem(budget, transactions)        // calculates remaining fixed expenses that are still scheduled out
+    const flexRemaining = flexRem(budget, transactions)          // calculates remaining flexible expenses that are still scheduled out
+    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedRemaining, flexRemaining, fixedTotal, flexTotal, progress, budgetPeriod, progressCategories })
 }

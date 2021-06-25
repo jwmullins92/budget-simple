@@ -1,11 +1,17 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
-    <div class="col-4 offset-4 mb-3">
+    <div class="col-12 col-md-8 offset-md-2 col-xl-4 offset-xl-4 mb-3">
         <div class="card shadow">
+
+            <!-- Card top image -->
             <img src="https://cdn.pixabay.com/photo/2017/10/25/19/45/piggy-bank-2889042_960_720.jpg"
                 class="card-img-top" alt="piggie">
+
+
             <div class="card-body">
                 <h5 class="card-title">Register</h5>
+
+                <!-- Register form start -->
                 <form action="/register" method="POST" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
@@ -22,10 +28,18 @@
                         <input type="password" class="form-control" name="password" id="password"
                             placeholder="Enter Password" required>
                     </div>
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-2 mb-3">
                         <button class="btn btn-success">Register!</button>
                     </div>
+
+                    <!-- Redirects to login page if they are regiestered -->
+                    <div class="mb-0">
+                        <p class="mb-0">Already Registered? <a class="text-decoration-none" href="/login">Login</a></p>
+                    </div>
+
+
                 </form>
+                <!-- Register form end -->
             </div>
         </div>
     </div>

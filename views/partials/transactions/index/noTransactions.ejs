@@ -1,0 +1,15 @@
+<% if (!categories.length) {%>
+
+<!-- Instructions if no categories have been created -->
+<p class="fs-5 col-7">Come back here once you've created your Categories to start logging your transactions!</p>
+<div>
+    <a href="/categories" class="btn btn-sm btn-success">Set up Categories</a>
+</div>
+
+
+<% } else {%>
+
+<!-- Instructions if categories have been created -->
+<p class="fs-5 col-7">Here you'll see all your logged transactions. Go ahead and log your first one!</p>
+<a class="btn btn-success btn-sm" href="/transactions/new">Add Transaction</a>
+<% } %>

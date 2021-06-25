@@ -1,14 +1,36 @@
 <% layout('layouts/boilerplate') %>
+
+<div class="row">
+    <div class="offset-md-1">
+        <h1 class="mb-0 mb-md-3 py-0">Transaction History</h1>
+    </div>
+</div>
+
+<!-- Transaction filters -->
+<% if(transactions.length) {%>
+<%- include('../partials/transactions/index/transactionFilters') %>
+<% } %>
 <div class="row">
     <div class="col-md-10 offset-md-1 mb-3">
         <div class="mb-3">
+
+            <!-- Transaction table -->
+            <% if (transactions.length) {%>
             <div class="mb-3">
-                <h1>TRANSACTIONS</h1>
+                <%- include('../partials/transactions/index/transactionTable') %>
             </div>
-            <!-- FILTERS GO HERE! -->
-            <%- include('../partials/transactions/index/transactionFilters') %>
+
+            <!-- If no transactions, directs user to next steps -->
+            <% } else {%>
+            <div class="mb-3">
+                <%- include('../partials/transactions/index/noTransactions') %>
+            </div>
+            <% } %>
         </div>
-        <!-- TABLE GOES HERE -->
-        <%- include('../partials/transactions/index/transactionTable') %>
     </div>
 </div>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(8)
+</script>

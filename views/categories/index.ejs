@@ -1,2 +1,15 @@
 <% layout('layouts/boilerplate') %>
+
+<!-- Loads category table that desplays all categories -->
+<% if(categories.length) { %>
 <%- include('../partials/categories/index/categoryTable') %>
+
+<!-- If no categories, directs to next steps -->
+<% } else { %>
+<%- include('../partials/categories/index/noCategories') %>
+<% } %>
+
+<script src="/scripts/alternateTableRows.js"></script>
+<script>
+    alternate(6)
+</script>

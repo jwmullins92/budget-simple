@@ -1,3 +1,4 @@
+// Verifies user is logged in
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl
@@ -7,7 +8,18 @@ module.exports.isLoggedIn = (req, res, next) => {
     next()
 }
 
+// Blocks access to password reset page unless user has entered an email that is in the database
+module.exports.confirmUserEmail = (req, res, next) => {
+    if (req.session.userEmail) {
+        next()
+    } else {
+        res.redirect('/reset-password/verify-email')
+    }
+}
+
+// Formats the categories with their budgeted amounts for a budget period so it will work with the Budget Model
 module.exports.budgetCat = (req, res, next) => {
+    req.body.user = req.user._id.toString()
     let string = 'string'
     if (req.body.categories) {
         let arr = []
@@ -18,7 +30,7 @@ module.exports.budgetCat = (req, res, next) => {
                 amount
             }
             arr.push(newObj)
-            req.body.categories = newObj
+            req.body.categories = arr
             next()
         } else {
             let { category, amount } = req.body.categories

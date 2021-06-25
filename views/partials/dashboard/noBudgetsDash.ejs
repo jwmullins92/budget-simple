@@ -1,15 +1,73 @@
-<div class="row mb-5 d-flex justify-content-center">
-    <div class="col-4">
-        <h1>Welcome to your Dashboard</h1>
-    </div>
-    <div class="col-3">
+<div class="mb-5">
+
+    <!-- Header with brief explanation -->
+    <h1 class="text-center header-lg mb-3 d-md-block d-none">Welcome to Budget Simple</h1>
+    <h1 class="text-center mb-3 d-md-none d-block">Welcome to Budget Simple</h1>
+    <p class="text-center fs-5 col-12 col-md-6 offset-md-3">This page will be your dashboard. Once you set up
+        your
+        first budget,
+        you'll find everything you need right here! </p>
+    <!-- <p class="text-center fs-6 col-6 offset-3 d-block d-md-none">This page will be your dashboard. Once you set up your
+        first budget,
+        you'll find everything you need right here! </p> -->
+</div>
+<hr>
+
+<!-- directs user downard -->
+<div class="text-center mt-5 mb-3">
+    <h2 class="mb-3">Getting Started</h2>
+    <p class="bi-arrow-down-circle-fill fs-2 text-success"></p>
+</div>
+
+<!-- Instructions for new user start -->
+<div class="row mb-5">
+
+    <!-- Step 1 -->
+    <div class="mb-5 col-md-4">
         <div class="card">
+            <h5 class="card-header">Step 1</h5>
             <div class="card-body">
-                <h5 class="card-title">Set budget for
-                    <%= months[date.getMonth()] %> <%= date.getFullYear() %> </h5>
-                <p class="card-text">Click Below to get started!</p>
-                <a href="/budgets/new" class="btn btn-success">Set Budget!</a>
+                <h5 class="card-title">Create Budget Categories</h5>
+                <p class="card-text">Start by defining the categories you want to include in your budget (i.e. Gas,
+                    Groceries, Rent, etc.). You'll need to do this before you create your first budget!</p>
+                <a href="/categories" class="btn btn-success btn-sm">Create Categories</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="mb-5 col-md-4">
+        <div class="card">
+            <h5 class="card-header">Step 2</h5>
+            <div class="card-body">
+                <h5 class="card-title">Set Up Your First Budget</h5>
+                <p class="card-text">Once you create your categories, you can choose a budget period and decide how much
+                    you want to budget for each of your categories.</p>
+                <% if (categories.length) {%>
+                <a href="/budgets/new" class="btn btn-success btn-sm">Create Budget</a>
+                <% } else { %>
+                <a href="/budgets/new" class="btn btn-success btn-sm disabled">Create Budget</a>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="mb-5 col-md-4 mb-3">
+        <div class="card">
+            <h5 class="card-header">Step 3</h5>
+            <div class="card-body">
+                <h5 class="card-title">Start Logging Your Transactions</h5>
+                <p class="card-text">Simply choose the date, category, and amount to log the transaction and it will be
+                    tracked for the budget period!</p>
+                <% if (categories.length) {%>
+                <a href="/transactions/new" class="btn btn-success btn-sm">Log Transaction</a>
+                <% } else { %>
+                <a href="/transactions/new" class="btn btn-success btn-sm disabled">Log Transaction</a>
+                <% } %>
             </div>
         </div>
     </div>
 </div>
+<!-- Instructions for new user end -->

@@ -4,8 +4,20 @@ const Category = require('../models/category')
 const numSuffix = require('../utils/numSuffix')
 
 module.exports.index = async (req, res) => {
-    const budgets = await Budget.find({ user: req.user }).sort({ month: -1 }) //sorts budgets by date (newest to oldest)
-    res.render('budgets/index', { budgets })
+    let budgets = await Budget.find({ user: req.user })
+    const pageNums = Math.ceil(budgets.length / 10)
+    if (req.query.page) {
+        let { page } = req.query
+        skip = (page - 1) * 10
+        budgets = await Budget.find({ user: req.user }).limit(10).skip(skip).sort({ month: -1 })
+        categories = await Category.find({ user: req.user })
+        return res.render('budgets/index', { budgets, categories, page, pageNums })
+    } else {
+        const budgets = await Budget.find({ user: req.user }).limit(10).sort({ month: -1 }) //sorts budgets by date (newest to oldest)
+        const categories = await Category.find({ user: req.user })
+        let page = 1
+        return res.render('budgets/index', { budgets, categories, page, pageNums })
+    }
 }
 
 module.exports.createBudget = async (req, res) => {
@@ -31,15 +43,15 @@ module.exports.renderNewBudgetForm = async (req, res) => {
 module.exports.showBudget = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findById(id).populate('categories.category')
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/budgets')
+    }
     budget.categories.sort((a, b) => {                          // sorts budget categories alphabetically
         if (a.category.title < b.category.title) { return -1 };
         if (a.category.title > b.category.title) { return 1 };
         return 0
     })
-    if (!budget) {
-        req.flash('error', 'Budget not found')
-        return res.redirect('/budgets')
-    }
     res.render(`budgets/show`, { budget })
 }
 
@@ -47,6 +59,10 @@ module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params
     const categories = await Category.find({ user: req.user })
     const budget = await Budget.findById(id).populate('categories.category').populate('categories.category')
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/budgets')
+    }
     budget.categories.sort((a, b) => {                          // sorts budget categories alphabetically
         if (a.category.title < b.category.title) { return -1 };
         if (a.category.title > b.category.title) { return 1 };
@@ -59,6 +75,10 @@ module.exports.updateBudget = async (req, res) => {
     const { id } = req.params
     const { month, year } = req.body
     const oldBudget = await Budget.findByIdAndDelete(id) // deletes current budget
+    if (!oldBudget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/budgets')
+    }
     const budget = new Budget(req.body)                  // replaces current budget with updated information
     budget.month = new Date(year, month - 1)            // creates full date format to create ISO date in budget model
     budget.user = req.user
@@ -67,7 +87,6 @@ module.exports.updateBudget = async (req, res) => {
         budget.transactions.push(t)
     }
     await budget.save()
-    console.log(budget._id)
     res.redirect(`/budgets/${budget._id}`)
 }
 
@@ -75,6 +94,10 @@ module.exports.showFixed = async (req, res) => {
     req.session.returnTo = req.originalUrl      // will redirect back to this URL if edits are made on-page
     const { id } = req.params;
     const budget = await Budget.findById(id).populate('categories.category')
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/dashboard')
+    }
     const newArr = budget.categories.filter(c => c.category.payDate).sort((a, b) => a.category.payDate - b.category.payDate)    //
     budget.categories = budget.categories.filter(c => !c.category.payDate)                                                      // sorts budget.categories by due date of the fixed category
     budget.categories = budget.categories.push(...newArr)                                                                       //
@@ -88,6 +111,10 @@ module.exports.showFlex = async (req, res) => {
     req.session.returnTo = req.originalUrl  // will redirect back to this URL if edits are made on-page
     const { id } = req.params;
     const budget = await Budget.findById(id).populate('categories.category')
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/dashboard')
+    }
     budget.categories.sort((a, b) => {                          // sorts alphabetically
         if (a.category.title < b.category.title) { return -1 };
         if (a.category.title > b.category.title) { return 1 };
@@ -99,6 +126,10 @@ module.exports.showFlex = async (req, res) => {
 module.exports.updateBudgetItem = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findByIdAndUpdate(id, { ...req.body })
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/dashboard')
+    }
     await budget.save()
     let redirectUrl = req.session.returnTo // redirects back to showFixed or showFlex, depending on where you came from
     req.flash('success', 'Budget updated!')
@@ -109,5 +140,9 @@ module.exports.updateBudgetItem = async (req, res) => {
 module.exports.deleteBudget = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findByIdAndDelete(id)
+    if (!budget) {
+        req.flash('error', 'Budget not found')
+        return res.redirect('/dashboard')
+    }
     res.redirect('/budgets')
 }

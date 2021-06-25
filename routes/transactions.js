@@ -3,12 +3,11 @@ router = express.Router();
 const { isLoggedIn } = require('../middleware')
 const catchAsync = require('../utils/catchAsync')
 const { validateTransaction } = require('../schemas.js')
-const Category = require('../models/category')
-const Transaction = require('../models/transaction')
-const Budget = require('../models/budget')
 const transactions = require('../controllers/transactions')
-const moment = require('moment');
-moment().format();
+
+// Middleware
+// isLoggedIn = Verifies user is logged in
+// validateTransaction = Validates Transaction Model
 
 router.route('/')
     .get(isLoggedIn, catchAsync(transactions.index))

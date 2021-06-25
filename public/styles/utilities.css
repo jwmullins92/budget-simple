@@ -1,0 +1,46 @@
+/* For Home Page */
+
+
+
+/* hides elements */
+
+.hide {
+    display: none!important
+}
+
+/* Font utilities */
+
+.header-lg {
+    font-size: calc(2.5rem + 1.5vh);
+}
+
+@media (max-width: 576px) { 
+    .fs-7 {
+        font-size: .75rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dash-title {
+        font-size: 1rem;
+    }
+}
+
+/* Progress bar */
+
+.prog-bar {
+    height: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 10px
+}
+
+/* Dashboard header vertical divider */
+
+.divider {
+    width: 2px;
+    margin: 6px 0;
+    background: lightgray;
+}
+

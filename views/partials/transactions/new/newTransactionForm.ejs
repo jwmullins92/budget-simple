@@ -1,14 +1,12 @@
 <form action="/transactions" class="needs-validation" method="post" novalidate>
+
+    <!-- Transaction date -->
     <div class="mb-3">
         <label for="datepicker">Date:</label>
         <input type="text" name="transaction[date]" class="form-control" id="datepicker" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-        <div class="invalid-feedback">
-            Please select a date.
-        </div>
     </div>
+
+    <!-- Transaction category (only gets categories associated with the user)-->
     <div class="mb-3">
         <label for="category">Category:</label>
         <select class="form-select" name="transaction[category]" id="category" aria-label="Pick a category" required>
@@ -20,36 +18,29 @@
             <% } %>
             <% } %>
         </select>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-        <div class="invalid-feedback">
-            Please select a category.
-        </div>
     </div>
+
+    <!-- Transaction amount -->
     <div class="mb-3">
         <label for="amount">Total:</label>
         <input type="number" class="form-control" name="transaction[amount]" id="amount" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-        <div class="invalid-feedback">
-            Please enter the total of the transaction.
-        </div>
     </div>
+
+    <!-- Add any description to the transactions -->
     <div class="mb-3">
-        <label for="notes">Notes:</label>
+        <label for="notes">Description:</label>
         <textarea class="form-control" name="transaction[note]" id="notes" rows="3" style="width: 100%;"
             class="d-block"></textarea>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
     </div>
+
+    <!-- Gives transaction value of fixed or flexible based on category selection-->
     <div class="hide">
         <label for="isFixed">Fixed</label>
         <input type="radio" name="transaction[isFixed]" id="isFixed" value='true'>
         <label for="flexible">Flexible</label>
         <input type="radio" name="transaction[isFixed]" id="flexible" value='false'>
     </div>
+
+    <!-- Submits form -->
     <button class="btn btn-sm btn-success">Submit</button>
 </form>

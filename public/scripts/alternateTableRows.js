@@ -1,3 +1,5 @@
+// Alternates the table colors by selecting the last cell in the second row
+
 const alternate = (lastColSecondRow) => {
     let cells = [...document.querySelectorAll('.alt')]
     altRows = []

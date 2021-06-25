@@ -1,46 +1,62 @@
-<form action="/budgets" class="row" method="POST">
-    <div class="mb-3 col-2">
+<!-- Edit form start -->
+<form action="/budgets" class="row needs-validation" method="POST" novalidate>
+
+    <!-- Choose budget period month start-->
+    <div class="mb-3 col-lg-2">
         <label class="form-label" for="month">Month</label>
-        <select class="form-select" name="month" id="month">
-            <option value="" selected>All</option>
-            <option value="1" <%= date.getMonth() + 1 === 1 ? 'selected' : ''%>>Jan</option>
-            <option value="2" <%= date.getMonth() + 1 === 2 ? 'selected' : ''%>>Feb</option>
-            <option value="3" <%= date.getMonth() + 1 === 3 ? 'selected' : ''%>>Mar</option>
-            <option value="4" <%= date.getMonth() + 1 === 4 ? 'selected' : ''%>>Apr</option>
-            <option value="5" <%= date.getMonth() + 1 === 5 ? 'selected' : ''%>>May</option>
-            <option value="6" <%= date.getMonth() + 1 === 6 ? 'selected' : ''%>>June</option>
-            <option value="7" <%= date.getMonth() + 1 === 7 ? 'selected' : ''%>>July</option>
-            <option value="8" <%= date.getMonth() + 1 === 8 ? 'selected' : ''%>>Aug</option>
-            <option value="9" <%= date.getMonth() + 1 === 9 ? 'selected' : ''%>>Sept</option>
-            <option value="10" <%= date.getMonth() + 1 === 10 ? 'selected' : ''%>>Oct</option>
-            <option value="11" <%= date.getMonth() + 1 === 11 ? 'selected' : ''%>>Nov</option>
-            <option value="12" <%= date.getMonth() + 1 === 12 ? 'selected' : ''%>>Dec</option>
+        <select class="form-select" name="month" id="month" required>
+            <option value="<%=parseInt(1)%>" <%= date.getMonth() + 1 === 1 ? 'selected' : ''%>>Jan</option>
+            <option value="<%=parseInt(2)%>" <%= date.getMonth() + 1 === 2 ? 'selected' : ''%>>Feb</option>
+            <option value="<%=parseInt(3)%>" <%= date.getMonth() + 1 === 3 ? 'selected' : ''%>>Mar</option>
+            <option value="<%=parseInt(4)%>" <%= date.getMonth() + 1 === 4 ? 'selected' : ''%>>Apr</option>
+            <option value="<%=parseInt(5)%>" <%= date.getMonth() + 1 === 5 ? 'selected' : ''%>>May</option>
+            <option value="<%=parseInt(6)%>" <%= date.getMonth() + 1 === 6 ? 'selected' : ''%>>June</option>
+            <option value="<%=parseInt(7)%>" <%= date.getMonth() + 1 === 7 ? 'selected' : ''%>>July</option>
+            <option value="<%=parseInt(8)%>" <%= date.getMonth() + 1 === 8 ? 'selected' : ''%>>Aug</option>
+            <option value="<%=parseInt(9)%>" <%= date.getMonth() + 1 === 9 ? 'selected' : ''%>>Sept</option>
+            <option value="<%=parseInt(10)%>" <%= date.getMonth() + 1 === 10 ? 'selected' : ''%>>Oct</option>
+            <option value="<%=parseInt(11)%>" <%= date.getMonth() + 1 === 11 ? 'selected' : ''%>>Nov</option>
+            <option value="<%=parseInt(12)%>" <%= date.getMonth() + 1 === 12 ? 'selected' : ''%>>Dec</option>
         </select>
     </div>
-    <div class="mb-3 col-2">
+    <!-- Choose budget period month end-->
+
+    <!-- Choose budget period year start-->
+    <div class="mb-3 col-lg-2">
         <label class="form-label" for="year">Year</label>
-        <select class="form-select" name="year" id="year">
+        <select class="form-select" name="year" id="year" required>
             <% for(let i = 2015; i <= date.getFullYear(); i++) {%>
-            <option value="<%=i%>" selected><%= i %></option>
+            <option value="<%=parseInt(i)%>" selected><%= i %></option>
             <% } %>
         </select>
     </div>
-    <div class="mb-3 col-3">
-        <label class="form-label" for="amount">Total Income for Month:</label>
-        <input class="form-control" type="number" name="amount" id="amount">
+    <!-- Choose budget period year end-->
+
+    <!-- Enter total income or amount budgeted for budget period start-->
+    <div class="mb-3 col-lg-2">
+        <label class="form-label" for="amount">Total Income:</label>
+        <input class="form-control" min="0" type="number" name="amount" id="amount">
     </div>
-    <div class="col-5"></div>
+    <!-- Enter total income or amount budgeted for budget period end-->
+
+    <!-- Enter budget amounts for categories for budget period start-->
     <div class="row mb-3">
         <% for(let c of categories) {%>
-        <div class="col-3 d-flex justify-content-between align-items-baseline mb-1">
+        <div class="col-12 col-sm-6 col-lg-3 d-flex justify-content-between align-items-baseline mb-1">
             <label for="<%=c.title%>" class="form-label"><%=c.title%>:</label>
-            <input class="hide" type="text" name="categories[category]" value="<%=c._id%>">
+            <input class="hide" type="text" name="categories[category]" value="<%=c._id%>" required>
             <input type="number" name="categories[amount]" id="<%=c.title%>" class="form-control w-50 py-1">
         </div>
         <div class="col-10"></div>
         <% } %>
     </div>
+    <!-- Enter budget amounts for categories for budget period end-->
+
+    <!-- Submit Button Start -->
     <div class="mb-3">
         <button class="btn btn-success">Create</button>
     </div>
+    <!-- Submit button End -->
+
 </form>
+<!-- Form End -->

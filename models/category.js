@@ -4,7 +4,7 @@ const Transaction = require('./transaction')
 
 const Schema = mongoose.Schema
 
-const categorySchema = new Schema({
+const categorySchema = new Schema({     // Stores a caategory
     title: {
         type: String,
         required: true
@@ -19,7 +19,7 @@ const categorySchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
-categorySchema.post('findOneAndDelete', async function (cat) {
+categorySchema.post('findOneAndDelete', async function (cat) {      // Deletes all references to a deleted category
     const id = cat._id
     if (cat) {
         await Budget.updateMany({ $pull: { categories: { category: { _id: id } } } })
