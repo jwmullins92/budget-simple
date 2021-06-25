@@ -68,7 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Customizes and configures the session
 
-const secret = process.env.SECRET || "developmentBackupSecret"
+const secret = process.env.SECRET || "developmentBackupSecretCode"
 
 const sessionConfig = {
     name: 'budgetSession',
