@@ -178,7 +178,7 @@ app.use((err, req, res, next) => {
 
 // Starts server
 
-port = process.env.PORT
+port = process.env.PORT || 3000
 app.listen(3000, () => {
     console.log(`Serving on port ${port}`)
 })
