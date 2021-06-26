@@ -1,51 +1,47 @@
-<div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 mb-3">
-    <div class="container">
-        <div class="row g-0 mb-3">
-            <h1 class="offset-1">Categories</h1>
+<div class="col-lg-10 offset-lg-1 mb-3">
+    <div class="row g-0 mb-3">
+        <h1>Categories</h1>
 
-            <!-- Table headers start-->
-            <div class="col-3 offset-1 fs-4 border border-2 border-end-0 bg-light">
-                <p class="ms-2 my-0 fs-7">Category</p>
-            </div>
-            <div class="col-3 fs-4 border border-2 border-end-0 bg-light">
-                <p class="ms-2 my-0 fs-7">Type</p>
-            </div>
-            <div class="col-3 fs-4 border border-2 bg-light">
-                <p class="ms-2 my-0 fs-7">Pay Date</p>
-            </div>
-            <div class="col-2"></div>
-            <!-- Table headers end-->
-
-
-            <% for(let category of categories) {%>
-            <% if(category.user.equals(currentUser._id)) {%>
-
-            <!-- Table data start-->
-            <div class="col-3 offset-1 border border-2 border-end-0 border-top-0 alt table-alt">
-                <p class="fs-7 ms-2 my-1"><%= category.title %> </p>
-            </div>
-            <div class="col-3 border border-2 border-end-0 border-top-0 alt table-alt">
-                <p class="fs-7 ms-2 my-1"><%= category.fixed ? "Fixed" : "Flexible" %> </p>
-            </div>
-            <div class="col-3 border border-2 border-top-0 alt table-alt">
-                <p class="fs-7 ms-2 my-1"><%= parseInt(category.payDate) ? category.payDate : '-' %> </p>
-            </div>
-            <div class="col-2">
-                <a class="ms-2 my-1 bi-pencil-square" href="categories/<%=category._id%>/edit"
-                    class="btn btn-sm btn-secondary"></a>
-            </div>
-            <!-- Table data end-->
-
-
-            <% } %>
-            <% } %>
+        <!-- Table headers start-->
+        <div class="col-4 fs-4 border border-2 border-end-0 bg-light">
+            <p class="ms-2 py-2 my-0 fs-7">Category</p>
         </div>
-
-        <!-- Open category creator popup button -->
-        <div class="col-10 offset-1">
-            <%- include('../modals/newCategoryModal') %>
+        <div class="col-4 fs-4 border border-2 border-end-0 bg-light">
+            <p class="ms-2 py-2 my-0 fs-7">Type</p>
         </div>
+        <div class="col-3 fs-4 border border-2 bg-light">
+            <p class="ms-2 py-2 my-0 fs-7">Pay Date</p>
+        </div>
+        <div class="col-1"></div>
+        <!-- Table headers end-->
 
 
+        <% for(let category of categories) {%>
+        <% if(category.user.equals(currentUser._id)) {%>
+
+        <!-- Table data start-->
+        <div class="col-4 border border-2 border-end-0 border-top-0 alt table-alt">
+            <p class="fs-7 ms-2 py-2 my-1"><%= category.title %> </p>
+        </div>
+        <div class="col-4 border border-2 border-end-0 border-top-0 alt table-alt">
+            <p class="fs-7 ms-2 py-2 my-1"><%= category.fixed ? "Fixed" : "Flexible" %> </p>
+        </div>
+        <div class="col-3 border border-2 border-top-0 alt table-alt">
+            <p class="fs-7 ms-2 py-2 my-1"><%= parseInt(category.payDate) ? category.payDate : '-' %> </p>
+        </div>
+        <div class="col-1 my-auto">
+            <a class="ms-2 py-2 my-auto bi-pencil-square" href="categories/<%=category._id%>/edit"
+                class="btn btn-sm btn-secondary"></a>
+        </div>
+        <!-- Table data end-->
+
+
+        <% } %>
+        <% } %>
+    </div>
+
+    <!-- Open category creator popup button -->
+    <div>
+        <%- include('../modals/newCategoryModal') %>
     </div>
 </div>

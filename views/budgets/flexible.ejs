@@ -1,24 +1,22 @@
 <% layout('layouts/boilerplate') %>
 
-<div id="flex-items" class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 mb-3">
-    <div class="container">
+<div id="flex-items" class="col-sm-10 offset-sm-1 mb-3">
 
-        <!-- Prints name of the budget month -->
-        <h1 class="offset-2 d-sm-block d-none mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
-            <%= budget.month.getFullYear() %>
-        </h1>
-        <h1 class="d-sm-none offset-1 d-block fs-4 mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
-            <%= budget.month.getFullYear() %>
-        </h1>
+    <!-- Prints name of the budget month -->
+    <h1 class="d-sm-block d-none mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
+        <%= budget.month.getFullYear() %>
+    </h1>
+    <h1 class="d-sm-none d-block fs-4 mb-3">Flexible Expenses for <%= months[budget.month.getMonth()] %>
+        <%= budget.month.getFullYear() %>
+    </h1>
 
-        <!-- Table of flexible categories and their budgeted amount for the period -->
-        <%- include('../partials/budgets/flexible/flexTable') %>
+    <!-- Table of flexible categories and their budgeted amount for the period -->
+    <%- include('../partials/budgets/flexible/flexTable') %>
 
-    </div>
 </div>
 <script src="/scripts/alternateTableRows.js"></script>
 <script src="/scripts/allowEditCells.js"></script>
 <script>
     allowEditCells()
-    alternate(4)
+    alternate(6)
 </script>

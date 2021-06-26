@@ -1,25 +1,38 @@
 <div class="row g-0 mb-3">
 
     <!-- Table Headers Start -->
-    <div class="col-5 col-sm-4 offset-1 offset-sm-2 fs-4 border border-2 border-end-0 bg-light">
-        <p class="ms-2 my-0">Category</p>
+    <div class="col-4 fs-4 border border-2 border-end-0 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-none d-md-block">Category</p>
+        <p class="ms-2 py-2 mt-2 fs-6 d-block d-md-none">Category</p>
     </div>
-    <div class="col-5 col-sm-4 fs-4 border border-2 bg-light">
-        <p class="ms-2 my-0">Budgeted</p>
+    <div class="col-3 fs-4 border border-2 border-end-0 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-none d-md-block">Remaining</p>
+        <p class="ms-2 py-2 mt-2 fs-6 d-block d-md-none">Remaining</p>
     </div>
-    <div class="col-1 col-sm-2"></div>
+    <div class="col-4 fs-4 border border-2 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-none d-md-block">Budgeted</p>
+        <p class="ms-2 py-2 mt-2 fs-6 d-block d-md-none">Budgeted</p>
+    </div>
+    <div class="col-1"></div>
     <!-- Table Headers End -->
 
     <% for(let c of budget.categories) {%>
     <% if(!c.category.fixed) {%>
 
     <!-- Table data start -->
-    <div class="col-5 col-sm-4 offset-1 offset-sm-2 border border-2 border-end-0 border-top-0 alt table-alt">
-        <p class="ms-2 my-1"><%= c.category.title%> </p>
+    <div class="col-4 border border-2 border-end-0 border-top-0 alt table-alt">
+        <p class="ms-2 py-2 my-1 fs-7"><%= c.category.title%> </p>
     </div>
-    <div class="col-5 col-sm-4 border border-2 border-top-0 alt table-alt form-div">
+    <div class="col-3 border border-2 border-end-0 border-top-0 alt table-alt">
+        <% for(let s of spent) {%>
+        <% if(c.category._id.toString() === s.category._id.toString()) {%>
+        <p class="ms-2 py-2 fs-7 my-1">$<%= s.amount%> </p>
+        <% } %>
+        <% } %>
+    </div>
+    <div class="col-4 border border-2 border-top-0 alt table-alt form-div">
         <div class="amount">
-            <p class="ms-2 my-1">$<%= c.amount %> </p>
+            <p class="ms-2 py-2 my-1 fs-7">$<%= c.amount %> </p>
         </div>
 
         <!-- Edit form start -->
@@ -29,10 +42,10 @@
     </div>
     <!-- Table data end -->
 
-    <div class="col-1 col-sm-2">
+    <div class="col-1">
 
         <!-- Shows edit field for the category's budgeted amount -->
-        <button type="button" class="btn btn-sm bi-pencil-square text-primary edit-amount"></button>
+        <button type="button" class="btn btn-sm bi-pencil-square text-primary edit-amount ms-2 py-2 my-1"></button>
 
     </div>
     <% } %>

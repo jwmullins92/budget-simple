@@ -1,17 +1,22 @@
 <div class="row g-0 mb-3">
 
+    <% console.log(spent) %>
     <!-- Table Headers Start -->
-    <div class="col-3 offset-sm-1 border border-2 border-end-0 bg-light">
-        <p class="ms-2 my-0 fs-4 d-none d-sm-block">Due Date</p>
-        <p class="ms-2 my-0 fs-7 d-block d-sm-none">Due Date</p>
+    <div class="col-2 offset-sm-1 border border-2 border-end-0 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-none d-md-block">Due Date</p>
+        <p class="ms-2 py-2 my-0 fs-7 d-block d-md-none">Due Date</p>
     </div>
-    <div class="col-3 border border-2 border-end-0 bg-light">
-        <p class="ms-2 my-0 fs-4 d-sm-block d-none">Category</p>
-        <p class="ms-2 my-0 fs-7 d-block d-sm-none">Category</p>
+    <div class="col-2 border border-2 border-end-0 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-md-block d-none">Category</p>
+        <p class="ms-2 py-2 my-0 fs-7 d-block d-md-none">Category</p>
+    </div>
+    <div class="col-2 border border-2 border-end-0 bg-light">
+        <p class="ms-2 py-2 my-0 fs-4 d-md-block d-none">Remaining</p>
+        <p class="ms-2 py-2 my-0 fs-7 d-block d-md-none">Remaining</p>
     </div>
     <div class="col-5 col-sm-4 border border-2 bg-light">
-        <p class="ms-2 my-0 fs-4 d-sm-block d-none">Budgeted</p>
-        <p class="ms-2 my-0 fs-7 d-block d-sm-none">Budgeted</p>
+        <p class="ms-2 py-2 my-0 fs-4 d-md-block d-none">Budgeted</p>
+        <p class="ms-2 py-2 my-0 fs-7 d-block d-md-none">Budgeted</p>
     </div>
     <div class="col-1"></div>
     <!-- Table Headers End -->
@@ -21,15 +26,22 @@
     <% if(c.category.fixed) {%>
 
     <!-- Table data start -->
-    <div class="col-3 offset-sm-1 border border-2 border-end-0 border-top-0 alt table-alt">
-        <p class="ms-2 py-1 fs-7 my-1"><%=months[budget.month.getMonth()]%> <%= c.category.payDate %> </p>
+    <div class="col-2 offset-sm-1 border border-2 border-end-0 border-top-0 alt table-alt">
+        <p class="ms-2 py-2 fs-7 my-1"><%=months[budget.month.getMonth()]%> <%= c.category.payDate %> </p>
     </div>
-    <div class="col-3 border border-2 border-end-0 border-top-0 alt table-alt">
-        <p class="ms-2 py-1 fs-7 my-1"><%= c.category.title%> </p>
+    <div class="col-2 border border-2 border-end-0 border-top-0 alt table-alt">
+        <p class="ms-2 py-2 fs-7 my-1"><%= c.category.title%> </p>
+    </div>
+    <div class="col-2 border border-2 border-end-0 border-top-0 alt table-alt">
+        <% for(let s of spent) {%>
+        <% if(c.category._id.toString() === s.category._id.toString()) {%>
+        <p class="ms-2 py-2 fs-7 my-1">$<%= s.amount%> </p>
+        <% } %>
+        <% } %>
     </div>
     <div class="col-5 col-sm-4 border border-2 border-top-0 alt table-alt form-div">
         <div class="amount">
-            <p class="ms-2 py-1 fs-7 my-1">$<%= c.amount %> </p>
+            <p class="ms-2 py-2 py-1 fs-7 my-1">$<%= c.amount %> </p>
         </div>
         <%- include('./fixedEditForm') %>
     </div>
@@ -37,7 +49,7 @@
         <!-- Table data end -->
 
         <!-- Shows edit field for the category's budgeted amount -->
-        <button type="button" class="btn btn-sm text-primary bi-pencil-square edit-amount my-1"></button>
+        <button type="button" class="btn btn-sm text-primary bi-pencil-square edit-amount my-auto py-2"></button>
 
     </div>
 

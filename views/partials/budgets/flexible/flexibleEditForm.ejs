@@ -1,7 +1,7 @@
 <!-- Hidden form to change budgeted amount for flexible categories -->
 
 <div class="hide amount">
-    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST" class="amount-form">
+    <form action="/budgets/<%=budget._id%>?_method=PATCH" method="POST" class="amount-form d-flex">
         <% for(let cat of budget.categories) {%>
         <% if(!cat.category.fixed) {%>
 
@@ -9,11 +9,11 @@
         <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
 
 
-        <div class="input-group py-0 my-0 px-1 justify-content-between hide">
+        <div class="input-group py-0 my-1 px-1 w-75 hide">
             <span class="input-group-text d-none d-sm-block">$</span>
             <input type="number" class="form-control" name="categories[amount]" id="amount" value="<%=cat.amount%>">
-            <button class="btn bi-check-lg confirm-change"></button>
         </div>
+        <button class="btn bi-check-lg confirm-change w-25 hide"></button>
         <!-- Category id input end -->
 
 

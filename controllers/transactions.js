@@ -29,6 +29,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.createTransaction = async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);  // corrects the date to the users timezone (prevents error that sometimes sets date 1 day earlier than expected)
+    console.log(req.body)
     const transaction = new Transaction(req.body.transaction)
     transaction.user = req.user._id;
     let budget = await Budget.find({ user: req.user })
@@ -39,7 +40,12 @@ module.exports.createTransaction = async (req, res) => {
         await budget.save()                                     //
     }                                                           //
     await transaction.save();
-    const redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions' // returns to the transactions page with the persisted filters
+    let redirectUrl
+    if (req.body.submit === "Submit") {
+        redirectUrl = req.session.returnTo ? req.session.returnTo : '/transactions' // returns to transaction index with filters intact
+    } else if (req.body.submit = "Submit and Log Another") {
+        redirectUrl = '/transactions/new'                                           // submits and redirects back to new transactions page
+    }
     req.flash('success', 'Successfully added transaction!')
     res.redirect(redirectUrl)
 }

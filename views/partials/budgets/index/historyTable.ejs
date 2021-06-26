@@ -1,18 +1,18 @@
-<!-- Table headers start -->
-<div class="d-flex col-11 col-xl-8 offset-xl-2 justify-content-between align-items-baseline">
+<div class="d-flex col-11 justify-content-between align-items-baseline">
     <h2 class="d-none d-sm-block">Budget History</h2>
     <h2 class="d-block d-sm-none fs-5">Budget History</h2>
     <p class="d-none d-sm-block">Page <%= page %> of <%= pageNums %> </p>
     <p class="d-block d-sm-none fs-7">Page <%= page %> of <%= pageNums %> </p>
 </div>
 
-<div class="col-6 col-xl-4 offset-xl-2 border border-2 border-end-0 bg-light">
-    <p class="ms-2 my-1 fs-5 d-none d-sm-block">Budget Period</p>
-    <p class="ms-2 my-1 fs-6 d-block d-sm-none">Budget Period</p>
+<!-- Table headers start -->
+<div class="col-6 border border-2 border-end-0 bg-light">
+    <p class="ms-2 py-2 my-1 fs-5 d-none d-sm-block">Budget Period</p>
+    <p class="ms-2 py-2 my-1 fs-6 d-block d-sm-none">Budget Period</p>
 </div>
-<div class="col-5 col-xl-4 border border-2 bg-light">
-    <p class="ms-2 my-1 d-none d-sm-block fs-5">Income</p>
-    <p class="ms-2 my-1 d-block d-sm-none fs-6">Income</p>
+<div class="col-5 border border-2 bg-light">
+    <p class="ms-2 py-2 my-1 d-none d-sm-block fs-5">Income</p>
+    <p class="ms-2 py-2 my-1 d-block d-sm-none fs-6">Income</p>
 </div>
 <!-- Table headers end -->
 
@@ -20,28 +20,28 @@
 <% for(let b of budgets) {%>
 
 <!-- Table data start -->
-<div class="col-6 col-xl-4 offset-xl-2 border border-2 border-end-0 border-top-0 alt table-alt">
-    <p class="ms-2 my-1 fs-7"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
+<div class="col-6 border border-2 border-end-0 border-top-0 alt table-alt">
+    <p class="ms-2 py-2 my-1 fs-7"><%= months[b.month.getMonth()]%> <%= b.month.getFullYear() %> </p>
 </div>
-<div class="col-5 col-xl-4 border border-2 border-top-0 alt table-alt">
-    <p class="ms-2 my-1 fs-7">$<%= b.amount %> </p>
+<div class="col-5 border border-2 border-top-0 alt table-alt">
+    <p class="ms-2 py-2 my-1 fs-7">$<%= b.amount %> </p>
 </div>
-<div class="col-1">
-    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 my-1"></a>
+<div class="col-1 my-auto">
+    <a href="/budgets/<%= b._id %>" class="bi-pencil-square ms-2 py-2 my-1"></a>
 </div>
 <!-- Table data end -->
 
 <% } %>
 
 <!-- Create new budget link start -->
-<div class="offset-xl-2 mt-3">
-    <a href="/budgets/new" class="btn btn-sm btn-success">Create Budget</a>
+<div class=" mt-3">
+    <a href="/budgets/new" class="btn btn-success">Create Budget</a>
 </div>
 <!-- Create new budget link end -->
 
 <!-- Page navigator start -->
 <nav class="mt-2" aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination">
         <% if(page > 1) {%>
         <li class="page-item"><a class="page-link bi-caret-left-fill" href="/budgets?page=<%=parseInt(page) - 1%>"></a>
         </li>

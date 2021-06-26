@@ -1,6 +1,6 @@
 <!-- Transaction Table -->
 <!-- Link to log new transaction -->
-<div class="col-10 col-sm-11 d-flex mb-3 justify-content-between align-items-baseline">
+<div class="col-11 d-flex mb-3 justify-content-between align-items-baseline">
     <a class="btn btn-success btn-md d-none d-md-block" href="/transactions/new">Log Transaction</a>
     <a class="btn btn-success btn-sm d-block d-md-none" href="/transactions/new">Log Transaction</a>
     <p class="mb-0">Page <%= page %> of <%= pageNums %> </p>
@@ -10,19 +10,19 @@
 
 
     <!-- Table headers start -->
-    <div class="col-2 fs-sm-6 fs-7 border border-2 bg-light fw-bold">
-        <p class="ms-2 my-0">Date</p>
+    <div class="col-2 fs-7 border border-2 bg-light fw-bold">
+        <p class="ms-1 my-0">Date</p>
     </div>
-    <div class="col-3 col-sm-4 fs-sm-6 fs-7 border border-2 border-start-0 bg-light fw-bold">
-        <p class="ms-2 my-0">Description</p>
+    <div class="col-4 fs-7 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-1 my-0">Description</p>
     </div>
-    <div class="col-3 fs-sm-6 fs-7 border border-2 border-start-0 bg-light fw-bold">
-        <p class="ms-2 my-0">Category</p>
+    <div class="col-3 fs-7 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-1 my-0">Category</p>
     </div>
-    <div class="col-2 fs-sm-6 fs-7 border border-2 border-start-0 bg-light fw-bold">
-        <p class="ms-2 my-0">Total</p>
+    <div class="col-2 fs-7 border border-2 border-start-0 bg-light fw-bold">
+        <p class="ms-1 my-0">Total</p>
     </div>
-    <div class="col-2 col-sm-1"></div>
+    <div class="col-1"></div>
     <!-- Table headers end -->
 
     <% for(let t of transactions) {%>
@@ -32,21 +32,21 @@
     <!-- Table data Start -->
     <!-- Transaction date -->
     <div class="fs-7 col-2 border border-2 border-top-0 alt table-alt">
-        <p class="ms-2 my-0"><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %> </p>
+        <p class="ms-1 my-0"><%= t.date.getMonth() + 1%>/<%= t.date.getDate() %> </p>
     </div>
 
     <!-- Description -->
-    <div class="fs-7 col-3 col-sm-4 border border-2 border-top-0 border-start-0 alt table-alt">
+    <div class="fs-7 col-4 border border-2 border-top-0 border-start-0 alt table-alt">
         <% if (t.note) {%>
-        <p class="ms-2 my-0"> <%= t.note %> </p>
+        <p class="ms-1 my-0"> <%= t.note %> </p>
         <% } else { %>
-        <p class="ms-2 my-0"> - </p>
+        <p class="ms-1 my-0"> - </p>
         <% } %>
     </div>
 
     <!-- Category -->
     <div class="fs-7 col-3 border border-top-0 border-start-0 border-2 alt table-alt">
-        <p class="ms-2 my-0"><%= t.category.title %> </p>
+        <p class="ms-1 my-0"><%= t.category.title %> </p>
     </div>
 
     <!-- Amount -->
@@ -55,12 +55,11 @@
     </div>
 
     <!-- Edit button -->
-    <div class="fs-7 col-2 col-sm-1">
-        <a class="ms-2 my-0 bi-pencil-square" href="transactions/<%=t._id%>/edit"></a>
+    <div class="fs-7 my-auto col-1">
+        <a class="ms-1 bi-pencil-square" href="transactions/<%=t._id%>/edit"></a>
     </div>
     <!-- Table data end -->
 
     <% } %>
     <% } %>
     <% } %>
-</div>

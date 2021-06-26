@@ -21,9 +21,19 @@
 .confirm-change {
     color: #198754;
     width: 25%;
-    transition: all .25s ease-in-out;
+    transition: all .15s ease-in-out;
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .confirm-change:hover {
-    color: #146b42;
+    color: white;
+    background-color: #198754;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }

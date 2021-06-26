@@ -2,6 +2,7 @@ const Budget = require('../models/budget')
 const Transaction = require('../models/transaction')
 const Category = require('../models/category')
 const numSuffix = require('../utils/numSuffix')
+const { fixedRem, flexRem } = require('../utils/budgetHelpers')
 
 module.exports.index = async (req, res) => {
     let budgets = await Budget.find({ user: req.user })
@@ -98,13 +99,16 @@ module.exports.showFixed = async (req, res) => {
         req.flash('error', 'Budget not found')
         return res.redirect('/dashboard')
     }
+    let transactions = await Transaction.find({ user: req.user })
+    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
+    const spent = fixedRem(budget, transactions)
     const newArr = budget.categories.filter(c => c.category.payDate).sort((a, b) => a.category.payDate - b.category.payDate)    //
     budget.categories = budget.categories.filter(c => !c.category.payDate)                                                      // sorts budget.categories by due date of the fixed category
     budget.categories = budget.categories.push(...newArr)                                                                       //
     for (let c of budget.categories) {
         c.category.payDate = numSuffix(c.category.payDate) // adds the appropriate suffix to the date (i.e. 1st, 11th, 22nd etc)
     }
-    res.render('budgets/fixed', { budget })
+    res.render('budgets/fixed', { budget, spent })
 }
 
 module.exports.showFlex = async (req, res) => {
@@ -115,12 +119,15 @@ module.exports.showFlex = async (req, res) => {
         req.flash('error', 'Budget not found')
         return res.redirect('/dashboard')
     }
+    let transactions = await Transaction.find({ user: req.user })
+    transactions = transactions.filter(t => t.date.getMonth() === budget.month.getMonth())
+    const spent = flexRem(budget, transactions)
     budget.categories.sort((a, b) => {                          // sorts alphabetically
         if (a.category.title < b.category.title) { return -1 };
         if (a.category.title > b.category.title) { return 1 };
         return 0
     })
-    res.render('budgets/flexible', { budget })
+    res.render('budgets/flexible', { budget, spent })
 }
 
 module.exports.updateBudgetItem = async (req, res) => {

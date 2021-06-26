@@ -1,16 +1,14 @@
 <% layout('layouts/boilerplate') %>
-<div class="container">
-    <div class="row g-0 mb-3">
+<div class="row g-0 mb-3">
 
-        <!-- Budget history table if user has any budgets -->
-        <% if(budgets.length) {%>
-        <%- include('../partials/budgets/index/historyTable') %>
+    <!-- Budget history table if user has any budgets -->
+    <% if(budgets.length) {%>
+    <%- include('../partials/budgets/index/historyTable') %>
 
-        <!-- If no budgets, directs to next steps -->
-        <% } else {%>
-        <%- include('../partials/budgets/index/noBudgets') %>
-        <% } %>
-    </div>
+    <!-- If no budgets, directs to next steps -->
+    <% } else {%>
+    <%- include('../partials/budgets/index/noBudgets') %>
+    <% } %>
 </div>
 
 <script src="/scripts/alternateTableRows.js"></script>
