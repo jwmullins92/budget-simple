@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync')
 const { validateTransaction } = require('../schemas.js')
 const transactions = require('../controllers/transactions')
 
-// Middleware
+// MIDDLEWARE
 // isLoggedIn = Verifies user is logged in
 // validateTransaction = Validates Transaction Model
 

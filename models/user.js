@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose'); // allows easier authentication building with passport and mongoose
+const passportLocalMongoose = require('passport-local-mongoose'); // allows easier authentication setup with passport and mongoose
 
-const userSchema = new Schema({     // Stores a user
+
+// Stores a user
+const userSchema = new Schema({
     email: {
         type: String,
         required: true,

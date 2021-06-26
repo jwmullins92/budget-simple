@@ -1,14 +1,19 @@
 const passport = require('passport');
 const User = require('../models/user')
 
+// Redirects to the dashboard when get requrest to '/' is submitted
 module.exports.renderHomePage = (req, res) => {
     res.redirect('/dashboard')
 }
 
+
+// Loads login page
 module.exports.renderLogin = (req, res) => {
     res.render('users/login')
 }
 
+
+// Logs in user
 module.exports.login = (req, res) => {
     req.flash('success', 'Welcome back!')
     const redirectUrl = req.session.returnTo || '/dashboard' // once logged in, they are taken to where they tried to go
@@ -16,10 +21,14 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl)
 }
 
+
+// Loads registration page
 module.exports.renderRegister = (req, res) => {
     res.render('users/register')
 }
 
+
+// Creates new user and logs them in
 module.exports.createNewUser = async (req, res) => {
     try {
         const { username, password, email } = req.body
@@ -38,11 +47,14 @@ module.exports.createNewUser = async (req, res) => {
     }
 }
 
-module.exports.renderVerifyEmail = async (req, res) => { // First step in password reset. User must enter email.
+
+// First step in password reset. User must enter email.
+module.exports.renderVerifyEmail = async (req, res) => {
     res.render('users/verifyEmail')
 }
 
-module.exports.verifyEmail = async (req, res) => {  // checks to see if email belongs to a user in the database and saves it to the session
+// checks to see if email belongs to a user in the database and saves it to the session
+module.exports.verifyEmail = async (req, res) => {
     const { email } = req.body
     const user = await User.find({ email })
     if (!user.length) {
@@ -53,11 +65,13 @@ module.exports.verifyEmail = async (req, res) => {  // checks to see if email be
     res.redirect('/reset-password')
 }
 
-module.exports.renderPasswordReset = async (req, res) => { // Renders password reset page
+// Renders password reset page
+module.exports.renderPasswordReset = async (req, res) => {
     res.render('users/resetPassword')
 }
 
-module.exports.resetPassword = async (req, res) => {  // resets password if re-entered email matches what is stored in the session
+// resets password if re-entered email matches what is stored in the session
+module.exports.resetPassword = async (req, res) => {
     const { email, password } = req.body
     await User.findOne({ email })
         .then((user) => {
@@ -80,6 +94,8 @@ module.exports.resetPassword = async (req, res) => {  // resets password if re-e
         })
 }
 
+
+// Logs user out
 module.exports.logout = (req, res) => {
     req.logout();
     req.flash('success', 'Goodbye!')

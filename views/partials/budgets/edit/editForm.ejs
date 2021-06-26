@@ -1,8 +1,8 @@
 <!-- Edit form start -->
-<form action="/budgets/<%=budget._id%>" class="row" method="POST">
+<form action="/budgets/<%=budget._id%>" class="row" method="POST" id="edit-budget">
 
     <!-- Choose budget period month start-->
-    <div class="mb-3 col-lg-2">
+    <div class="mb-3 col-lg-2" id="select-month">
         <label class="form-label" for="month">Month</label>
         <select class="form-select" name="month" id="month">
             <option value="" selected>All</option>
@@ -20,10 +20,10 @@
             <option value="12" <%= budget.month.getMonth() + 1 === 12 ? 'selected' : ''%>>Dec</option>
         </select>
     </div>
-    <!-- Choose budget period month end-->
+
 
     <!-- Choose budget period year start-->
-    <div class="mb-3 col-lg-2">
+    <div class="mb-3 col-lg-2" id="select-year">
         <label class="form-label" for="year">Year</label>
         <select class="form-select" name="year" id="year">
             <% for(let i = 2015; i <= new Date().getFullYear(); i++) {%>
@@ -37,7 +37,7 @@
     <!-- Choose budget period month end-->
 
     <!-- Enter total income or amount budgeted for budget period start-->
-    <div class="mb-3 col-lg-2">
+    <div class="mb-3 col-lg-2" id="income">
         <label class="form-label" for="amount">Total Income:</label>
         <div class="input-group">
             <span class="input-group-text">$</span>
@@ -47,7 +47,7 @@
     <!-- Enter total income or amount budgeted for budget period end-->
 
     <!-- Enter budget amounts for categories for budget period start-->
-    <div class="row mb-3">
+    <div class="row mb-3" id="set-budget-amounts">
         <% for(let c of budget.categories) {%>
         <div class="col-12 col-sm-6 col-lg-3 d-flex justify-content-between align-items-baseline mb-1">
             <label for="<%=c.category.title%>" class="form-label"><%=c.category.title%>:</label>

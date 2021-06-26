@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync')
 const { validateCategory } = require('../schemas.js')
 const categories = require('../controllers/categories')
 
-// Middleware
+// MIDDLEWARE
 // isLoggedIn = Verifies user is logged in
 // validateCategory = Validates the Category Model
 

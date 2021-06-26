@@ -2,6 +2,8 @@ const category = document.querySelector('#category');
 const trs = document.querySelector('#trs')
 const date = document.querySelector('#date')
 
+
+// Finds transactions based on query
 const filter = (category, date) => {
     const children = trs.children
     for (let child of children) {
@@ -27,11 +29,3 @@ const filter = (category, date) => {
         }
     }
 }
-
-category.addEventListener('change', (event) => {
-    filter(category, date)
-})
-
-date.addEventListener('change', (event) => {
-    filter(category, date)
-})

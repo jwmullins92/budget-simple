@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const transactionSchema = new Schema({      // stores a transaction
+
+// stores a transaction
+const transactionSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     date: Date,
     isFixed: {

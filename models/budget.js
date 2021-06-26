@@ -1,12 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const breakdownSchema = new Schema({    // Nested schema on budgetSchema. Stores how much is budgeted toward each category
+// Nested schema on budgetSchema. Stores how much is budgeted toward each category
+const breakdownSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     amount: Number,
 })
 
-const budgetSchema = new Schema({       // Stores budgets
+
+// Stores budgets
+const budgetSchema = new Schema({
     amount: Number,
     month: {
         type: Date,

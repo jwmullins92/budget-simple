@@ -5,6 +5,13 @@
     display: none!important
 }
 
+/* Removes increment and decrement buttons from number input fields */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* Font utilities */
 
 .header-lg {

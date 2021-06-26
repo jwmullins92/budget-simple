@@ -1,4 +1,4 @@
-// Adds fixed or flexible descriptor to transactions
+// Adds fixed or flexible descriptor to transactions when logging a new one
 
 const transactionFixedFlexPicker = () => {
     const category = document.querySelector('#category')

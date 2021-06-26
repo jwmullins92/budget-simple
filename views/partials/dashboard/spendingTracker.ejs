@@ -33,7 +33,7 @@
             <!-- Category list items start-->
             <ul class="list-group list-group-flush">
                 <% for(let b of budget.categories) {%>
-                <% if(b.amount > 0) {%>
+                <% if(b.amount > 0 || categorySpentTracker.includes(b.category._id)) {%>
                 <li class="list-group-item fs-5" id="<%=b.category.title%>">
                     <div class="d-flex justify-content-between cat-tracker">
 
@@ -44,18 +44,22 @@
                         <% for(let c of progress.categories) {%>
                         <% if(c.category === b.category.title) {%>
 
-                        <!-- calculates percent of budget category that hsa been spent -->
+                        <!-- calculates percent of budget category that has been spent -->
+                        <% if(b.amount > 0) {%>
                         <p class="percent-complete hide"> <%= c.percent %>% </p>
-
+                        <% } else { %>
+                        <p class="percent-complete hide"> 101% </p>
+                        <% } %>
                         <!-- Displays how much has been spent -->
-                        <p>$<%= c.spent %> of $<%= b.amount %> </p>
+                        <p class="test">$<%= c.spent %> of $<%= b.amount %> </p>
 
 
                         <% } %>
                         <% } %>
 
-                        <!-- If no transactions have been logged for category, displays $0 out of total -->
+
                         <% if(!progressCategories.includes(b.category.title)) {%>
+                        <!-- If no transactions have been logged for category, displays $0 out of total -->
                         <p>$0 of $<%= b.amount %> </p>
                         <p class="percent-complete hide">0%</p>
                         <% } %>
@@ -68,7 +72,6 @@
 
 
                 </li>
-
                 <% } %>
                 <% } %>
             </ul>

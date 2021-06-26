@@ -5,7 +5,7 @@ const { isLoggedIn } = require('../middleware')
 const catchAsync = require('../utils/catchAsync')
 const dashboard = require('../controllers/dashboard')
 
-// Middleware
+// MIDDLEWARE
 // isLoggedIn = Verifies user is logged in
 
 // Dashboard

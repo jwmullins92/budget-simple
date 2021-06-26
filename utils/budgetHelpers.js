@@ -1,3 +1,4 @@
+// Calculates remaining money budgeted for fixed category (can be negative)
 module.exports.fixedRem = (budget, transactions) => {
     fixed = []
     for (let b of budget.categories) {
@@ -15,6 +16,8 @@ module.exports.fixedRem = (budget, transactions) => {
     return fixed
 }
 
+
+// Calculates remaining money budgeted for fixed category (can be negative)
 module.exports.flexRem = (budget, transactions) => {
     flex = []
     for (let b of budget.categories) {

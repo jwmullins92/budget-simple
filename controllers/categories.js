@@ -3,6 +3,8 @@ const Category = require('../models/category');
 const { updateBudgets } = require('../utils/categoryHelpers');
 const numSuffix = require('../utils/numSuffix')
 
+
+// Loads category index page
 module.exports.index = async (req, res) => {
     const categories = await Category.find({ user: req.user })
     categories.sort(function (a, b) {                                       // 
@@ -16,6 +18,8 @@ module.exports.index = async (req, res) => {
     res.render('categories/index', { categories })
 }
 
+
+// Creates new category when form is submitted
 module.exports.createCategory = async (req, res) => {
     const category = new Category(req.body.category)
     category.user = req.user._id
@@ -25,6 +29,8 @@ module.exports.createCategory = async (req, res) => {
     res.redirect('/categories')
 }
 
+
+// Loads category edit form
 module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params;
     const category = await Category.findById(id);
@@ -35,6 +41,8 @@ module.exports.renderEditForm = async (req, res) => {
     res.render('categories/edit', { category });
 }
 
+
+// updates category when edit form is submitted
 module.exports.updateCategory = async (req, res) => {
     const category = await Category.findByIdAndUpdate(req.params.id, { ...req.body.category })
     if (!category) {
@@ -44,6 +52,8 @@ module.exports.updateCategory = async (req, res) => {
     res.redirect('/categories')
 }
 
+
+// Deletes category
 module.exports.deleteCategory = async (req, res) => {
     const { id } = req.params
     const category = await Category.findByIdAndDelete(id)

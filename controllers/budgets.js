@@ -4,6 +4,8 @@ const Category = require('../models/category')
 const numSuffix = require('../utils/numSuffix')
 const { fixedRem, flexRem } = require('../utils/budgetHelpers')
 
+
+// Gets index page
 module.exports.index = async (req, res) => {
     let budgets = await Budget.find({ user: req.user })
     const pageNums = Math.ceil(budgets.length / 10)
@@ -21,6 +23,8 @@ module.exports.index = async (req, res) => {
     }
 }
 
+
+// Creates new budget
 module.exports.createBudget = async (req, res) => {
     const { month, year } = req.body
     const budget = new Budget(req.body)
@@ -35,12 +39,16 @@ module.exports.createBudget = async (req, res) => {
     res.redirect('/budgets')
 }
 
+
+// Loads new budget form
 module.exports.renderNewBudgetForm = async (req, res) => {
     const date = new Date()
     const categories = await Category.find({ user: req.user }).sort({ title: 1 }) // sorts categories alphabetically
     res.render('budgets/new', { date, categories }) // date is passed so the new budget form defaults to the current date
 }
 
+
+// Loads budget show page
 module.exports.showBudget = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findById(id).populate('categories.category')
@@ -56,6 +64,8 @@ module.exports.showBudget = async (req, res) => {
     res.render(`budgets/show`, { budget })
 }
 
+
+// Loads budget edit page
 module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params
     const categories = await Category.find({ user: req.user })
@@ -72,6 +82,8 @@ module.exports.renderEditForm = async (req, res) => {
     res.render(`budgets/edit`, { budget, categories })
 }
 
+
+// Updates budget after submitting edit form
 module.exports.updateBudget = async (req, res) => {
     const { id } = req.params
     const { month, year } = req.body
@@ -91,6 +103,8 @@ module.exports.updateBudget = async (req, res) => {
     res.redirect(`/budgets/${budget._id}`)
 }
 
+
+// Shows page of fixed categories for the budget period
 module.exports.showFixed = async (req, res) => {
     req.session.returnTo = req.originalUrl      // will redirect back to this URL if edits are made on-page
     const { id } = req.params;
@@ -111,6 +125,8 @@ module.exports.showFixed = async (req, res) => {
     res.render('budgets/fixed', { budget, spent })
 }
 
+
+// Shows page of fixed categories for the budget period
 module.exports.showFlex = async (req, res) => {
     req.session.returnTo = req.originalUrl  // will redirect back to this URL if edits are made on-page
     const { id } = req.params;
@@ -130,6 +146,8 @@ module.exports.showFlex = async (req, res) => {
     res.render('budgets/flexible', { budget, spent })
 }
 
+
+// Updates budget when form is submitted from the fixed or flex show page
 module.exports.updateBudgetItem = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findByIdAndUpdate(id, { ...req.body })
@@ -144,6 +162,8 @@ module.exports.updateBudgetItem = async (req, res) => {
 
 }
 
+
+// Deletes budget
 module.exports.deleteBudget = async (req, res) => {
     const { id } = req.params
     const budget = await Budget.findByIdAndDelete(id)

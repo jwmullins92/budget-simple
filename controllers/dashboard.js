@@ -1,8 +1,10 @@
 const Transaction = require('../models/transaction')
 const Budget = require('../models/budget')
 const Category = require('../models/category')
-const { filterBudget, findSpent, findExpenses, findFixed, findFlex, fixedRem, flexRem, findFixedTransactions, findFlexTransactions, findProgress, findProgressCategories } = require('../utils/dashboardHelpers.js')
+const { filterBudget, findSpent, findSpentCategories, findExpenses, findFixed, findFlex, fixedRem, flexRem, findFixedTransactions, findFlexTransactions, findProgress, findProgressCategories } = require('../utils/dashboardHelpers.js')
 
+
+// Loads dashboard
 module.exports.loadDashboard = async (req, res) => {
     const budgetPeriod = req.query // Defines budget period from query string
     const date = new Date()
@@ -27,5 +29,7 @@ module.exports.loadDashboard = async (req, res) => {
     const progressCategories = findProgressCategories(progress)  // reference for categories that have transactions associated with them
     const fixedRemaining = fixedRem(budget, transactions)        // calculates remaining fixed expenses that are still scheduled out
     const flexRemaining = flexRem(budget, transactions)          // calculates remaining flexible expenses that are still scheduled out
-    res.render('dash/dashboard', { categories, date, budget, transactions, expenses, spent, fixedRemaining, flexRemaining, fixedTotal, flexTotal, progress, budgetPeriod, progressCategories })
+    const categorySpentTracker = findSpentCategories(budget, transactions) // Stores category ids that have transactions associated with them to identify which to render on spending tracker table
+    console.log(categorySpentTracker)
+    res.render('dash/dashboard', { categories, categorySpentTracker, date, budget, transactions, expenses, spent, fixedRemaining, flexRemaining, fixedTotal, flexTotal, progress, budgetPeriod, progressCategories })
 }

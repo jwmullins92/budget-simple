@@ -25,6 +25,8 @@ module.exports.filterBudget = (budget, budgetPeriod, date) => {
     return budget
 }
 
+
+// Calculates total of all transactions for the budget period
 module.exports.findSpent = (transactions) => {
     total = 0
     for (let t of transactions) {
@@ -142,7 +144,6 @@ module.exports.fixedRem = (budget, transactions) => {
     return fixedRem
 }
 
-
 // Finds how much is still scheduled out for flex categories
 module.exports.flexRem = (budget, transactions) => {
     flex = []
@@ -166,4 +167,27 @@ module.exports.flexRem = (budget, transactions) => {
         flexRem = flexRem + f.amount
     }
     return flexRem
+}
+
+
+// Stores category ids that have transactions associated with them to identify which to render on spending tracker table
+module.exports.findSpentCategories = (budget, transactions) => {
+    categories = []
+    spentCategories = []
+    let total
+    for (let b of budget.categories) {
+        categories.push({ category: b.category, amount: b.amount })
+    }
+    for (let c of categories) {
+        total = 0
+        for (let t of transactions) {
+            if (c.category._id.toString() === t.category._id.toString()) {
+                c.amount = total + t.amount
+            }
+        }
+        if (c.amount > 0) {
+            spentCategories.push(c.category._id)
+        }
+    }
+    return spentCategories
 }
