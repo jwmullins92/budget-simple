@@ -29,8 +29,9 @@
                         <select class="form-select" name="category[fixed]" id="fixed" aria-label="Fixed or flexible?"
                             required>
                             <option value='' selected disabled>--Select Fixed or Flexible--</option>
-                            <option value="true">Fixed</option>
-                            <option value="false">Flexible</option>
+                            <option value="true">Fixed (amount is decided for you (rent, utilities, etc.)</option>
+                            <option value="false">Flexible (amount is decided by you (groceries, eating out, etc.)
+                            </option>
                         </select>
                     </div>
 
@@ -78,5 +79,10 @@
             cancel.classList.add('hide')
             payDate.classList.add('hide')
         }
+    })
+
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    const popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
     })
 </script>

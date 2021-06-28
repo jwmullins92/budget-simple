@@ -30,6 +30,5 @@ module.exports.loadDashboard = async (req, res) => {
     const fixedRemaining = fixedRem(budget, transactions)        // calculates remaining fixed expenses that are still scheduled out
     const flexRemaining = flexRem(budget, transactions)          // calculates remaining flexible expenses that are still scheduled out
     const categorySpentTracker = findSpentCategories(budget, transactions) // Stores category ids that have transactions associated with them to identify which to render on spending tracker table
-    console.log(categorySpentTracker)
     res.render('dash/dashboard', { categories, categorySpentTracker, date, budget, transactions, expenses, spent, fixedRemaining, flexRemaining, fixedTotal, flexTotal, progress, budgetPeriod, progressCategories })
 }
