@@ -7,7 +7,7 @@ Using budget-simple is easy:
   -create your budget categories
   -create a new budget period and assign a budgeted amount to each category
   -log transactions
-  -track spendings and easily adapt your budget from the dashboard
+  -track spending and easily adapt your budget from the dashboard
   
 Features
 --------
