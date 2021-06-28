@@ -3,7 +3,7 @@ router = express.Router();
 const catchAsync = require('../utils/catchAsync')
 const passport = require('passport');
 const users = require('../controllers/users')
-const { confirmUserEmail } = require('../middleware.js')
+const { confirmUserEmail, seedExample } = require('../middleware.js')
 const { validateNewUser, validateNewPassword } = require('../schemas')
 
 // MIDDLEWARE
@@ -18,7 +18,7 @@ router.route('/')
 // login routes
 router.route('/login')
     .get(users.renderLogin)
-    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), seedExample, users.login)
 
 
 // Register routes

@@ -18,7 +18,6 @@ module.exports.index = async (req, res) => {
         if (!query.page) {
             query.page = 1
         }
-        console.log(query)
         const results = await filterTransactions(query, allTransactions, pageNums, originalUrl)// filters results based on selected parameters
         return res.render('transactions/index', { ...results, allTransactions })
     }
@@ -33,7 +32,6 @@ module.exports.index = async (req, res) => {
 // Creates new transaction when new transaction form is submitted
 module.exports.createTransaction = async (req, res) => {
     req.body.transaction.date = moment(req.body.transaction.date);  // corrects the date to the users timezone (prevents error that sometimes sets date 1 day earlier than expected)
-    console.log(req.body)
     const transaction = new Transaction(req.body.transaction)
     transaction.user = req.user._id;
     let budget = await Budget.find({ user: req.user })

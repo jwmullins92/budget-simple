@@ -16,8 +16,6 @@ const categorySchema = new Schema({
         required: true
     },
     payDate: String,
-    amount: Number,
-    canEnd: Boolean,
     user: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 

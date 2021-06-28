@@ -1,5 +1,6 @@
 const passport = require('passport');
 const User = require('../models/user')
+const seedExampleUser = require('../seeds/seedExampleUser')
 
 // Redirects to the dashboard when get requrest to '/' is submitted
 module.exports.renderHomePage = (req, res) => {
@@ -97,6 +98,7 @@ module.exports.resetPassword = async (req, res) => {
 
 // Logs user out
 module.exports.logout = (req, res) => {
+    delete req.session.returnTo
     req.logout();
     req.flash('success', 'Goodbye!')
     res.redirect('/login')

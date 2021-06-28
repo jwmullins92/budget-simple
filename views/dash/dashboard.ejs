@@ -18,14 +18,11 @@
 
 <script>
     const fixed = document.querySelector("#fixed")
-    const cancel = document.querySelector("#cancel")
     const payDate = document.querySelector("#pay-date")
     fixed.addEventListener('change', (event) => {
         if (fixed.value === "true") {
-            cancel.classList.remove('hide')
             payDate.classList.remove('hide')
         } else {
-            cancel.classList.add('hide')
             payDate.classList.add('hide')
         }
     })

@@ -1,3 +1,5 @@
+const seedExampleUser = require('./seeds/seedExampleUser')
+
 // Verifies user is logged in
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -47,6 +49,15 @@ module.exports.budgetCat = (req, res, next) => {
             req.body.categories = arr
             next()
         }
+    } else {
+        next()
+    }
+}
+
+module.exports.seedExample = async (req, res, next) => {
+    if (req.user._id.toString() === "60da2f71165c5b8c8167eea0") {
+        await seedExampleUser(req.user)
+        next()
     } else {
         next()
     }
