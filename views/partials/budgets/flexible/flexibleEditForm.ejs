@@ -5,6 +5,8 @@
         <% for(let cat of budget.categories) {%>
         <% if(!cat.category.fixed) {%>
 
+
+
         <!-- Submits category id. This part stays hidden. Start. -->
         <input class="hide" type="text" name="categories[category]" value="<%=cat.category._id%>">
 

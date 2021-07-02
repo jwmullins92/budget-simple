@@ -46,6 +46,16 @@
     </div>
     <!-- Enter total income or amount budgeted for budget period end-->
 
+    <!-- Dynamically shows how much money is still available to be budgeted start-->
+    <div class="col-lg-2 mb-3 sticky-top bg-white">
+        <label class="form-label" for="remaining">Remaining to budget:</label>
+        <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input class="form-control" min="0" type="number" id="remaining" readonly>
+        </div>
+    </div>
+    <!-- Dynamically shows how much money is still available to be budgeted end-->
+
     <!-- Enter budget amounts for categories for budget period start-->
     <div class="row mb-3" id="set-budget-amounts">
         <% for(let c of budget.categories) {%>
@@ -55,7 +65,7 @@
             <div class="input-group w-50">
                 <span class="input-group-text">$</span>
                 <input type="number" name="categories[amount]" id="<%=c.category.title%>" value="<%=c.amount%>"
-                    class="form-control py-1">
+                    class="form-control budget-input py-1">
             </div>
         </div>
         <div class="col-10"></div>
